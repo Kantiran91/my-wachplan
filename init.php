@@ -62,7 +62,7 @@ if ((include_once ROOT . '/config/config.php') === FALSE) {
 require_once ROOT . '/include/mail.inc';
 require_once ROOT . '/include/header.php';
 
-// ---------- END INCLUDES ----------//
+// ---------- END INCLUDES ----------/
 
 // ---------- SQL --------------------//
 // SQL-Datenbank
@@ -125,16 +125,15 @@ function checkRights($inputRights, $error = TRUE)
 /**
  * Prüft ob die Benutzer ID mit der User ID in der Session übereinstimmt.
  *
- *
  * @param integer $userID ID die geprüft werden soll.
- * @param boolean $error Wenn TRUE wird auf die Hauptseite verwiesen.
+ * @param boolean $error  Wenn TRUE wird auf die Hauptseite verwiesen.
  * Wenn FALSE erfolgt keine Reaktion. Es wird nur TRUE bzw. FALSE zurückgegeben.
  *
  * @return boolean TRUE wenn die Person berechtigt ist.
  */
 function checkID($userID, $error = TRUE)
 {
-    if ($_SESSION['id'] == $userID) {
+    if ((int) $_SESSION['id'] === $userID) {
         if ($error === TRUE) {
             header('location: index.php');
         }
@@ -144,8 +143,24 @@ function checkID($userID, $error = TRUE)
         return TRUE;
     }
 
-}//end checkRights()
+}//end checkID()
 
+/**
+ * Prüft ob ein Datum in der Vergangenheit liegt.
+ *
+ * @param string $date Datum das mit dem Datum von heute verglichen werden soll.
+ *
+ * @return boolean TRUE wenn das Datum in der Vergangenheit liegt.
+ */
+function checkPast($date)
+{
+    if (strtotime($date) >= time()) {
+        return FALSE;
+    } else {
+        return TRUE;
+    }
+
+}//end checkDate()
 
 /**
  * Die Funktion verschlüsstel ein Passowrt über den sha512 Schlüssel.
