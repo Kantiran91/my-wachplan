@@ -1,0 +1,16 @@
+@CHARSET "UTF-8";
+
+#feedback_formular select {
+	text-align: center;
+	width: 200px;
+	padding: 5px;
+	font-size: 20px;
+	line-height: 1;
+	height: 40px;
+}
+
+#feedback_formular label {
+	margin-left: 5px;
+	padding: 10px;
+	font-size: 16px;
+}

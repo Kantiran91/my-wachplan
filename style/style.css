@@ -1,0 +1,97 @@
+@CHARSET "UTF-8";
+
+@import "table.css";
+
+@import "menu.css";
+
+@import "button.css";
+
+@import "feedback.css";
+
+body {
+	text-align: center;
+	font-size: 16px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-weight: normal;
+	color: #cc3900;
+}
+
+p {
+	font-size: 18px;
+}
+
+ul,li {
+	display: block;
+}
+
+#foot {
+	height: 10px;
+	bottom: 0;
+	width: 100%;
+}
+
+#logout {
+	border: 1px solid #eaca2c;
+	background: #fefcea; /* Old browsers */
+	background: -moz-linear-gradient(top, #fefcea 0%, #f1da36 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fefcea),
+		color-stop(100%, #f1da36)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #fefcea 0%, #f1da36 100%);
+	/* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #fefcea 0%, #f1da36 100%);
+	/* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #fefcea 0%, #f1da36 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #fefcea 0%, #f1da36 100%); /* W3C */
+}
+
+#logout a {
+	text-decoration: none;
+	display: inline-block;
+	color: #cc3900;
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
+	cursor: pointer;
+	text-indent: 0;
+}
+
+.meldung {
+	width: 500px;
+	background-color: #FFFFFF;
+	top: 50%;
+	Left: 50%;
+	margin-left: -250px;
+	margin-right: auto;
+	position: fixed;
+	z-index: 2;
+	border: 2px solid black;
+	box-shadow: 3px 0px 5px #050505;
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+
+.notice {
+	width: 200px;
+	height: 100px;
+}
+
+.modul {
+	width: 850px;
+	border: 1px solid #aaaaaa;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+	padding-top: 1px;
+}
+
+.formular td {
+	border: 0px;
+}
+
+.formular tr:HOVER {
+	border: 0px;
+	background-color: #F2F2F2;
+}
