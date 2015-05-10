@@ -84,7 +84,6 @@ foreach ($ergebnisOwn as $zeile) {
     echo date('d.m.Y', strtotime($zeile['date']));
     echo '</td>';
     echo '<td>';
-    //FIXME Hier wird nicht die richtige Psoition angeben.
     if ((int) $zeile['position'] === 1) {
         echo 'Wachleiter ';
     } else if ((int) $zeile['position'] === 2) {
@@ -94,10 +93,13 @@ foreach ($ergebnisOwn as $zeile) {
     }
 
     echo '</td> ';
-    echo '<td>';
-    echo '<a class="button"  id="' . $zeile['date'] . '" onclick="cancel_date(' .
-     $zeile['id'] . ')">absagen</a>';
-    echo '</td>';
+
+    if (checkPast($zeile['date']) === FALSE) {
+        echo '<td>';
+        echo '<a class="button"  id="' . $zeile['date'] .
+                     '" onclick="cancel_date(' . $zeile['id'] . ')">absagen</a>';
+        echo '</td>';
+    }
     if ((int) $zeile['position'] === 1 ||(int) $zeile['position'] === 2) {
         setButtonFeedback($zeile['id_day']);
     }
@@ -109,7 +111,7 @@ foreach ($ergebnisOwn as $zeile) {
         </table>
     </div>
     <div class="modul" id="formular">
-        <h1>Mögliche Wachtage 2015</h1>
+        <h1>Mögliche Waddchtage 2015</h1>
 	<?php
 require 'template/formular_year.php';
 ?>

@@ -93,8 +93,9 @@ foreach ($days as $day) {
             echo ' ' . substr($user[$i][5], 0, 1) . '.';
         } else if ($i < 3 && $_SESSION['rights'] < 1) {
             NULL;
-            // TODO soll hier wirklich nichts gemacht werden?
+            // @todo soll hier wirklich nichts gemacht werden?
         } else {
+            // @todo ggf. durch checkPast ersetzten.
             if (strtotime($day[1]) >= time()) {
                 setAddButton($i, $day);
             }

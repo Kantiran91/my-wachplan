@@ -14,7 +14,6 @@
 require_once '../../init.php';
 checkSession();
 
-// FIXME DAS NACHTRÄGLICHE LÖSCHEN DARF NICHT GEHEN
 // Hole die Daten zu der Verknüpfung die gelöscht werden soll!
 $id = $database->real_escape_string($_GET['acc']);
 
@@ -29,14 +28,20 @@ $result = $database->query($queryUser);
 if (is_bool($result) === FALSE) {
     $user = $result->fetch_row();
 
-    // Prüfen die Person andere löschen will und darf!
+    // Prüfen ob der Benutzer einen andern Benutzer löschen will und darf!
     if (($user[0] === $_SESSION['id']) === FALSE) {
         if (checkRights(2) === FALSE) {
             exit();
         }
     }
+
+    // Prüfen ob das zu löschen Datum in der Vergangenheit liegt.
+    var_dump($user[3]);
+    if (checkPast($user[3]) === TRUE) {
+        exit();
+    }
 } else {
-    //TODO Fehlermeldung vom Wachplan übernehmen.
+    //@todo Fehlermeldung vom Wachplan übernehmen.
     echo 'Fehler: Datenbank abfreage ist gescheitert.';
 }
 
@@ -70,11 +75,11 @@ if ($database->query($queryDel) === TRUE) {
     echo '<h4>Person gelöscht.</h4>';
     echo "Die Person wurde ausgetragen.\n";
     echo '<a class="button" onclick="hide_massage()">schließen</a>';
-    echo "</div>";
+    echo '</div>';
 } else {
     echo '<div class=meldung>';
     echo '<h4>Fehler!</h4>';
     echo "Austragen der Person fehlgeschlagen.\n";
     echo '<a class="button" onclick="hide_massage()">schließen</a>';
-    echo "</div>";
+    echo '</div>';
 }
