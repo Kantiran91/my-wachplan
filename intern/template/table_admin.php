@@ -133,7 +133,9 @@ foreach ($table as $day) {
         if (isset($users[$i]) === TRUE) {
             echo $users[$i]['first_name'];
             echo ' ' . substr($users[$i]['last_name'], 0, 1) . '.<br>';
-            if ((checkRights(2, FALSE)) === TRUE) {
+            if ((checkRights(2, FALSE)) === TRUE
+                && checkPast($day['date']) === FALSE
+            ) {
                 genHTMLDeleteButton($users[$i]['accessID']);
             }
         } else if ((strtotime($day['date']) >= time()) === TRUE) {
