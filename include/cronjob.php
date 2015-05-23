@@ -57,7 +57,7 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
      *
      * Feedback senden.
      */
-    if ((int)$wochentag === '1') {
+    if ($wochentag === '1') {
         // Hole die Tage an denen Wachdienst gemacht wird.
         $datumNextFormat = $datumNext->format('Y-m-d');
         $queryDays = "SELECT `id_day`, `date`
@@ -89,7 +89,7 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
             }
 
             array_pop($users);
-            $betreffUser = 'Wachdienst am ' . ddateDe($day[1]);
+            $betreffUser = 'Wachdienst am ' . dateDe($day[1]);
             foreach ($users as $user) {
                 $mail = new mail($user[1], $betreffUser);
                 $mailUserText = 'Hallo ' . $user[2] . ",\n";
@@ -134,8 +134,7 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
                 Deine Technische Leitung\n Daniel Schmid \t 0176/82148811\n
                 Sebastian Friedl \t 0151/25255314";
                 $mail->setText($mailUserText);
-                echo $mailUserText;
-                ////$mail->sendMail();
+                $mail->sendMail();
                 echo '<br>\n\n';
             }//end foreach
 
@@ -169,8 +168,7 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
              seepelikan.bplaced.net/wachplan/intern/feedback_wl.php?day=" .
              $row[0];
             $wlText .= "\n\n Danke für deine Hilfe \n Deine Technische Leitung";
-            ////$mailWl->sendMail($wlText);
-            echo $wlText;
+            $mailWl->sendMail($wlText);
         }
 
         echo "-------------------------------------\n";
@@ -205,6 +203,5 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
 
     $mailAdminText .= "-------------------------------------\n";
     $mailAdmin->setText($mailAdminText);
-    ////$mailAdmin->sendMail();
-    echo $mailAdminText;
+    $mailAdmin->sendMail();
 }//end if
