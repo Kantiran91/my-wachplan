@@ -57,8 +57,7 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
      *
      * Feedback senden.
      */
-
-    if ($wochentag === '1') {
+    if ((int)$wochentag === '1') {
         // Hole die Tage an denen Wachdienst gemacht wird.
         $datumNextFormat = $datumNext->format('Y-m-d');
         $queryDays = "SELECT `id_day`, `date`
@@ -135,7 +134,8 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
                 Deine Technische Leitung\n Daniel Schmid \t 0176/82148811\n
                 Sebastian Friedl \t 0151/25255314";
                 $mail->setText($mailUserText);
-                $mail->sendMail();
+                echo $mailUserText;
+                ////$mail->sendMail();
                 echo '<br>\n\n';
             }//end foreach
 
@@ -169,7 +169,8 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
              seepelikan.bplaced.net/wachplan/intern/feedback_wl.php?day=" .
              $row[0];
             $wlText .= "\n\n Danke für deine Hilfe \n Deine Technische Leitung";
-            $mailWl->sendMail($wlText);
+            ////$mailWl->sendMail($wlText);
+            echo $wlText;
         }
 
         echo "-------------------------------------\n";
@@ -181,12 +182,12 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
 
     $queryLogin =
     'SELECT
-    count(`wp_log_login`.`email`) AS `anzahl`,
-    `wp_log_login`.`email` AS `email`,
+    count(`wp_log_login`.`username`) AS `anzahl`,
+    `wp_log_login`.`username` AS `username`,
     `wp_log_login`.`datum` AS `datum` ,
     `pw_korrekt`
 	FROM `wp_log_login`
-	WHERE 1 group by `wp_log_login`.`email` ,`pw_korrekt`
+	WHERE 1 group by `wp_log_login`.`username` ,`pw_korrekt`
 	order by `wp_log_login`.`datum` desc limit 0,10;';
     $resultLogin = $database->query($queryLogin);
     $login = array();
@@ -203,6 +204,7 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
     }
 
     $mailAdminText .= "-------------------------------------\n";
-    $mailAdmin->set_text($mailAdminText);
-    $mailAdmin->sendMail();
+    $mailAdmin->setText($mailAdminText);
+    ////$mailAdmin->sendMail();
+    echo $mailAdminText;
 }//end if
