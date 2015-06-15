@@ -31,7 +31,11 @@ if (DEBUG === TRUE) {
 } else {
     ini_set('display_errors', 'OFF');
 }
+/*
+ *  Die Funktion errorHandler leitet alle Fehlermeldungen in eine eigene Datei um.
+ */
 
+set_error_handler('errorHandler');
 // ---------- END DEBUG ----------//
 
 // ---------- PHP INI ----------//
@@ -160,7 +164,7 @@ function checkPast($date)
         return TRUE;
     }
 
-}//end checkDate()
+}//end checkPast()
 
 /**
  * Die Funktion verschlüsstel ein Passowrt über den sha512 Schlüssel.
@@ -209,5 +213,54 @@ function getDays()
     return $tage;
 
 }//end getDays()
+
+/**
+ * Speichert den Fehler zusätzlich in einem Fehler LOG.
+ *
+ * @param string $fehlercode  Code des Fehlers.
+ * @param string $fehlertext  Beschriebung des Fehlers.
+ * @param string $fehlerdatei Datei in der der Fehler aufgetreten ist.
+ * @param string $fehlerzeile Zeile in der der Fehler aufgetreten ist.
+ *
+ * @return void|boolean Kommentar.
+ */
+function errorHandler($fehlercode, $fehlertext, $fehlerdatei, $fehlerzeile)
+{
+    $fehlerart;
+    switch ($fehlercode) {
+        case E_USER_ERROR:
+            $fehlerart = 'ERROR';
+        break;
+
+        case E_USER_WARNING:
+            $fehlerart = 'WARNING';
+        break;
+
+        case E_USER_NOTICE:
+            $fehlerart = 'NOTICE';
+        break;
+
+        default:
+            $fehlerart = 'Unbekannter Fehlertyp';
+        break;
+    }
+
+    $zeile = '[' . date('Y-m-d H:i:s') . '] ';
+    $zeile .= $fehlerart . ' : ' . $fehlertext . ' in ' . $fehlerdatei .
+                 ' Zeile:' . $fehlerzeile . "\n";
+
+    $datei = fopen('./error.log', 'a');
+    fwrite($datei, $zeile);
+
+    /*
+     * Wenn DEBUG wird dem Benutzer der Fehler ausgegeben,ansonsten in nur in
+     * die Datei umgeleitet
+     */
+
+    return (!DEBUG);
+
+}//end errorHandler()
+
+
 
 // ---------- END GOLOBAL FUNCTIONS ----------//

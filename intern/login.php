@@ -86,6 +86,7 @@ function addLogLine($pwKorrekt)
     $anfrage .= "'" . $_SERVER['REMOTE_ADDR'] . "',";
     $anfrage .= "'" . $pwKorrekt . "'";
     $anfrage .= ')';
+    $database->query($anfrage);
 
 }//end addLogLine()
 

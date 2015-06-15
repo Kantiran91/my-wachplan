@@ -57,7 +57,6 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
      *
      * Feedback senden.
      */
-
     if ($wochentag === '1') {
         // Hole die Tage an denen Wachdienst gemacht wird.
         $datumNextFormat = $datumNext->format('Y-m-d');
@@ -90,7 +89,7 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
             }
 
             array_pop($users);
-            $betreffUser = 'Wachdienst am ' . ddateDe($day[1]);
+            $betreffUser = 'Wachdienst am ' . dateDe($day[1]);
             foreach ($users as $user) {
                 $mail = new mail($user[1], $betreffUser);
                 $mailUserText = 'Hallo ' . $user[2] . ",\n";
@@ -181,12 +180,12 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
 
     $queryLogin =
     'SELECT
-    count(`wp_log_login`.`email`) AS `anzahl`,
-    `wp_log_login`.`email` AS `email`,
+    count(`wp_log_login`.`username`) AS `anzahl`,
+    `wp_log_login`.`username` AS `username`,
     `wp_log_login`.`datum` AS `datum` ,
     `pw_korrekt`
 	FROM `wp_log_login`
-	WHERE 1 group by `wp_log_login`.`email` ,`pw_korrekt`
+	WHERE 1 group by `wp_log_login`.`username` ,`pw_korrekt`
 	order by `wp_log_login`.`datum` desc limit 0,10;';
     $resultLogin = $database->query($queryLogin);
     $login = array();
@@ -203,6 +202,6 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
     }
 
     $mailAdminText .= "-------------------------------------\n";
-    $mailAdmin->set_text($mailAdminText);
+    $mailAdmin->setText($mailAdminText);
     $mailAdmin->sendMail();
 }//end if
