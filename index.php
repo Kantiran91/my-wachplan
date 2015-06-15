@@ -60,7 +60,7 @@ createHeader('Login');
     </div>
 		<?php
 if (isset($_GET['error']) === TRUE) {
-    include __DIR__ . '/include/errormeldung.php';
+    include __DIR__ . '/ include/errormeldung.php';
 }
 ?>
 </body>
