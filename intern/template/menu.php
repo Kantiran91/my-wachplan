@@ -21,6 +21,7 @@
 if ($_SESSION['rights'] >= 2) {
     ?>
     <li><a href="feedback_show.php">Feedback anschauen</a></li>
+    <li><a  href="test.php">Test</a></li>
     <li><a class="menupoint" href="system_settings.php"> Systemeinstellungen</a></li>
     <?php
 }

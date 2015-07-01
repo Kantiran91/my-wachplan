@@ -9,6 +9,7 @@
 @import "feedback.css";
 
 body {
+	padding-top: 40px;
 	text-align: center;
 	font-size: 16px;
 }
@@ -22,8 +23,8 @@ p {
 	font-size: 18px;
 }
 
-ul,li {
-	display: block;
+ul,li{
+	list-style: none;
 }
 
 #foot {

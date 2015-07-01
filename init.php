@@ -30,7 +30,9 @@ if (DEBUG === TRUE) {
     error_reporting(E_ALL);
 } else {
     ini_set('display_errors', 'OFF');
+    session_set_cookie_params(36000);
 }
+
 /*
  *  Die Funktion errorHandler leitet alle Fehlermeldungen in eine eigene Datei um.
  */
@@ -45,7 +47,6 @@ header('Content-Type: text/html; charset=utf-8');
 
 // ---------- SESSION ----------//
 // Startet eine Session für 3600sec = 60 minuten
-session_set_cookie_params(3600);
 session_start();
 // ---------- END SESSION ----------//
 
@@ -54,7 +55,7 @@ session_start();
 // name des root verzeichnis
 define('ROOT', realpath(dirname(__FILE__)));
 // Versionsnummer des RELEASE
-define('VERSION', 'Version 0.4.2');
+define('VERSION', 'Version 0.5');
 
 // ---------- END CONSTANTEN ----------//
 
@@ -261,6 +262,24 @@ function errorHandler($fehlercode, $fehlertext, $fehlerdatei, $fehlerzeile)
 
 }//end errorHandler()
 
+/**
+ * Generiert eine Standardfehlermeldung für Benutzerfehler.
+ *
+ * @param string  $file    Name des Files in dem der Fehler aufgetreten ist.
+ * @param integer $line    Zeile in der der Fehler aufgetreten ist.
+ * @param string  $methode Methode in der der Fehler aufgetreten ist.
+ *
+ * @return void
+ */
+function errorMessage($file, $line, $methode = '')
+{
+    if ($methode === '') {
+        trigger_error('Error in ' . $file . 'on Line' . $line);
+    } else {
+        trigger_error(
+            'Error in ' . $methode . 'in File ' . $file . 'on Line' . $line);
+    }
 
+}//end errorMessage()
 
 // ---------- END GOLOBAL FUNCTIONS ----------//
