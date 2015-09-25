@@ -48,9 +48,8 @@ class Table
 
         echo '<tbody>';
         foreach ($content->table as $row) {
-            //var_dump($row);
             echo '<tr>';
-            if (is_array($row)) {
+            if (is_array($row) === TRUE) {
                 foreach ($row as $column) {
                     echo '<td>';
                     echo $column;

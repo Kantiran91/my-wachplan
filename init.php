@@ -277,18 +277,35 @@ function errorMessage($file, $line, $methode = '')
         trigger_error('Error in ' . $file . 'on Line' . $line);
     } else {
         trigger_error(
-            'Error in ' . $methode . 'in File ' . $file . 'on Line' . $line);
+            'Error in ' . $methode . 'in File ' . $file . 'on Line ' . $line);
     }
 
 }//end errorMessage()
 
-function get($param){
+/**
+ * Sichere Zugriff auf die $_GET Parameter.
+ *
+ * @param string $param Name des Parameter der ausgegeben wird.
+ *
+ * @return string
+ */
+function get($param)
+{
     return htmlentities($_GET[$param], ENT_QUOTES, 'utf-8');
-}
 
-function post($param){
+}//end get()
+
+/**
+ * Sichere Zugriff auf die $_POST Parameter.
+ *
+ * @param string $param Name des Parameter der ausgegeben wird.
+ *
+ * @return string
+ */
+function post($param)
+{
     return htmlentities($_POST[$param], ENT_QUOTES, 'utf-8');
-}
 
+}//end post()
 
 // ---------- END GOLOBAL FUNCTIONS ----------//

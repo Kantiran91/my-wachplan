@@ -5,11 +5,16 @@ table {
 	margin-left: auto;
 	margin-right: auto;
 	background-color: #ffffff;
+	
 }
 
 tr {
 	/*border: 1px solid #A4A4A4;*/
 	background-color: #f2f2f2;
+}
+
+thead th td{
+	   border-radius: 4px;
 }
 
 thead th {

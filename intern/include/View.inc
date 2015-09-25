@@ -12,7 +12,7 @@
  * @version GIT:$Date $
  * @link    http:/salem.dlrg.de
  **/
-include_once '../init.php';
+require_once '../init.php';
 
 /**
  * Stell den View des MVP dar.
@@ -25,16 +25,19 @@ class View
 {
 
     /**
+     *
      * @var String Inhalt der in der Webseite dargestellt werden soll.
      */
     private $_content = '';
 
     /**
+     *
      * @var String Inhalt der in der Webseite dargestellt werden soll.
      */
     private $_title = '';
 
     /**
+     *
      * @var Singleton Statische Variable um die einzige Instanz der Klasse zu halten.
      */
     protected static $instance = NULL;
@@ -143,17 +146,29 @@ class View
 
     }//end printPage()
 
-
-    static public function getAServices(){
+    /**
+     * Erstellt eine vollständige Liste aller A-Services.
+     *
+     * Dabei stellen A-Services, Services da die für Admins gedacht sind.
+     *
+     * @return array Liste von Services die zur Verfügung stehen.
+     */
+    static public function getAServices()
+    {
         $submenu = array();
-        foreach (glob("aservice/*.inc") as $datei) {
+        foreach (glob('aservice/*.inc') as $datei) {
             include_once $datei;
             $dateiName = explode('aservice/', $datei)[1];
             $className = explode('.', $dateiName)[0];
-            $submenu[] = array($className::DISPLAYNAME,'test.php?service='.$className);
+            $submenu[] = array(
+                          $className::DISPLAYNAME,
+                          'test.php?service=' . $className,
+                         );
         }
+
         return $submenu;
-    }
+
+    }//end getAServices()
 
     /**
      * Gibt den HTML-Header aus.
@@ -165,29 +180,29 @@ class View
     private function _printHeader()
     {
         ?>
-<!DOCTYPE html>
-<html>
-<head>
-<title> <?php echo $this->title; ?>@Wachplan Salem</title>
-<meta charset="UTF-8" />
-<link href="/wachplan/style/style.css" type="text/css" rel="stylesheet" />
-<link href="/wachplan/style/menu.css" type="text/css" rel="stylesheet" />
-<link rel="stylesheet"
-    href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"
->
-<script src="/wachplan/js/jquery.min.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<script src="/wachplan/js/intern_function.js"></script>
-<script src="/wachplan/js/buttons.js"></script>
-<script src="/wachplan/js/formulars.js"></script>
-</head>
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <title> <?php echo $this->title; ?>@Wachplan Salem</title>
+        <meta charset="UTF-8" />
+        <link href="/wachplan/style/style.css" type="text/css" rel="stylesheet" />
+        <link href="/wachplan/style/menu.css" type="text/css" rel="stylesheet" />
+        <link rel="stylesheet"
+            href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"
+        >
+        <script src="/wachplan/js/jquery.min.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="/wachplan/js/intern_function.js"></script>
+        <script src="/wachplan/js/buttons.js"></script>
+        <script src="/wachplan/js/formulars.js"></script>
+        </head>
         <?php
         NULL;
 
     }//end _printHeader()
 
     /**
-     * Erzeugt das Menü für den Wachplan
+     * Erzeugt das Menü für den Wachplan.
      *
      * @return void
      * @todo Einstellungseite erzeugen
@@ -195,18 +210,37 @@ class View
     private function _printMenu()
     {
         $menu = array();
-        $menu[] = array('Eigene Daten','index.php#own_data');
-        $menu[] = array('Wachplan','index.php#plan');
-        $menu[] = array('Telefonliste','index.php#tele_plan');
+        $menu[] = array(
+                   'Eigene Daten',
+                   'index.php#own_data',
+                  );
+        $menu[] = array(
+                   'Wachplan',
+                   'index.php#plan',
+                  );
+        $menu[] = array(
+                   'Telefonliste',
+                   'index.php#tele_plan',
+                  );
 
-        if (checkRights(2, $error = False) && TRUE) {
-            $menu[] = array('Feedback anschauen','feedback_show.php');
-            $submenu = View::getAServices();
-            $menu[] = array('Einstellungen',$submenu);
+        if (checkRights(2, FALSE) === TRUE) {
+            $menu[] = array(
+                       'Feedback anschauen',
+                       'feedback_show.php',
+                      );
+            $submenu = self::getAServices();
+            $menu[] = array(
+                       'Einstellungen',
+                       $submenu,
+                      );
         }
-        $menu[] = array('Logout', 'logout.php');
 
-            // Menüdarstellung für normale Displays
+        $menu[] = array(
+                   'Logout',
+                   'logout.php',
+                  );
+
+        // Menüdarstellung für normale Displays
         echo '<div id="menu">' . "\n";
         echo '<ul>' . "\n";
         foreach ($menu as $menupoint) {
@@ -216,12 +250,11 @@ class View
                 echo '<li><a href=#>' . $menupoint[0] . '</a><ul>';
                 foreach ($menupoint[1] as $submenupoint) {
                     self::printMenupoint($submenupoint[0], $submenupoint[1]);
-                }
+                }//end foreach
+
                 echo '</ul></li>' . "\n";
-
-            }
-
-        }
+            }//end if
+        }//end foreach
 
         echo '</ul>' . "\n";
 
@@ -241,25 +274,29 @@ class View
                         $submenupoint[0],
                         $submenupoint[1],
                         TRUE);
-                }
+                }//end foreach
+
                 echo '</optgroup>' . "\n";
+            }//end if
+        }//end foreach
 
-            }
-
-        }
         echo '</select>';
         echo '</div>' . "\n\n";
 
     }//end _printMenu()
 
     /**
-     * Erzeugt eines Menüpunkt für den Wachplan
+     * Erzeugen eines Menuepunkts.
+     *
+     * @param string  $name   Name des Menuepunkts.
+     * @param string  $link   Link zu der Seite.
+     * @param boolean $option Wenn True dann nicht als li sonder option Element.
      *
      * @return void
      */
-    private function printMenupoint($name,$link,$option=FALSE)
+    private function _printMenupoint($name, $link, $option = FALSE)
     {
-        if($option === FALSE){
+        if ($option === FALSE) {
             echo '<li><a href=" ';
             echo $link;
             echo ' ">';
@@ -271,8 +308,8 @@ class View
             echo ' ">';
             echo $name;
             echo '</option>' . "\n";
-
         }
+
     }//end _printMenupoint()
 
 }//end class

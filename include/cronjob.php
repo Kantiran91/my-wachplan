@@ -57,6 +57,7 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
      *
      * Feedback senden.
      */
+
     if ($wochentag === '1') {
         // Hole die Tage an denen Wachdienst gemacht wird.
         $datumNextFormat = $datumNext->format('Y-m-d');
