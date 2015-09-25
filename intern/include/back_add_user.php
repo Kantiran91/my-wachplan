@@ -103,9 +103,10 @@ $query->bind_param(
 
 
 // send as mail with Password
+$emailAdresse = post('email');
 $betreff = 'Erflogreiche Anmeldung zum Wachplan der Ortsgruppe Salem';
-$mail = new mail($post['email'], $betreff);
-$text = 'Hallo ' . $post['first_name'] . ' ' . $post['last_name'] . ',';
+$mail = new mail($emailAdresse, $betreff);
+$text = 'Hallo ' . post('first_name'). ' ' . post('last_name'). ',';
 $text .= "\n dir wurde von einem der Admins ein Account für den Wachplan
             der Ortsgruppe Salem erstellt.\n Hier kannst du eine Wachtermine
             sehen, denn Daten ändern und dich zusätzlich noch eintragen.

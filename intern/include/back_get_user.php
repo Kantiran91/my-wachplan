@@ -20,8 +20,8 @@ require_once '../../init.php';
 checkSession();
 
 //@todo ggf. dieser Codeteil der alle Benutzer ausgibt in eine eigene Funktion.
-$day = $_GET['day'];
-$position = $_GET['position'];
+$day = get('day');
+$position = get('position');
 $query = 'SELECT `id_user`, `user_name` FROM `wp_user` ORDER BY `user_name`';
 $result = $database->query($query);
 while ($users[] = mysqli_fetch_row($result)) {

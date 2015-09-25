@@ -144,7 +144,7 @@ class View
     }//end printPage()
 
 
-    static public function getAService(){
+    static public function getAServices(){
         $submenu = array();
         foreach (glob("aservice/*.inc") as $datei) {
             include_once $datei;
@@ -201,7 +201,7 @@ class View
 
         if (checkRights(2, $error = False) && TRUE) {
             $menu[] = array('Feedback anschauen','feedback_show.php');
-            $submenu = View::getAService();
+            $submenu = View::getAServices();
             $menu[] = array('Einstellungen',$submenu);
         }
         $menu[] = array('Logout', 'logout.php');

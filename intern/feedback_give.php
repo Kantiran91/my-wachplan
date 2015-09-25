@@ -21,7 +21,7 @@ if (isset($_GET['day']) === FALSE) {
     header('Location: intern/index.php');
 }
 
-$input['day'] = $database->real_escape_string($_GET['day']);
+$input['day'] = $database->real_escape_string(Get('day'));
 
 // Hole das datum zum Tag
 $queryDay = 'SELECT `id_day`, `date` FROM `wp_days` WHERE `id_day` = "' .

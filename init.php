@@ -282,4 +282,13 @@ function errorMessage($file, $line, $methode = '')
 
 }//end errorMessage()
 
+function get($param){
+    return htmlentities($_GET[$param], ENT_QUOTES, 'utf-8');
+}
+
+function post($param){
+    return htmlentities($_POST[$param], ENT_QUOTES, 'utf-8');
+}
+
+
 // ---------- END GOLOBAL FUNCTIONS ----------//

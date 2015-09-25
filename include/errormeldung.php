@@ -17,7 +17,8 @@
 <div class=meldung>
     <h4>Fehler!</h4>
 	<?php
-echo $_GET['error'];
+	//!< @todo Funktion mit der GET und POST global abgedeckt werden.
+    echo get('error');
 ?>
 	<br> <br> <a class="button" onclick="hide_massage()">schließen</a> <br>
 </div>
