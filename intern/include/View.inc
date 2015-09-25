@@ -143,6 +143,18 @@ class View
 
     }//end printPage()
 
+
+    static public function getAService(){
+        $submenu = array();
+        foreach (glob("aservice/*.inc") as $datei) {
+            include_once $datei;
+            $dateiName = explode('aservice/', $datei)[1];
+            $className = explode('.', $dateiName)[0];
+            $submenu[] = array($className::DISPLAYNAME,'test.php?service='.$className);
+        }
+        return $submenu;
+    }
+
     /**
      * Gibt den HTML-Header aus.
      *
@@ -189,13 +201,7 @@ class View
 
         if (checkRights(2, $error = False) && TRUE) {
             $menu[] = array('Feedback anschauen','feedback_show.php');
-            $submenu = array();
-            foreach (glob("aservice/*.inc") as $datei) {
-                include_once $datei;
-                $dateiName = explode('aservice/', $datei)[1];
-                $className = explode('.', $dateiName)[0];
-                $submenu[] = array($className::DISPLAYNAME,'system_settings.php');
-            }
+            $submenu = View::getAService();
             $menu[] = array('Einstellungen',$submenu);
         }
         $menu[] = array('Logout', 'logout.php');
