@@ -41,7 +41,7 @@ class Form
         echo "\n<!-- Formular " . $content->name . " --> \n";
         echo '<form class="formular" ';
         echo 'id= "' . $content->name . '" ';
-        echo 'action= "' . $content->target . '" ';
+        echo 'action= "'.$_SERVER['REQUEST_URI'].'&method=' . $content->target . '" ';
         echo 'method="POST" ';
         echo ">\n";
         echo "<table>\n";
@@ -179,9 +179,9 @@ class Form
         $count = count($input->values);
         for ($i = 0; $i < $count; $i ++) {
             echo '<input type="checkbox"';
-            echo 'name="' . $input->names[$i] . '" ';
-            echo 'value="' . $input->values[$i] . '" ';
-            echo '>' . $input->displays[$i];
+            echo 'name="' . $input->name[$i] . '" ';
+            echo 'value="' . $input->value[$i] . '" ';
+            echo '>' . $input->valName[$i];
             echo '</input>' . "\n";
             if ($numRow === 1) {
                 echo '<br>';
@@ -195,6 +195,45 @@ class Form
         echo "</tr>\n";
 
     }//end _checkbox()
+
+    /**
+     * Erzeugt aus den Input Daten Select-Eingabefelder.
+     *
+     * Die Besonderheit bei Select ist, das in eine Array mehrer
+     * Select sein können.
+     * Genaueres siehe Dokumenation.
+     *
+     * @param object $input Array mit den Informationen über das Eingabefeld.
+     *
+     * @return void
+     */
+    private function _select($input)
+    {
+        $numRow = 0;
+        echo "<tr>\n";
+        echo '<td>';
+        echo $input->display;
+        echo '</td>' . "\n";
+        echo '<td width=200>';
+        $count = count($input->value);
+        echo '<select ';
+        echo 'name="' . $input->name . '" >';
+        for ($i = 0; $i < $count; $i ++) {
+
+            echo '<option value="' . $input->value[$i] . '" >';
+            echo $input->valName[$i] . '</option>';
+            if ($numRow === 1) {
+                echo '<br>';
+                $numRow = 0;
+            } else {
+                $numRow++;
+            }
+        }
+        echo '</select>';
+        echo "</td>\n";
+        echo "</tr>\n";
+
+    }//end _select()
 
 }//end class
 

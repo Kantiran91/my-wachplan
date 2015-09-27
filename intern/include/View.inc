@@ -32,6 +32,12 @@ class View
 
     /**
      *
+     * @var array  Sammlung aller Meldungen, die von den Methoden aufgerufen werden.
+     */
+    private $_meldung =  array();
+
+    /**
+     *
      * @var String Inhalt der in der Webseite dargestellt werden soll.
      */
     private $_title = '';
@@ -112,6 +118,17 @@ class View
     }//end setTitle()
 
     /**
+     * Fügt dem View eine Meldung hinzu.
+     *
+     * @param string $meldung Meldung die Ausgegeben werden soll.
+     *
+     * @return void
+     */
+    public function addMeldung($meldung){
+        $this->_meldung[] = $meldung;
+    }
+
+    /**
      * Gibt den Inhalt des View aus. Und fügt Menü, Header und etc. hinzu.
      *
      * @return void
@@ -142,6 +159,15 @@ class View
             include_once 'interpreter/' . $modul->type . '.inc';
             $modulContent = new $modul->type($modul->content);
             echo '</div>' . "\n";
+        }
+
+        // alle Meldungen ausgeben
+        foreach ($this->_meldung as $meldung){
+            echo '<div class=meldung>';
+            echo '<h4> '.$meldung[0].'</h4>';
+            echo $meldung[1];
+            echo '<br><br><a class="button" onclick="hide_massage()">';
+            echo 'schließen</a><br></div>';
         }
 
     }//end printPage()
@@ -245,11 +271,11 @@ class View
         echo '<ul>' . "\n";
         foreach ($menu as $menupoint) {
             if (is_array($menupoint[1]) === FALSE) {
-                self::printMenupoint($menupoint[0], $menupoint[1]);
+                self::_printMenupoint($menupoint[0], $menupoint[1]);
             } else {
                 echo '<li><a href=#>' . $menupoint[0] . '</a><ul>';
                 foreach ($menupoint[1] as $submenupoint) {
-                    self::printMenupoint($submenupoint[0], $submenupoint[1]);
+                    self::_printMenupoint($submenupoint[0], $submenupoint[1]);
                 }//end foreach
 
                 echo '</ul></li>' . "\n";
@@ -266,11 +292,11 @@ class View
         echo '<select onChange="OnSelectionChange (this)">' . "\n";
         foreach ($menu as $menupoint) {
             if (is_array($menupoint[1]) === FALSE) {
-                self::printMenupoint($menupoint[0], $menupoint[1], TRUE);
+                self::_printMenupoint($menupoint[0], $menupoint[1], TRUE);
             } else {
                 echo ' <optgroup label="' . $menupoint[0] . '">';
                 foreach ($menupoint[1] as $submenupoint) {
-                    self::printMenupoint(
+                    self::_printMenupoint(
                         $submenupoint[0],
                         $submenupoint[1],
                         TRUE);
