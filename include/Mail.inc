@@ -75,6 +75,51 @@ class Mail
     }//end setText()
 
     /**
+     * Läde einen Mailvorlagetext und ersetzt Schlüsselwörter.
+     *
+     * Mailvorlagen werden mit dem Dateinamen *.mail im Ornder mail_template
+     * im Root-Verzeichnis abgelegt.
+     * Der Aufbau des Textdokument ist wie folgt:
+     * Die erste Zeile enthält den Betreff der Mail. Alle folgenden Zeilen werden
+     * als Text der Mail aufgefasst. Um die Mail anpassen zu können, können
+     * Schlüsselwörter definiert werden. Dazu wird in der Vorlage an entsprechender
+     * Stelle ein Schlüsselwort hinterlegt. Diese wird mit $ vorne und hinten markiert.
+     * Das Schlüsselwort und das entsprechende Array sehen dann wie folgt aus:
+     * -Schlüsselwort: $tele$
+     * -Array = array(tele => "1234/21234"
+     *
+     * @param string $file  Name des Template das geladen werden soll.
+     * @param array  $param Array mit den Attributen die bei der Mail erstetzt
+     * werden.
+     *
+     * @return bool TRUE wenn alles okay ist.
+     */
+    public function loadTemplate($file, array $param)
+    {
+        $filename = ROOT .'/mail_template/'. $file . '.mail';
+        $filehandle = fopen($filename, 'r');
+        $this->_betreff = fgets($filehandle);
+        while ($line = fgets($filehandle)) {
+            $this->_text .= $line;
+        }//end while
+
+        foreach ($param as $key => $value) {
+            $this->_betreff = str_replace(
+                '$' . $key . '$',
+                $value,
+                $this->_betreff);
+            $this->_text = str_replace(
+                '$' . $key . '$',
+                $value,
+                $this->_text,
+                $count);
+        }//end foreach
+
+        return TRUE;
+
+    }//end loadTemplate()
+
+    /**
      * Setzt die private Variable $Betreff.
      *
      * @param string $betreff Setzt den Betreff der Mail neu.
