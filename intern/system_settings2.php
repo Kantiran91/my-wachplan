@@ -27,10 +27,13 @@ if (isset($_GET['service']) === TRUE) {
     $serviceName = get('service');
     $service = new $serviceName();
 
-    //Backend
+    // Backend
     if (isset($_GET['method']) === TRUE) {
         $methode = get('method');
-        $view->addMeldung($service->$methode($_POST));
+        $meldung = $service->$methode($_POST);
+        if (is_array($meldung) === TRUE) {
+            $view->addMeldung($meldung);
+        }
     }
 
     //Frontend

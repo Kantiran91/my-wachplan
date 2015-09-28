@@ -186,9 +186,10 @@ class View
             include_once $datei;
             $dateiName = explode('aservice/', $datei)[1];
             $className = explode('.', $dateiName)[0];
+            //!< FIXME nicht schön das hier die Datei systemsettings2.php direkt gecodet ist.
             $submenu[] = array(
                           $className::DISPLAYNAME,
-                          'test.php?service=' . $className,
+                          'system_settings2.php?service=' . $className,
                          );
         }
 

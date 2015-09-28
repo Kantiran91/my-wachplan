@@ -155,7 +155,6 @@ class UserSettings extends AbstractSettings
             return array('Fehler', 'Benutzername schon vorhanden.');
         }
 
-        var_dump($data);
         foreach ($data as $value) {
             $value = (string) $value;
             if ($value === '') {
@@ -198,21 +197,14 @@ class UserSettings extends AbstractSettings
                     $data['last_name']);
 
             // send as mail with Password
-        $emailAdresse = post('email');
-        $betreff = 'Erflogreiche Anmeldung zum Wachplan der Ortsgruppe Salem';
-        $mail = new mail($emailAdresse, $betreff);
-        $text = 'Hallo ' . post('first_name') . ' ' . post('last_name') . ',';
-        $text .= "\n dir wurde von einem der Admins ein Account für den Wachplan
-            der Ortsgruppe Salem erstellt.\n Hier kannst du eine Wachtermine
-            sehen, denn Daten ändern und dich zusätzlich noch eintragen.
-            Solltest du keinen Account brauchen oder nicht zu der DLRG OG Salem
-            gehören, melde dich bitte sofort bei uns,
-             damit wir das klären können.";
-        $text .= "\nFür diesen Wachplan benötigst du ein eigenes Passwort,diese lautet:";
-        $text .= " \n\n" . $newpasswort . "\n";
-        $text .= "\n---------------------------------------\n";
-        $text .= "Viele Grüße \n Deine Technische Leitung";
-        $mail->sendMail($text);
+        $mail = new mail(post('email'));
+        $keywords = array(
+                        'firstName' => post('first_name'),
+                        'lastName' => post('last_name'),
+                        'password' => $newpasswort,
+        );
+        $mail->loadTemplate('addUser', $keywords);
+        $mail->sendMail();
 
         if ($query->execute() === TRUE) {
             return array('Meldung', 'Benutzer angelegt!');
