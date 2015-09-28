@@ -40,9 +40,6 @@ createHeader('Systemeinstellungen');
 ?>
 <body>
 	<?php require 'template/menu.php'; ?>
-	<div class="modul">
-		<?php require 'template/ss_add_user.php'; ?>
-	</div>
     <div class="modul">
 		<?php require 'template/ss_change_user_data.php'; ?>
 	</div>

@@ -41,63 +41,101 @@ class UserSettings extends AbstractSettings
     {
         $this->frontend['description'] = 'Folgende Funktionen sind zur Zeit bei den
                     Benutzereinstellungen möglich';
-        $modulAddUser = array('header' => 'Neuen Benutzer anlegen','type' => 'Form');
-        $modulAddUser['content'] = array('name' => 'name','target' => 'addUser');
-        $modulAddUser['content']['inputs'][] = array(
-            'display' => 'Benutzername',
-            'name' => 'username',
-            'type' => 'text'
+        // add User
+        $modulAddUser = self::generateModule('Neuen Benutzer anlegen', 'Form');
+        $modulAddUser['content'] = array(
+                                        'name' => 'addUser',
+                                        'target' => 'addUser'
         );
-        $modulAddUser['content']['inputs'][] = array(
-            'display' => 'Vorname',
-            'name' => 'first_name',
-            'type' => 'text'
+        $modulAddUser['content']['inputs'] = $this->getAttributeInputs();
+        $this->frontend['moduls'][] = $modulAddUser;
+        // change User
+        // Hier muss noch ein Formular eingerichtet werden, das den zu bearbeiten Benuzter auswählt.
+      /* if ($showUsers) {
+            $userIds = array();
+            $userName = array();
+            foreach ($this->getAllUser() as $user){
+                $userIds[] = $user[0];
+                $userName[] = $user[1];
+            }
+            $inputs[] = array(
+                'display' => 'Benutzername',
+                'name' => 'username',
+                'type' => 'select',
+                'value' => $userIds,
+                'valName' => $userName,
+            );
+            ;
+        } else {*/
+        $modulChangeUser = self::generateModule('Benutzer bearbeiten', 'Form');
+        $modulChangeUser['content'] = array(
+                                        'name' => 'changeUser',
+                                        'target' => 'changeUser'
         );
-        $modulAddUser['content']['inputs'][] = array(
+        $modulChangeUser['content']['inputs'] = $this->getAttributeInputs(true);
+        $this->frontend['moduls'][] = $modulChangeUser;
+
+        return json_encode($this->frontend);
+    }
+
+    private function  getAttributeInputs($showUsers=FALSE){
+        $inputs = array();
+
+        $inputs[] = array(
+                        'display' => 'Benutzername',
+                        'name' => 'username',
+                        'type' => 'text'
+        );
+
+        $inputs[] = array(
+                        'display' => 'Vorname',
+                        'name' => 'first_name',
+                        'type' => 'text'
+        );
+        $inputs[] = array(
             'display' => 'Nachname',
             'name' => 'last_name',
             'type' => 'text'
         );
-        $modulAddUser['content']['inputs'][] = array(
+        $inputs[] = array(
             'display' => 'eMail',
             'name' => 'email',
             'type' => 'email'
         );
-        $modulAddUser['content']['inputs'][] = array(
+        $inputs[] = array(
             'display' => 'Telefonnummer',
             'name' => 'tele',
             'type' => 'text'
         );
-        $modulAddUser['content']['inputs'][] = array(
+        $inputs[] = array(
             'display' => 'Geburtsdatum',
             'name' => 'gb',
             'type' => 'date'
         );
-        $modulAddUser['content']['inputs'][] = array(
+        $inputs[] = array(
             'display' => 'Abzeichen',
             'name' => 'abzeichen',
             'type' => 'select',
             'value' => array('DRSA Bronze','DRSA Silber','DRSA Gold'),
             'valName' => array('DRSA Bronze','DRSA Silber','DRSA Gold'),
         );
-        $modulAddUser['content']['inputs'][] = array(
+        $inputs[] = array(
             'display' => 'Ausbildung EH / SAN',
             'name' => 'med',
             'type' => 'select',
             'valName' => array('','EH Kurs','San A','San B','Schulsani','Rettungsdienst'),
             'value' => array('eh','eh','san','san','san','san'),
         );
-        $modulAddUser['content']['inputs'][] = array(
+        $inputs[] = array(
             'display' => 'Benutzerrechte',
             'name' => 'rights',
             'type' => 'select',
             'valName' => array('Wachgänger','Wachleiter / stellv. Wachleiter','Admin'),
             'value' => array('0','1','2'),
         );
-        $this->frontend['moduls'][] = $modulAddUser;
-        return  json_encode($this->frontend);
-    }
 
+        return $inputs;
+    }
 
     public function addUser($data)
     {
@@ -206,6 +244,31 @@ class UserSettings extends AbstractSettings
 
         return $pass;
 
-    }//end randomString()
+    } // end randomString()
+
+
+    /**
+     * Schauen ob ich die Iwo anderst hinpacken kann.
+     *
+     * Lange Beschreibung
+     * Kommentar.
+     */
+    private function getAllUser()
+    {
+        global $database;
+        $stmtUserdata = $database->prepare(
+            'SELECT `id_user`, `user_name` FROM `wp_user` ORDER BY `user_name`');
+        $stmtUserdata->bind_result($idUser, $userName);
+        $stmtUserdata->execute();
+        $users = array();
+        while ($stmtUserdata->fetch()) {
+            $users[] = array(
+                            $idUser,
+                            $userName
+            );
+
+        }
+        return $users;
+    }
 }
 ?>

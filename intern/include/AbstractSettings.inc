@@ -69,6 +69,22 @@ abstract class AbstractSettings
         return TRUE;
     }
 
+    /**
+     * Erzeugt ein Array, das einen valides Modul erzeugt.
+     *
+     * @param string $header      Header des Moduls
+     * @param string $type        Type des Moduls zurZeit Form & Table
+     * @param string $descriptons Beschreibung des Moduls
+     * @return array Modul, das mit Content erweitert werden kann.
+     */
+    static function generateModule($header,$type,$descriptons=''){
+        return array(
+                    'header' => $header,
+                    'type' => $type,
+                    'descriptons' => $descriptons
+        );
+    }
+
 }//end class
 
 ?>
