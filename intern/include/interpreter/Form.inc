@@ -38,10 +38,11 @@ class Form
      */
     public function __construct($content)
     {
+        $url = $_SERVER['REQUEST_URI'];
         echo "\n<!-- Formular " . $content->name . " --> \n";
         echo '<form class="formular" ';
         echo 'id= "' . $content->name . '" ';
-        echo 'action= "'.$_SERVER['REQUEST_URI'].'&method=' . $content->target . '" ';
+        echo 'action= "' . $url . '&method=' . $content->target . '" ';
         echo 'method="POST" ';
         echo ">\n";
         echo "<table>\n";
@@ -219,7 +220,6 @@ class Form
         echo '<select ';
         echo 'name="' . $input->name . '" >';
         for ($i = 0; $i < $count; $i ++) {
-
             echo '<option value="' . $input->value[$i] . '" >';
             echo $input->valName[$i] . '</option>';
             if ($numRow === 1) {
@@ -228,7 +228,8 @@ class Form
             } else {
                 $numRow++;
             }
-        }
+        }//end for
+
         echo '</select>';
         echo "</td>\n";
         echo "</tr>\n";

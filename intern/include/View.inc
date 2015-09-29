@@ -34,7 +34,7 @@ class View
      *
      * @var array  Sammlung aller Meldungen, die von den Methoden aufgerufen werden.
      */
-    private $_meldung =  array();
+    private $_meldung = array();
 
     /**
      *
@@ -124,9 +124,11 @@ class View
      *
      * @return void
      */
-    public function addMeldung($meldung){
+    public function addMeldung($meldung)
+    {
         $this->_meldung[] = $meldung;
-    }
+
+    }//end addMeldung()
 
     /**
      * Gibt den Inhalt des View aus. Und fügt Menü, Header und etc. hinzu.
@@ -162,9 +164,9 @@ class View
         }
 
         // alle Meldungen ausgeben
-        foreach ($this->_meldung as $meldung){
+        foreach ($this->_meldung as $meldung) {
             echo '<div class=meldung>';
-            echo '<h4> '.$meldung[0].'</h4>';
+            echo '<h4> ' . $meldung[0] . '</h4>';
             echo $meldung[1];
             echo '<br><br><a class="button" onclick="hide_massage()">';
             echo 'schließen</a><br></div>';

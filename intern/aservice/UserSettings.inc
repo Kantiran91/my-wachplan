@@ -48,7 +48,8 @@ class UserSettings extends AbstractSettings
         $modulAddUser['content']['inputs'] = $this->getAttributeInputs();
         $this->frontend['moduls'][] = $modulAddUser;
         // change User
-        // Hier muss noch ein Formular eingerichtet werden, das den zu bearbeiten Benuzter
+        // Hier muss noch ein Formular eingerichtet werden,
+        //das den zu bearbeiten Benuzter
         // auswählt.
 
         /*

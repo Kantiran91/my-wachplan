@@ -40,16 +40,19 @@ abstract class AbstractSettings
      *
      * @var array Frontend
      */
-    protected  $frontend = array();
+    protected $frontend = array();
+
 
     /**
-     * Konstruktor
+     * Konstruktor.
      */
-    public function __construct(){
+    public function __construct()
+    {
         checkRights(2);
         $this->frontend['header'] = $this->displayname;
         $this->frontend['moduls'] = array();
-    }
+
+    }//end __construct()
 
     /**
      * Erstellt das Frontend für die Einstellungen.
@@ -65,25 +68,30 @@ abstract class AbstractSettings
      *
      * @return boolean True wenn alles richtig durchgeführt wurde.
      */
-     public function cronjob(){
+    public function cronjob($time)
+    {
         return TRUE;
-    }
+
+    }//end cronjob()
 
     /**
      * Erzeugt ein Array, das einen valides Modul erzeugt.
      *
-     * @param string $header      Header des Moduls
-     * @param string $type        Type des Moduls zurZeit Form & Table
-     * @param string $descriptons Beschreibung des Moduls
+     * @param string $header      Header des Moduls.
+     * @param string $type        Type des Moduls zurZeit Form & Table.
+     * @param string $descriptons Beschreibung des Moduls.
+     *
      * @return array Modul, das mit Content erweitert werden kann.
      */
-    static function generateModule($header,$type,$descriptons=''){
+    static function generateModule($header, $type, $descriptons = '')
+    {
         return array(
-                    'header' => $header,
-                    'type' => $type,
-                    'descriptons' => $descriptons
-        );
-    }
+                'header'      => $header,
+                'type'        => $type,
+                'descriptons' => $descriptons,
+               );
+
+    }//end generateModule()
 
 }//end class
 

@@ -12,7 +12,7 @@
  * @link    http:/salem.dlrg.de
  **/
 require_once '../init.php';
-include_once '../intern/aservice/UserSettings.inc';
+require_once '../intern/aservice/UserSettings.inc';
 
 if (count($_GET) !== 2) {
     header('Location: ../index.php?fehler=3');

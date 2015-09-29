@@ -83,8 +83,9 @@ class Mail
      * Die erste Zeile enthält den Betreff der Mail. Alle folgenden Zeilen werden
      * als Text der Mail aufgefasst. Um die Mail anpassen zu können, können
      * Schlüsselwörter definiert werden. Dazu wird in der Vorlage an entsprechender
-     * Stelle ein Schlüsselwort hinterlegt. Diese wird mit $ vorne und hinten markiert.
-     * Das Schlüsselwort und das entsprechende Array sehen dann wie folgt aus:
+     * Stelle ein Schlüsselwort hinterlegt. Diese wird mit $ vorne und
+     * hinten markiert. Das Schlüsselwort und das entsprechende Array sehen
+     * dann wie folgt aus:
      * -Schlüsselwort: $tele$
      * -Array = array(tele => "1234/21234"
      *
