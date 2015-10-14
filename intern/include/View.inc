@@ -270,7 +270,7 @@ class View
                   );
 
         // Menüdarstellung für normale Displays
-        echo '<div id="menu">' . "\n";
+        echo '<div class="menu">' . "\n";
         echo '<ul>' . "\n";
         foreach ($menu as $menupoint) {
             if (is_array($menupoint[1]) === FALSE) {
@@ -288,6 +288,7 @@ class View
         echo '</ul>' . "\n";
 
         // Menüdarstellung für kleine Displays
+        // TODO Auslagern in eigene JavaSkript datei
         echo '<script type="text/javascript">
                  function OnSelectionChange(select){
             	 document.location= select.options[select.selectedIndex].value;}

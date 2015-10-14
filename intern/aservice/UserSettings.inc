@@ -30,9 +30,15 @@ class UserSettings extends AbstractSettings
 {
     const DISPLAYNAME = 'Benutzereinstellungen';
 
-    var $displayname = 'Benutzereinstellungen';
+    /**
+     * @var String Displayname
+     */
+    public $displayname = self::DISPLAYNAME;
 
-    var $title = 'Benutzereinstellungen';
+    /**
+     * @var string Titel in der Titelleiste
+     */
+    public $title = self::DISPLAYNAME;
 
 
     public function getFrontend()
@@ -40,12 +46,12 @@ class UserSettings extends AbstractSettings
         $this->frontend['description'] = 'Folgende Funktionen sind zur Zeit bei den
                     Benutzereinstellungen möglich';
         // add User
-        $modulAddUser = self::generateModule('Neuen Benutzer anlegen', 'Form');
+        $modulAddUser = static::generateModule('Neuen Benutzer anlegen', 'Form');
         $modulAddUser['content'] = array(
                                     'name'   => 'addUser',
                                     'target' => 'addUser',
                                    );
-        $modulAddUser['content']['inputs'] = $this->getAttributeInputs();
+        $modulAddUser['content']['inputs'] = $this->_getAttributeInputs();
         $this->frontend['moduls'][] = $modulAddUser;
         // change User
         // Hier muss noch ein Formular eingerichtet werden,
@@ -71,7 +77,7 @@ class UserSettings extends AbstractSettings
          * } else {
          */
 
-        $modulChangeUser = self::generateModule('Benutzer bearbeiten', 'Form');
+        $modulChangeUser = static::generateModule('Benutzer bearbeiten', 'Form');
         $modulChangeUser['content'] = array(
                                        'name'   => 'changeUser',
                                        'target' => 'changeUser',
@@ -189,11 +195,8 @@ class UserSettings extends AbstractSettings
     public function addUser(array $data)
     {
         global $database;
-        if ($data === NULL || count($data) !== 9) {
-            // @todo besser Fehlermldung überlegen
-            return array('Fehler', 'Formualar nicht vollständig');
-        }
 
+        //@todo Prüfung auf  Benutzername in Funktion auslagern
         // Prüfen ob der Benutzername schon vergeben ist!
         $query = 'SELECT `id_user`FROM `wp_user` WHERE `user_name`=?';
         $checkQuery = $database->prepare($query);
@@ -213,7 +216,7 @@ class UserSettings extends AbstractSettings
             $database->real_escape_string($value);
         }//end foreach
 
-        $newpasswort = self::randomString(10);
+        $newpasswort = static::randomString(10);
         $pwHash = encryptHash($newpasswort);
 
         // create the db query
@@ -255,11 +258,14 @@ class UserSettings extends AbstractSettings
         $mail->loadTemplate('addUser', $keywords);
         $mail->sendMail();
 
+        $result = array();
         if ($query->execute() === TRUE) {
-            return array('Meldung', 'Benutzer angelegt!');
+            $result = array('Meldung', 'Benutzer angelegt!');
         } else {
-            return array('Fehler', 'Fehler in der Datenbank!');
+            $result = array('Fehler', 'Fehler in der Datenbank!');
         }
+
+        return $result;
 
     }//end addUser()
 

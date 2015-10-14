@@ -12,7 +12,7 @@
   * @link    http:/salem.dlrg.de
   **/
 ?>
-<div id="menu">
+<div class="menu">
     <ul>
         <li><a href="index.php#own_data">Eigene Daten </a></li>
         <li><a href="index.php#plan">Wachplan </a></li>

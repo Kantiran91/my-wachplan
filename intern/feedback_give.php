@@ -30,16 +30,16 @@ $reslutDay = mysqli_fetch_row($database->query($queryDay));
 createHeader('Feedback');
 ?>
 <body>
-	<?php require 'template/menu.php'; ?>
-	<div class="modul" id="anleitung">
-        <h1>
-		Feedback für den <?php echo date('d.m.Y', strtotime($reslutDay[1])); ?>
-		</h1>
+<?php require 'template/menu.php'; ?>
+<div class="modul" id="anleitung">
+<h1>
+Feedback für den <?php echo date('d.m.Y', strtotime($reslutDay[1])); ?>
+</h1>
         Danke das du Hilfts den Wachdienst zu verbessern, bitte fülle das
         angebene Formular aus. Dies sollte dich nur max. 5 Minuten kosten.
     </div>
     <div class="modul" id="formular">
-        <form id="feedback_formular" method="GET"
+        <form id="feedback_formular" class="formFeedback"  method="GET"
             action="include/back_add_feedback.php"
         >
             <input type="hidden" name="day" value="<?php echo $reslutDay[0]; ?>">
@@ -112,8 +112,7 @@ createHeader('Feedback');
             </select>
             <h2>sonstiges</h2>
             <br> Verbrauchtes Material / Fehlendes Material <br>
-            <textarea name="material" cols="50" rows="10">
-            (max. 180 Zeichen)</textarea>
+            <textarea name="material" cols="50" rows="10">(max. 180 Zeichen)</textarea>
             <br> Bemerkungen (Sollt es Probleme oder Einsätze gegeben haben,
             bitte hier eine kurze Beschreibung noch einfügen)<br>
             <textarea name="notice" cols="50" rows="10">(max. 180 Zeichen)</textarea>
