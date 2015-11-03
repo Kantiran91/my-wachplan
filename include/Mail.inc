@@ -58,7 +58,7 @@ class Mail
     public function __construct($empfaenger, $betreff = 'Wachplan')
     {
         $this->empfaenger = $empfaenger;
-        $this->betreff = $betreff;
+        $this->_betreff = $betreff;
 
     }//end __construct()
 
@@ -71,7 +71,7 @@ class Mail
      */
     public function setText($text)
     {
-        $this->text = $text;
+        $this->_text = $text;
 
     }//end setText()
 
@@ -100,20 +100,20 @@ class Mail
     {
         $filename = dirname(__FILE__) . '/../mail_template/'. $file . '.mail';
         $filehandle = fopen($filename, 'r');
-        $this->betreff = fgets($filehandle);
+        $this->_betreff = fgets($filehandle);
         while ($line = fgets($filehandle)) {
-            $this->text .= $line;
+            $this->_text .= $line;
         }//end while
 
         foreach ($param as $key => $value) {
-            $this->betreff = str_replace(
+            $this->_betreff = str_replace(
                 '$' . $key . '$',
                 $value,
-                $this->betreff);
-            $this->text = str_replace(
+                $this->_betreff);
+            $this->_text = str_replace(
                 '$' . $key . '$',
                 $value,
-                $this->text,
+                $this->_text,
                 $count);
         }//end foreach
 
@@ -130,7 +130,7 @@ class Mail
      */
     public function setBetreff($betreff)
     {
-        $this->betreff = $betreff;
+        $this->_betreff = $betreff;
 
     }//end setBetreff()
 
@@ -141,7 +141,7 @@ class Mail
      */
     public function getText()
     {
-       return $this->text;
+       return $this->_text;
 
     }//end setText()
 
@@ -152,7 +152,7 @@ class Mail
      */
     public function getBetreff()
     {
-        return $this->betreff;
+        return $this->_betreff;
 
     }//end setText()
 
@@ -167,10 +167,10 @@ class Mail
     public function sendMail($text = NULL)
     {
         if (isset($text) === TRUE) {
-            $this->text = $text;
+            $this->_text = $text;
         }
 
-        return mail($this->_empfaenger, $this->betreff, $this->text, $this->_absender);
+        return mail($this->_empfaenger, $this->_betreff, $this->_text, $this->_absender);
 
     }//end sendMail()
 
