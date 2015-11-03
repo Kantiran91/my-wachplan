@@ -53,7 +53,7 @@ class MailTest extends PHPUnit_Framework_TestCase
         $filehandle = fopen($filename, 'r');
         $betreff = fgets($filehandle);
         $this->assertEquals($betreff,$this->object->getBetreff());
-
+        $textFile = '';
         while ($line = fgets($filehandle)) {
             $textFile .= $line;
         }//end while
