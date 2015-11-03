@@ -1,6 +1,6 @@
 <?php
 
-require_once '/Users/sebi/entwicklung/wachplan/include/Mail.inc';
+require_once '../include/Mail.inc';
 
 /**
  * Test class for Mail.
