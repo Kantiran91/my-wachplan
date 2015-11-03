@@ -222,6 +222,7 @@ function getDays()
  * @param string $fehlertext  Beschriebung des Fehlers.
  * @param string $fehlerdatei Datei in der der Fehler aufgetreten ist.
  * @param string $fehlerzeile Zeile in der der Fehler aufgetreten ist.
+ * FIXME Die Log datei wird in jedem unterverzeichnis angelegt
  *
  * @return void|boolean Kommentar.
  */

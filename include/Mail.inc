@@ -53,11 +53,12 @@ class Mail
      *
      * @param string $empfaenger Empfänger der Email.
      * @param string $betreff    Betreff der Email.
+     * @todo  Mit RegEx prüfen ob die eMail-Adresse valide ist.
      */
     public function __construct($empfaenger, $betreff = 'Wachplan')
     {
         $this->empfaenger = $empfaenger;
-        $this->betreff = $betreff;
+        $this->_betreff = $betreff;
 
     }//end __construct()
 
@@ -70,7 +71,7 @@ class Mail
      */
     public function setText($text)
     {
-        $this->text = $text;
+        $this->_text = $text;
 
     }//end setText()
 
@@ -87,7 +88,7 @@ class Mail
      * hinten markiert. Das Schlüsselwort und das entsprechende Array sehen
      * dann wie folgt aus:
      * -Schlüsselwort: $tele$
-     * -Array = array(tele => "1234/21234"
+     * -Array = array(tele => "1234/21234" ... )
      *
      * @param string $file  Name des Template das geladen werden soll.
      * @param array  $param Array mit den Attributen die bei der Mail erstetzt
@@ -97,7 +98,7 @@ class Mail
      */
     public function loadTemplate($file, array $param)
     {
-        $filename = ROOT .'/mail_template/'. $file . '.mail';
+        $filename = dirname(__FILE__) . '/../mail_template/'. $file . '.mail';
         $filehandle = fopen($filename, 'r');
         $this->_betreff = fgets($filehandle);
         while ($line = fgets($filehandle)) {
@@ -129,9 +130,31 @@ class Mail
      */
     public function setBetreff($betreff)
     {
-        $this->betreff = $betreff;
+        $this->_betreff = $betreff;
 
     }//end setBetreff()
+
+    /**
+     * Return the text which is save in the object
+     *
+     * @return void
+     */
+    public function getText()
+    {
+       return $this->_text;
+
+    }//end setText()
+
+    /**
+     * Return the text of the betreff which is save in the object
+     *
+     * @return void
+     */
+    public function getBetreff()
+    {
+        return $this->_betreff;
+
+    }//end setText()
 
     /**
      * Schickt schließlich die Mail ab.
@@ -144,7 +167,7 @@ class Mail
     public function sendMail($text = NULL)
     {
         if (isset($text) === TRUE) {
-            $this->text = $text;
+            $this->_text = $text;
         }
 
         return mail($this->_empfaenger, $this->_betreff, $this->_text, $this->_absender);

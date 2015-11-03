@@ -14,8 +14,6 @@
  * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
  * @version GIT:  $Date$
  * @link    http:/salem.dlrg.de
- * @todo Jede Interpreter Klasse soll die eigene CSS-Datei und ggf. auch Java-Skript
- * -Datei miteinbinden.
  * @todo required Attribute einbinden.
  **/
 
@@ -62,13 +60,21 @@ class Form
 
     }//end __construct()
 
+    public static function getStyles(){
+        return array();
+    }//end getStyles()
+
+    public static function getScripts(){
+        return array('formulars.js' => '/wachplan/js/formulars.js');
+    }//end getScripts()
+
     /**
      * Erzeugt aus den Input Daten ein Datums-Eingabefeld mit den jquery Datespicker.
      *
      * @param object $input Array mit den Informationen über das Eingabefeld.
      *
      * @return void
-     * @todo schöner Lösung für den datepicker
+     * @todo datepicker in Javaskript datei unterbringen.
      */
     private function _date($input)
     {
