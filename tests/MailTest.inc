@@ -1,6 +1,6 @@
 <?php
 
-require_once '../include/Mail.inc';
+require_once  dirname(__FILE__) .'/../include/Mail.inc';
 
 /**
  * Test class for Mail.
