@@ -44,10 +44,21 @@ class View
 
     /**
      *
+     * @var Array Liste mit css-Dateien die eingebunden werden.
+     */
+    private $_styles = array();
+
+    /**
+     *
+     * @var Array Liste mit JavaSkript-Dateien die eingebunden werden sollen.
+     */
+    private $_scripts = array();
+
+    /**
+     *
      * @var Singleton Statische Variable um die einzige Instanz der Klasse zu halten.
      */
     protected static $instance = NULL;
-
 
     /**
      * Konstruktor.
@@ -56,7 +67,13 @@ class View
      */
     protected function __construct()
     {
+        $this->_styles['style.css'] = '/wachplan/style/style.css';
+        $this->_styles['menu.css'] = '/wachplan/style/menu.css';
 
+        $this->_scripts['jquery.min.js'] = '/wachplan/js/jquery.min.js';
+        $this->_scripts['jquery-ui.js'] = '//code.jquery.com/ui/1.11.4/jquery-ui.js';
+        $this->_scripts['intern_function.js'] = '/wachplan/js/intern_function.js';
+        $this->_scripts['buttons.js'] = '/wachplan/js/buttons.js';
     }//end __construct()
 
     /**
@@ -137,10 +154,23 @@ class View
      */
     public function printPage()
     {
+        $contentDecoded = json_decode($this->_content);
+        //Binde Modulspezifsche HTML-Attribute in Header ein.
+        foreach ($contentDecoded->moduls as $modul){
+            include_once 'interpreter/' . $modul->type . '.inc';
+            $className = $modul->type;
+            foreach ($className::getStyles() as $style){
+                $this->_styles[$style['name']] = $style['path'];
+            }
+            foreach ($className::getScripts() as $scripts){
+                $this->_scripts[] = $scripts;
+            }
+
+        }
+
         $this->_printHeader();
         $this->_printMenu();
 
-        $contentDecoded = json_decode($this->_content);
         // Hauptfenster und beschreibung
         echo '<div class="modul">' . "\n";
         echo '<h1>' . $contentDecoded->header . '</h1>' . "\n";
@@ -157,8 +187,6 @@ class View
             if (isset($modul->description) === TRUE) {
                 echo $modul->description . '<br><br>';
             }
-
-            include_once 'interpreter/' . $modul->type . '.inc';
             $modulContent = new $modul->type($modul->content);
             echo '</div>' . "\n";
         }
@@ -188,7 +216,7 @@ class View
             include_once $datei;
             $dateiName = explode('aservice/', $datei)[1];
             $className = explode('.', $dateiName)[0];
-            //!< FIXME nicht schön das hier die Datei systemsettings2.php direkt gecodet ist.
+            //!< @todo Wenn MVP impementiert auf system_settings.php um ändern.
             $submenu[] = array(
                           $className::DISPLAYNAME,
                           'system_settings2.php?service=' . $className,
@@ -214,16 +242,18 @@ class View
         <head>
         <title> <?php echo $this->title; ?>@Wachplan Salem</title>
         <meta charset="UTF-8" />
-        <link href="/wachplan/style/style.css" type="text/css" rel="stylesheet" />
-        <link href="/wachplan/style/menu.css" type="text/css" rel="stylesheet" />
+        <?php
+        foreach ($this->_styles as $style){
+            echo '<link href="' . $style . '" type="text/css" rel="stylesheet" />' . "\n";
+        }?>
         <link rel="stylesheet"
             href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"
         >
-        <script src="/wachplan/js/jquery.min.js"></script>
-        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-        <script src="/wachplan/js/intern_function.js"></script>
-        <script src="/wachplan/js/buttons.js"></script>
-        <script src="/wachplan/js/formulars.js"></script>
+        <?php
+        foreach ($this->_styles as $style){
+            echo '<link href="' . $style . '" type="text/css" rel="stylesheet" />'. "\n";
+        }?>
+
         </head>
         <?php
         NULL;
