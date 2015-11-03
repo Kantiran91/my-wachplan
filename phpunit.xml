@@ -3,7 +3,7 @@
 <phpunit bootstrap="tests/include" colors="true">
     <testsuites>
         <testsuite name="Mail Test Suite">
-            <directory>./tests/include</directory>
+            <directory>./tests/include/</directory>
         </testsuite>
     </testsuites>
 
