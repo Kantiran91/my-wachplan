@@ -14,8 +14,12 @@
 function loader($class)
 {
     $file = $class . '.php';
+    $file2 = $class . '.inc';
     if (file_exists($file)) {
         require $file;
+    }
+    else if (file_exists($file2)){
+        require $file2;
     }
 }
 spl_autoload_register('loader');
