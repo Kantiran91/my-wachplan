@@ -45,12 +45,11 @@ class MailTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadTemplate()
     {
-        echo scandir(".");
         $this->object->loadTemplate('addUser', array());
         $text = $this->object->getText();
         $this->assertNotNull($text);
 
-        $filename = dirname(__FILE__) . '/../../mail_template/addUser.mail';
+        $filename = dirname(__FILE__) . '/../mail_template/addUser.mail';
         $filehandle = fopen($filename, 'r');
         $betreff = fgets($filehandle);
         $this->assertEquals($betreff,$this->object->getBetreff());
