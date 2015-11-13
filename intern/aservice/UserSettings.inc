@@ -25,6 +25,7 @@ require_once '../init.php';
  * -neuen Benutzer anlegen
  * -Benutzer Bearbeiten
  * -Benutzer löschen
+* mögliche Lösung für das Problem das Daten zuerst geholt werden soll, könnten Tabellenüberschriften über alle col darstellen
  */
 class UserSettings extends AbstractSettings
 {
