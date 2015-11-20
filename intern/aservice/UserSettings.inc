@@ -41,6 +41,12 @@ class UserSettings extends AbstractSettings
     public $title = self::DISPLAYNAME;
 
 
+    /**
+     * Erzeugt das Frontend der Benutzereinstellungen.
+     *
+     * @return array Mehrdim array der Inputs.
+     * @see    AbstractSettings::getFrontend()
+     */
     public function getFrontend()
     {
         $this->frontend['description'] = 'Folgende Funktionen sind zur Zeit bei den
@@ -53,29 +59,6 @@ class UserSettings extends AbstractSettings
                                    );
         $modulAddUser['content']['inputs'] = $this->_getAttributeInputs();
         $this->frontend['moduls'][] = $modulAddUser;
-        // change User
-        // Hier muss noch ein Formular eingerichtet werden,
-        //das den zu bearbeiten Benuzter
-        // auswählt.
-
-        /*
-         * if ($showUsers) {
-         * $userIds = array();
-         * $userName = array();
-         * foreach ($this->getAllUser() as $user){
-         * $userIds[] = $user[0];
-         * $userName[] = $user[1];
-         * }
-         * $inputs[] = array(
-         * 'display' => 'Benutzername',
-         * 'name' => 'username',
-         * 'type' => 'select',
-         * 'value' => $userIds,
-         * 'valName' => $userName,
-         * );
-         * ;
-         * } else {
-         */
 
         $modulChangeUser = static::generateModule('Benutzer bearbeiten', 'Form');
         $modulChangeUser['content'] = array(
@@ -92,11 +75,37 @@ class UserSettings extends AbstractSettings
     /**
      * Erzeugt die Input Elemente die zum hinzufügen und zum ändern notwendig sind.
      *
-     * @return array Mehrdim array der Inputs.
+     * @param boolean $change If true include a select field that show all users.
+     *
+     * @return array   Mehrdim array der Inputs.
      */
-    private function  _getAttributeInputs()
+    private function  _getAttributeInputs($change = FALSE)
     {
         $inputs = array();
+
+        if ($change === TRUE) {
+            $users = self::getAllUser();
+            $userNames = array('');
+            $userids   = array('');
+
+            foreach ($users as $user) {
+                $userids[] = $user['0'];
+                $userNames[] = $user['1'];
+            }//end foreach
+
+            $inputs[] = array(
+                         'display' => 'Benutzer',
+                         'name'    => 'user_id',
+                         'type'    => 'select',
+                         'valName' => $userNames,
+                         'value'   => $userids,
+                        );
+        }
+
+        $inputs[] = array(
+                     'display' => 'Benutzerdaten',
+                     'type'    => 'header',
+                    );
 
         $inputs[] = array(
                      'display' => 'Benutzername',
@@ -128,6 +137,10 @@ class UserSettings extends AbstractSettings
                      'display' => 'Geburtsdatum',
                      'name'    => 'gb',
                      'type'    => 'date',
+                    );
+        $inputs[] = array(
+                     'display' => 'Qualifkationen',
+                     'type'    => 'header',
                     );
         $inputs[] = array(
                      'display' => 'Abzeichen',
@@ -166,6 +179,10 @@ class UserSettings extends AbstractSettings
                                   ),
                     );
         $inputs[] = array(
+                     'display' => 'Rechte',
+                     'type'    => 'header',
+                    );
+        $inputs[] = array(
                      'display' => 'Benutzerrechte',
                      'name'    => 'rights',
                      'type'    => 'select',
@@ -194,9 +211,9 @@ class UserSettings extends AbstractSettings
      */
     public function addUser(array $data)
     {
-        global $database;
+       $database = $GOBALS['database'];
 
-        //@todo Prüfung auf  Benutzername in Funktion auslagern
+        //@TODO Prüfung auf  Benutzername in Funktion auslagern
         // Prüfen ob der Benutzername schon vergeben ist!
         $query = 'SELECT `id_user`FROM `wp_user` WHERE `user_name`=?';
         $checkQuery = $database->prepare($query);
@@ -204,7 +221,7 @@ class UserSettings extends AbstractSettings
         $checkQuery->execute();
         $checkQuery->store_result();
         if ($checkQuery->num_rows !== 0) {
-            return array('Fehler','Benutzername schon vorhanden.');
+            return array('Fehler', 'Benutzername schon vorhanden.');
         }
 
         foreach ($data as $value) {
@@ -294,15 +311,15 @@ class UserSettings extends AbstractSettings
     }//end randomString()
 
     /**
-     * Schauen ob ich die Iwo anderst hinpacken kann.
+     * Get List mit allen Useren.
      *
      * Lange Beschreibung
      *
      * @return array Liste mit Usern (mit ID und Name)
      */
-    private function _getAllUser()
+    static function getAllUser()
     {
-        global $database;
+       $database = $GOBALS['database'];
         $stmtUserdata = $database->prepare(
             'SELECT `id_user`, `user_name` FROM `wp_user` ORDER BY `user_name`');
         $stmtUserdata->bind_result($idUser, $userName);
@@ -317,7 +334,7 @@ class UserSettings extends AbstractSettings
 
         return $users;
 
-    }//end _getAllUser()
+    }//end getAllUser()
 
 }//end class
 

@@ -216,7 +216,7 @@ class View
             include_once $datei;
             $dateiName = explode('aservice/', $datei)[1];
             $className = explode('.', $dateiName)[0];
-            //!< @todo Wenn MVP impementiert auf system_settings.php um ändern.
+            //!< @TODO Wenn MVP impementiert auf system_settings.php um ändern.
             $submenu[] = array(
                           $className::DISPLAYNAME,
                           'system_settings2.php?service=' . $className,
@@ -231,8 +231,8 @@ class View
      * Gibt den HTML-Header aus.
      *
      * @return void
-     * @todo   Stylesheet für den Kalender anpassen
-     * @todo   Wenn der MVP-Pattern ankommt, doppelung mit header.php vermeiden
+     * @TODO   Stylesheet für den Kalender anpassen
+     * @TODO   Wenn der MVP-Pattern ankommt, doppelung mit header.php vermeiden
      */
     private function _printHeader()
     {
@@ -264,7 +264,7 @@ class View
      * Erzeugt das Menü für den Wachplan.
      *
      * @return void
-     * @todo Einstellungseite erzeugen
+     * @TODO Einstellungseite erzeugen
      */
     private function _printMenu()
     {

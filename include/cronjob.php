@@ -26,7 +26,7 @@ require_once '../init.php';
  * @param string $date String mit Datum.
  *
  * @return string Datum in der Darstellung d.m.Y
- * @todo   Überführen in die Init datei. ggf. auch eine funktion für sql Datum
+ * @TODO   Überführen in die Init datei. ggf. auch eine funktion für sql Datum
  */
 function dateDe($date)
 {

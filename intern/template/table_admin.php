@@ -15,7 +15,7 @@
  * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
  * @version GIT: $Date: Wed Apr 22 13:22:48 2015 +0200$
  * @link    http:/salem.dlrg.de
- * @todo    Umbennen des File und umbauen, so das nur noch diese genutzt wird.
+ * @TODO    Umbennen des File und umbauen, so das nur noch diese genutzt wird.
  **/
 require_once '../init.php';
 checkSession();

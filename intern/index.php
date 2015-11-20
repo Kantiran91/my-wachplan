@@ -78,7 +78,7 @@ createHeader('Startseite');
             <tbody>
 	<?php
 foreach ($ergebnisOwn as $zeile) {
-    //@todo schaueb ob Frontend und Backend besser getrennt werden können.
+    //@TODO schaueb ob Frontend und Backend besser getrennt werden können.
     echo '<tr>';
     echo '<td>';
     echo date('d.m.Y', strtotime($zeile['date']));
@@ -120,7 +120,7 @@ require 'template/formular_year.php';
     <div class="modul" id="plan">
         <h1>Wachplan</h1>
 	<?php
-//@todo Verschlanken da nur noch eine externe Datei notwendig ist.
+//@TODO Verschlanken da nur noch eine externe Datei notwendig ist.
 if ($_SESSION['rights'] >= 2) {
     include 'template/table_admin.php';
 } else {

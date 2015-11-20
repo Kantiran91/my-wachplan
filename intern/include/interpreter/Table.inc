@@ -12,7 +12,7 @@
   * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
   * @version GIT:  $Date$
   * @link    http:/salem.dlrg.de
-  * @todo    Möglichkeit zwei Spalten und Zeilen zusammen zu fassen.
+  * @TODO    Möglichkeit zwei Spalten und Zeilen zusammen zu fassen.
   **/
 
 /**

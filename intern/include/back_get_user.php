@@ -12,14 +12,14 @@
   * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
   * @version GIT:  $Date: Sun May 10 09:51:12 2015 +0200$
   * @link    http:/salem.dlrg.de
-  * @todo    Die Ausgabe sollte verallgemeinert werden. Das heißt die Benutzer
+  * @TODO    Die Ausgabe sollte verallgemeinert werden. Das heißt die Benutzer
   * sollen im JSON-Formant ausgegeben werden
-  * @todo    Trenne des Frontend vom Backend
+  * @TODO    Trenne des Frontend vom Backend
   **/
 require_once '../../init.php';
 checkSession();
 
-//@todo ggf. dieser Codeteil der alle Benutzer ausgibt in eine eigene Funktion.
+//@TODO ggf. dieser Codeteil der alle Benutzer ausgibt in eine eigene Funktion.
 $day = get('day');
 $position = get('position');
 $query = 'SELECT `id_user`, `user_name` FROM `wp_user` ORDER BY `user_name`';

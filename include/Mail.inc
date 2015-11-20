@@ -53,7 +53,7 @@ class Mail
      *
      * @param string $empfaenger Empfänger der Email.
      * @param string $betreff    Betreff der Email.
-     * @todo  Mit RegEx prüfen ob die eMail-Adresse valide ist.
+     * @TODO  Mit RegEx prüfen ob die eMail-Adresse valide ist.
      */
     public function __construct($empfaenger, $betreff = 'Wachplan')
     {

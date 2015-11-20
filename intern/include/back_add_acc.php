@@ -14,7 +14,7 @@
   * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
   * @version GIT: $Id$ $Date: Sun May 10 09:51:12 2015 +0200$
   * @link    http:/salem.dlrg.de
-  * @todo    Prüfen ob eine Mail verschickt wird wenn jemand eingetragen wird bzw. sich einträgt.
+  * @TODO    Prüfen ob eine Mail verschickt wird wenn jemand eingetragen wird bzw. sich einträgt.
   **/
 require_once '../../init.php';
 checkSession();

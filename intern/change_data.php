@@ -10,9 +10,10 @@
   * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
   * @version GIT:  $Date: Sun May 10 09:51:12 2015 +0200$
   * @link    http:/salem.dlrg.de
-  * @todo    Frontend und Backend Trennen
+  * @TODO    Frontend und Backend Trennen
   **/
 require_once '../init.php';
+require_once 'aservice/UserSettings.inc';
 checkSession();
 
 /*
@@ -55,41 +56,31 @@ if (isset($_GET['user_name']) === TRUE) {
  *  Hole die Liste von Wunschpartnern
  */
 
-//TODO in eine Funktion ausgliedern
-$query = 'SELECT `id_user`, `user_name` FROM `wp_user` ORDER BY `user_name`';
-$result = $database->query($query);
-while ($users[] = mysqli_fetch_row($result)) {
-    NULL;
-}
+$users = UserSettings::getAllUser();
 
-array_pop($users);
 
 /*
  * Passwort ändern
  */
 
-$pwSame = TRUE;
+$pwSame = TRUE; // @var bool is true if both pw fields are equal
+$pwSave = FALSE; // @var bool is true if the pw is save in the Database
 if (isset($_POST['pass1']) === TRUE && isset($_POST['pass2']) === TRUE) {
     if ($_POST['pass1'] === $_POST['pass2']) {
         $pwSame = TRUE;
         // TODO Query durch prepare ersetzten
         $queryPw = 'UPDATE `wp_user` SET `hash`="' .
-                     encrypt_hash($_POST['pass1']) . '" WHERE `user_name`=';
+                     encryptHash($_POST['pass1']) . '" WHERE `user_name`=';
         $queryPw .= '"' . $_SESSION['user_name'] . '"';
         $result = $database->query($queryPw);
-        // TODO Komisch wieso mach ich das und brauch ich das?
-        if ($result === TRUE) {
-            $pwCorrekt = TRUE;
-        } else {
-            $pwCorrekt = FALSE;
-        }
+        $pwSave = $result;
     } else {
         $pwSame = FALSE;
     }//end if
 }//end if
 
 // Holt alle Daten des Benutzers
-//TODO SQL befehl bearbeiten
+//TODO Schauen ob diese Querey ausgelagert werden kann.
 $queryOwn = '
 SELECT
     `user_name`,
@@ -105,9 +96,10 @@ FROM  `wp_user`
 WHERE `user_name` ="' . $_SESSION['user_name'] . '"';
 $resultOwn = $database->query($queryOwn);
 $row = $resultOwn->fetch_row();
+
 // FRONTEND
 createHeader('Eigene Daten');
-//FIXME Die eingabe der Abzeichen sollte nicht mehr manuelle Erfolgen!
+//@TODO die auswahl des Sanitätsausbildung überarbeiten
 ?>
 <body>
 	<?php require 'template/menu.php'; ?>
@@ -151,13 +143,27 @@ createHeader('Eigene Daten');
                 </tr>
                 <tr>
                     <td>Abzeichen:</td>
-                    <td><input type=text name=abzeichen
-                        value="<?php echo $row[4]; ?>"
-                    ></td>
+                    <td><select id="abzeichen" name="abzeichen" >
+                    <option value="<?php echo $row[4]; ?>" selected>
+                    <?php echo $row[4]; ?></option>
+                    <option value="DRSA Bronze" >DRSA Bronze</option>
+                    <option value="DRSA Silber" >DRSA Silber</option>
+                    <option value="DRSA Gold" >DRSA Gold</option>
+                    </select></td>
                 </tr>
                 <tr>
                     <td>Erste-Hilfe-Ausbildung:</td>
-                    <td><input type=text name=med value="<?php echo $row[5]; ?>"></td>
+                    <td><select id="med"name="med" >
+                    <option value="<?php echo $row[5]; ?>" selected>
+                    <?php echo $row[5]; ?></option>
+                    <option value="" ></option>
+                    <option value="eh" >EH Kurs</option>
+                    <br><option value="san" >San A</option>
+                    <option value="san" >San B</option>
+                    <br><option value="san" >Schulsani</option>
+                    <option value="san" >Rettungsdienst</option>
+                    <br>
+                    </select></td>
                 </tr>
                 <tr>
                     <td>Wunschpartner</td>
@@ -212,6 +218,11 @@ foreach ($users as $user) {
 	<?php
 if ($pwSame === FALSE) {
     echo '<div class=meldung> Die Passworte stimmen nicht überein!<br>
+          <a class="button" onclick="hide_massage()" >schließen</a></div>';
+}
+if ($pwSave === FALSE) {
+    echo '<div class=meldung> Password konnte nicht gespeichtert werden,
+               melden sie sich beim Admin<br>
           <a class="button" onclick="hide_massage()" >schließen</a></div>';
 }
 ?><div id="foot"><?php echo VERSION; ?></div>

@@ -14,7 +14,7 @@
  * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
  * @version GIT:  $Date$
  * @link    http:/salem.dlrg.de
- * @todo required Attribute einbinden.
+ * @TODO required Attribute einbinden.
  **/
 
 /**
@@ -60,12 +60,26 @@ class Form
 
     }//end __construct()
 
-    public static function getStyles(){
+    /**
+     * Stellt die CSS-Dateien zur Verfügung die für Formulare notwendig sind.
+     *
+     * @return array: Mit dem Namen und dem Pfad
+     */
+    public static function getStyles()
+    {
         return array();
+
     }//end getStyles()
 
-    public static function getScripts(){
+    /**
+     * Stellt die Java-Skript-Datein zur Verfügung.
+     *
+     * @return array: Mit dem Namen und dem Pfad
+     */
+    public static function getScripts()
+    {
         return array('formulars.js' => '/wachplan/js/formulars.js');
+
     }//end getScripts()
 
     /**
@@ -74,7 +88,7 @@ class Form
      * @param object $input Array mit den Informationen über das Eingabefeld.
      *
      * @return void
-     * @todo datepicker in Javaskript datei unterbringen.
+     * @TODO datepicker in Javaskript datei unterbringen.
      */
     private function _date($input)
     {
@@ -224,10 +238,11 @@ class Form
         echo '<td width=200>';
         $count = count($input->value);
         echo '<select ';
+        echo 'id="' . $input->name  . '"';
         echo 'name="' . $input->name . '" >';
         for ($i = 0; $i < $count; $i ++) {
             echo '<option value="' . $input->value[$i] . '" >';
-            echo $input->valName[$i] . '</option>';
+            echo $input->valName[$i] . '</option>' ."\n";
             if ($numRow === 1) {
                 echo '<br>';
                 $numRow = 0;
@@ -241,6 +256,27 @@ class Form
         echo "</tr>\n";
 
     }//end _select()
+
+    /**
+     * Erzeugt aus den Input Daten eine Formular Header.
+     *
+     * Ein Formularheader geht über beide Spalten und zeigtn den
+     * Displayname an.
+     *
+     * @param object $input Array mit den Informationen über die Spalte.
+     *
+     * @return void
+     */
+    function _header($input)
+    {
+        echo "<tr>\n";
+        echo '<td colspan=2 class="tableheader">';
+        echo $input->display;
+        echo '</td>' . "\n";
+        echo "</td>\n";
+        echo "</tr>\n";
+
+    }//end _header()
 
 }//end class
 

@@ -41,7 +41,7 @@ if (is_bool($result) === FALSE) {
         exit();
     }
 } else {
-    //@todo Fehlermeldung vom Wachplan übernehmen.
+    //@TODO Fehlermeldung vom Wachplan übernehmen.
     echo 'Fehler: Datenbank abfreage ist gescheitert.';
 }
 
@@ -69,7 +69,7 @@ $meldung->sendMail();
 
 $queryDel = 'DELETE FROM `wp_access_user_days` WHERE `id`=';
 $queryDel .= '"' . $id . '"';
-//@todo Fehlermeldung erfolgt nicht richtig. Da die Seite gleich neu geladen wird.
+//@TODO Fehlermeldung erfolgt nicht richtig. Da die Seite gleich neu geladen wird.
 if ($database->query($queryDel) === TRUE) {
     echo '<div class=meldung>';
     echo '<h4>Person gelöscht.</h4>';

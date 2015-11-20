@@ -27,6 +27,7 @@
 define('DEBUG', TRUE);
 if (DEBUG === TRUE) {
     ini_set('display_errors', 'ON');
+    session_set_cookie_params(10);
     error_reporting(E_ALL);
 } else {
     ini_set('display_errors', 'OFF');
@@ -73,6 +74,7 @@ require_once ROOT . '/include/header.php';
 // SQL-Datenbank
 $database = new mysqli($db['host'], $db['user'], $db['pass'], $db['name']);
 $database->set_charset('utf8');
+$GLOBALS['database'] = $database;
 // ---------- END SQL ----------//
 
 // ---------- GOLOBAL FUNCTIONS ----------//
@@ -85,12 +87,11 @@ $database->set_charset('utf8');
  * umgelenkt.
  *
  * @return boolean TRUE wenn die Session gültig ist
- * @todo Ausgabe einer Fehlermeldung das die Session gültig ist
  */
 function checkSession()
 {
     if (isset($_SESSION['logged']) === FALSE || $_SESSION['logged'] === FALSE) {
-        header('location: ../index.php');
+        header('location: ../index.php?error=Sessionistabgelaufen');
         $_SESSION['local'] = $_SERVER['REQUEST_URI'];
         exit();
     } else {
@@ -200,7 +201,7 @@ function encryptHash($password, $salt = 'c1ab2c7a')
 function getDays()
 {
     $tage = array();
-    global $database;
+   $database = $GOBALS['database'];
     $prepare = $database->prepare('SELECT * FROM `wp_days` ORDER BY `date`');
     $prepare->execute();
     $prepare->bind_result($dayId, $date);
@@ -222,7 +223,8 @@ function getDays()
  * @param string $fehlertext  Beschriebung des Fehlers.
  * @param string $fehlerdatei Datei in der der Fehler aufgetreten ist.
  * @param string $fehlerzeile Zeile in der der Fehler aufgetreten ist.
- * FIXME Die Log datei wird in jedem unterverzeichnis angelegt
+ *
+ * @TODO  implement a class for error handling in php, frontend and javascript
  *
  * @return void|boolean Kommentar.
  */
@@ -251,7 +253,7 @@ function errorHandler($fehlercode, $fehlertext, $fehlerdatei, $fehlerzeile)
     $zeile .= $fehlerart . ' : ' . $fehlertext . ' in ' . $fehlerdatei .
                  ' Zeile:' . $fehlerzeile . "\n";
 
-    $datei = fopen('./error.log', 'a');
+    $datei = fopen(ROOT . '/phperror.log', 'a');
     fwrite($datei, $zeile);
 
     /*

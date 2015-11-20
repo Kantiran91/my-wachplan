@@ -5,8 +5,12 @@ php:
   - 5.6
   - hhvm
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
   
 >>>>>>> branch '16_MVP' of https://github.com/Kantiran91/my-wachplan.git
 script: phpunit --configuration phpunit.xml --coverage-text
+=======
+  - nightly
+>>>>>>> master

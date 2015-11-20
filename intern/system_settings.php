@@ -66,8 +66,7 @@ require 'template/ss_fehlend.php';
     </div>
     <div id="foot"><?php echo VERSION; ?></div>
 		<?php
-//@todo Fehlermeldungen als Funktion ausgliedern.
-//@todo An die allgemeine Fehlermeldung anpassen und ggf. in das File back_add_user.php ausgliedern.
+//@TODO An die allgemeine Fehlermeldung anpassen und ggf. in das File back_add_user.php ausgliedern.
 if (isset($_GET['add']) === TRUE) {
     echo '<div class=meldung>';
     if ($_GET['add'] === 'TRUE') {

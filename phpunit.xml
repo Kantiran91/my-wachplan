@@ -7,4 +7,9 @@
             <directory>./tests/MailTest.inc</directory>
         </testsuite>
     </testsuites>
+    
+   <logging>
+  <log type="coverage-clover" target="/tmp/coverage.xml"/>
+  <log type="testdox-text" target="/tmp/testdox.txt"/>
+</logging>
 </phpunit>
