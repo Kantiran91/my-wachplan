@@ -84,7 +84,8 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
 			FROM `wp_access_user_days`
 			JOIN `wp_user` ON `wp_user`.`id_user`=`wp_access_user_days`.`user_id`
 			JOIN `wp_days` ON `wp_days`.`id_day`=`wp_access_user_days`.`day_id`
-			WHERE `day_id`='" . $day[0] . "'");
+			WHERE `day_id`='" . $day[0] . "'"
+            );
             while ($users[] = $resultAcc->fetch_row()) {
                 NULL;
             }

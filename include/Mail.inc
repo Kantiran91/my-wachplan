@@ -56,36 +56,28 @@ class Mail
      */
     public function __construct($empfaenger, $betreff = 'Wachplan')
     {
-<<<<<<< HEAD
         if (static::validAddresse($empfaenger) === FALSE) {
-=======
-        if (self::validAddresse($empfaenger) === FALSE) {
->>>>>>> branch '16_MVP' of https://github.com/Kantiran91/my-wachplan.git
             errorMessage(__FILE__, __LINE__, __METHOD__);
-
         } else {
             $this->empfaenger = $empfaenger;
             $this->_betreff = $betreff;
-
         }
+
     }//end __construct()
 
     /**
-     * check the adresse ist valid.
+     * Check the adresse ist valid.
      *
-     * @param empfaenger eMail addresse.
+     * @param string $addresse The eMail addresse.
      *
      * @return boolean True if the addresse is valid.
      */
-     static function validAddresse($addresse)
+    static function validAddresse($addresse)
     {
-        $exprection = "/^(([a-zA-z0-9])+(?:\\.[\\w-]+)*)@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-z]{2,6}(?:\\.[a-z]{2})?)$/";
-<<<<<<< HEAD
+        $exprection = '/^(([a-zA-z0-9])+(?:\\.[\\w-]+)*)@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-z]{2,6}(?:\\.[a-z]{2})?)$/';
         return preg_match($exprection, $addresse);
-=======
-        return preg_match($re, $addresse);
->>>>>>> branch '16_MVP' of https://github.com/Kantiran91/my-wachplan.git
-    }
+
+    }//end validAddresse()
 
     /**
      * Setzt die private Variable $text.
@@ -134,12 +126,14 @@ class Mail
             $this->_betreff = str_replace(
                 '$' . $key . '$',
                 $value,
-                $this->_betreff);
+                $this->_betreff
+            );
             $this->_text = str_replace(
                 '$' . $key . '$',
                 $value,
                 $this->_text,
-                $count);
+                $count
+            );
         }//end foreach
 
         return TRUE;
@@ -160,26 +154,26 @@ class Mail
     }//end setBetreff()
 
     /**
-     * Return the text which is save in the object
+     * Return the text which is save in the object.
      *
-     * @return void
+     * @return string
      */
     public function getText()
     {
-       return $this->_text;
+        return $this->_text;
 
-    }//end setText()
+    }//end getText()
 
     /**
-     * Return the text of the betreff which is save in the object
+     * Return the text of the betreff which is save in the object.
      *
-     * @return void
+     * @return string
      */
     public function getBetreff()
     {
         return $this->_betreff;
 
-    }//end setText()
+    }//end getBetreff()
 
     /**
      * Schickt schließlich die Mail ab.

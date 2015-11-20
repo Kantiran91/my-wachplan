@@ -201,7 +201,7 @@ function encryptHash($password, $salt = 'c1ab2c7a')
 function getDays()
 {
     $tage = array();
-   $database = $GOBALS['database'];
+    $database = $GOBALS['database'];
     $prepare = $database->prepare('SELECT * FROM `wp_days` ORDER BY `date`');
     $prepare->execute();
     $prepare->bind_result($dayId, $date);
@@ -282,7 +282,8 @@ function errorMessage($file, $line, $methode = '')
         trigger_error('Error in ' . $file . 'on Line' . $line);
     } else {
         trigger_error(
-            'Error in ' . $methode . 'in File ' . $file . 'on Line ' . $line);
+            'Error in ' . $methode . 'in File ' . $file . 'on Line ' . $line
+        );
     }
 
 }//end errorMessage()

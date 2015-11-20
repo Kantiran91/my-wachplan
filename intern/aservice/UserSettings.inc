@@ -106,43 +106,43 @@ class UserSettings extends AbstractSettings
 
         $inputs[] = array(
                      DISPLAY => 'Benutzerdaten',
-                     'type'    => 'header',
+                     'type'  =>  'header',
                     );
 
         $inputs[] = array(
                      DISPLAY => 'Benutzername',
-                     'name'    => 'username',
-                     'type'    => 'text',
+                     'name'  => 'username',
+                     'type'  => 'text',
                     );
 
         $inputs[] = array(
                      DISPLAY => 'Vorname',
-                     'name'    => 'first_name',
-                     'type'    => 'text',
+                     'name'  => 'first_name',
+                     'type'  => 'text',
                     );
         $inputs[] = array(
                      DISPLAY => 'Nachname',
-                     'name'    => 'last_name',
-                     'type'    => 'text',
+                     'name'  => 'last_name',
+                     'type'  => 'text',
                     );
         $inputs[] = array(
                      DISPLAY => 'eMail',
-                     'name'    => 'email',
-                     'type'    => 'email',
+                     'name'  => 'email',
+                     'type'  => 'email',
                     );
         $inputs[] = array(
                      DISPLAY => 'Telefonnummer',
-                     'name'    => 'tele',
-                     'type'    => 'text',
+                     'name'  => 'tele',
+                     'type'  => 'text',
                     );
         $inputs[] = array(
                      DISPLAY => 'Geburtsdatum',
-                     'name'    => 'gb',
-                     'type'    => 'date',
+                     'name'  => 'gb',
+                     'type'  => 'date',
                     );
         $inputs[] = array(
                      DISPLAY => 'Qualifkationen',
-                     'type'    => 'header',
+                     'type'  => 'header',
                     );
         $inputs[] = array(
                      DISPLAY   => 'Abzeichen',
@@ -160,7 +160,7 @@ class UserSettings extends AbstractSettings
                                   ),
                     );
         $inputs[] = array(
-                     DISPLAY => 'Ausbildung EH / SAN',
+                     DISPLAY   => 'Ausbildung EH / SAN',
                      'name'    => 'med',
                      'type'    => 'select',
                      'valName' => array(
