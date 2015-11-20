@@ -58,26 +58,26 @@ class Mail
     {
         if (static::validAddresse($empfaenger) === FALSE) {
             errorMessage(__FILE__, __LINE__, __METHOD__);
+
         } else {
             $this->empfaenger = $empfaenger;
             $this->_betreff = $betreff;
-        }
 
+        }
     }//end __construct()
 
     /**
-     * Check the adresse ist valid.
+     * check the adresse ist valid.
      *
-     * @param string $addresse The eMail addresse.
+     * @param empfaenger eMail addresse.
      *
      * @return boolean True if the addresse is valid.
      */
-    static function validAddresse($addresse)
+     static function validAddresse($addresse)
     {
         $exprection = '/^(([a-zA-z0-9])+(?:\\.[\\w-]+)*)@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-z]{2,6}(?:\\.[a-z]{2})?)$/';
         return preg_match($exprection, $addresse);
-
-    }//end validAddresse()
+    }
 
     /**
      * Setzt die private Variable $text.
@@ -126,14 +126,12 @@ class Mail
             $this->_betreff = str_replace(
                 '$' . $key . '$',
                 $value,
-                $this->_betreff
-            );
+                $this->_betreff);
             $this->_text = str_replace(
                 '$' . $key . '$',
                 $value,
                 $this->_text,
-                $count
-            );
+                $count);
         }//end foreach
 
         return TRUE;
@@ -154,26 +152,26 @@ class Mail
     }//end setBetreff()
 
     /**
-     * Return the text which is save in the object.
+     * Return the text which is save in the object
      *
-     * @return string
+     * @return void
      */
     public function getText()
     {
-        return $this->_text;
+       return $this->_text;
 
     }//end getText()
 
     /**
-     * Return the text of the betreff which is save in the object.
+     * Return the text of the betreff which is save in the object
      *
-     * @return string
+     * @return void
      */
     public function getBetreff()
     {
         return $this->_betreff;
 
-    }//end getBetreff()
+    }//end setText()
 
     /**
      * Schickt schließlich die Mail ab.
