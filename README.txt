@@ -8,11 +8,19 @@ Inhalt:
 
 aktuelle Version : 0.3.0
 
+Changlog
 ################################################
 Installation
 
 ################################################
+Build Status
+<img src=https://api.travis-ci.org/Kantiran91/my-wachplan.svg></img>
+
+################################################
 Changlog
+0.5
+* Change Mail Class
+
 0.4
 * Bugfixing Anmeldung mit falschen Passwort und bestimmten Umständen möglich
 * Icon für Wachgänge entfernen geändert.
