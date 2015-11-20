@@ -53,14 +53,31 @@ class Mail
      *
      * @param string $empfaenger Empfänger der Email.
      * @param string $betreff    Betreff der Email.
-     * @TODO  Mit RegEx prüfen ob die eMail-Adresse valide ist.
      */
     public function __construct($empfaenger, $betreff = 'Wachplan')
     {
-        $this->empfaenger = $empfaenger;
-        $this->_betreff = $betreff;
+        if (static::validAddresse($empfaenger) === FALSE) {
+            errorMessage(__FILE__, __LINE__, __METHOD__);
 
+        } else {
+            $this->empfaenger = $empfaenger;
+            $this->_betreff = $betreff;
+
+        }
     }//end __construct()
+
+    /**
+     * check the adresse ist valid.
+     *
+     * @param empfaenger eMail addresse.
+     *
+     * @return boolean True if the addresse is valid.
+     */
+     static function validAddresse($addresse)
+    {
+        $exprection = "/^(([a-zA-z0-9])+(?:\\.[\\w-]+)*)@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-z]{2,6}(?:\\.[a-z]{2})?)$/";
+        return preg_match($exprection, $addresse);
+    }
 
     /**
      * Setzt die private Variable $text.

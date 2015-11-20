@@ -225,6 +225,8 @@ function getDays()
  * @param string $fehlerzeile Zeile in der der Fehler aufgetreten ist.
  *
  * @TODO  implement a class for error handling in php, frontend and javascript
+ * @TODO  Bei RELEASE sollen ERROR noch angezeigt werden!
+ * @TODO  Bei RLEASE sollen nur Error und warning gemappt werden.
  *
  * @return void|boolean Kommentar.
  */

@@ -30,6 +30,7 @@ require_once '../init.php';
 class UserSettings extends AbstractSettings
 {
     const DISPLAYNAME = 'Benutzereinstellungen';
+    const DISPLAY = 'display';
 
     /**
      * @var String Displayname
@@ -85,7 +86,7 @@ class UserSettings extends AbstractSettings
         $inputs = array();
 
         if ($change === TRUE) {
-            $users = self::getAllUser();
+            $users = static::getAllUser();
             $userNames = array('');
             $userids   = array('');
 
@@ -95,7 +96,7 @@ class UserSettings extends AbstractSettings
             }//end foreach
 
             $inputs[] = array(
-                         'display' => 'Benutzer',
+                         DISPLAY   => 'Benutzer',
                          'name'    => 'user_id',
                          'type'    => 'select',
                          'valName' => $userNames,
@@ -104,47 +105,47 @@ class UserSettings extends AbstractSettings
         }
 
         $inputs[] = array(
-                     'display' => 'Benutzerdaten',
+                     DISPLAY => 'Benutzerdaten',
                      'type'    => 'header',
                     );
 
         $inputs[] = array(
-                     'display' => 'Benutzername',
+                     DISPLAY => 'Benutzername',
                      'name'    => 'username',
                      'type'    => 'text',
                     );
 
         $inputs[] = array(
-                     'display' => 'Vorname',
+                     DISPLAY => 'Vorname',
                      'name'    => 'first_name',
                      'type'    => 'text',
                     );
         $inputs[] = array(
-                     'display' => 'Nachname',
+                     DISPLAY => 'Nachname',
                      'name'    => 'last_name',
                      'type'    => 'text',
                     );
         $inputs[] = array(
-                     'display' => 'eMail',
+                     DISPLAY => 'eMail',
                      'name'    => 'email',
                      'type'    => 'email',
                     );
         $inputs[] = array(
-                     'display' => 'Telefonnummer',
+                     DISPLAY => 'Telefonnummer',
                      'name'    => 'tele',
                      'type'    => 'text',
                     );
         $inputs[] = array(
-                     'display' => 'Geburtsdatum',
+                     DISPLAY => 'Geburtsdatum',
                      'name'    => 'gb',
                      'type'    => 'date',
                     );
         $inputs[] = array(
-                     'display' => 'Qualifkationen',
+                     DISPLAY => 'Qualifkationen',
                      'type'    => 'header',
                     );
         $inputs[] = array(
-                     'display' => 'Abzeichen',
+                     DISPLAY   => 'Abzeichen',
                      'name'    => 'abzeichen',
                      'type'    => 'select',
                      'value'   => array(
@@ -159,7 +160,7 @@ class UserSettings extends AbstractSettings
                                   ),
                     );
         $inputs[] = array(
-                     'display' => 'Ausbildung EH / SAN',
+                     DISPLAY => 'Ausbildung EH / SAN',
                      'name'    => 'med',
                      'type'    => 'select',
                      'valName' => array(
@@ -180,11 +181,11 @@ class UserSettings extends AbstractSettings
                                   ),
                     );
         $inputs[] = array(
-                     'display' => 'Rechte',
+                     DISPLAY   => 'Rechte',
                      'type'    => 'header',
                     );
         $inputs[] = array(
-                     'display' => 'Benutzerrechte',
+                     DISPLAY   => 'Benutzerrechte',
                      'name'    => 'rights',
                      'type'    => 'select',
                      'valName' => array(
