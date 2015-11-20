@@ -1,5 +1,4 @@
-@CHARSET "UTF-8";
-
+/*TODO @IMPORT auslagern und über HTML <link> einabuen */
 @import "table.css";
 
 @import "menu.css";
@@ -9,8 +8,10 @@
 @import "feedback.css";
 
 body {
+	padding-top: 40px;
 	text-align: center;
-	font-size: 16px;
+	font-size: 14px;
+	font-family: Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -19,11 +20,11 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 p {
-	font-size: 18px;
+	font-size: 15px;
 }
 
-ul,li {
-	display: block;
+ul,li{
+	list-style: none;
 }
 
 #foot {
@@ -58,6 +59,7 @@ ul,li {
 }
 
 .meldung {
+	/*TODO Kanten abrunden?*/
 	width: 500px;
 	background-color: #FFFFFF;
 	top: 50%;
@@ -67,7 +69,7 @@ ul,li {
 	position: fixed;
 	z-index: 2;
 	border: 2px solid black;
-	box-shadow: 3px 0px 5px #050505;
+	box-shadow: 3px 4px 5px #979797;
 	padding-bottom: 10px;
 	padding-top: 10px;
 }
@@ -80,6 +82,7 @@ ul,li {
 .modul {
 	width: 850px;
 	border: 1px solid #aaaaaa;
+	border-radius: 4px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 10px;
@@ -92,6 +95,5 @@ ul,li {
 }
 
 .formular tr:HOVER {
-	border: 0px;
 	background-color: #F2F2F2;
 }

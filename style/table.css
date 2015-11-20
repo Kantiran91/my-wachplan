@@ -5,6 +5,13 @@ table {
 	margin-left: auto;
 	margin-right: auto;
 	background-color: #ffffff;
+	
+}
+
+.tableheader{
+	padding-top: 2px;
+	padding-bottom: 2px;
+	background-color: #fffddf;
 }
 
 tr {
@@ -22,9 +29,9 @@ tr:HOVER {
 }
 
 #own_table {
-	font-size: 18px;
+	font-size: 14px;
 }
 
 .plan{
-	font-size: 18px;
+	font-size: 14px;
 }

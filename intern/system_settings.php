@@ -40,9 +40,6 @@ createHeader('Systemeinstellungen');
 ?>
 <body>
 	<?php require 'template/menu.php'; ?>
-	<div class="modul">
-		<?php require 'template/ss_add_user.php'; ?>
-	</div>
     <div class="modul">
 		<?php require 'template/ss_change_user_data.php'; ?>
 	</div>
@@ -69,11 +66,10 @@ require 'template/ss_fehlend.php';
     </div>
     <div id="foot"><?php echo VERSION; ?></div>
 		<?php
-//@todo Fehlermeldungen als Funktion ausgliedern.
-//@todo An die allgemeine Fehlermeldung anpassen und ggf. in das File back_add_user.php ausgliedern.
+//@TODO An die allgemeine Fehlermeldung anpassen und ggf. in das File back_add_user.php ausgliedern.
 if (isset($_GET['add']) === TRUE) {
     echo '<div class=meldung>';
-    if ($_GET['add'] === "TRUE") {
+    if ($_GET['add'] === 'TRUE') {
         echo 'Neuer Benutzer angelegt!<br>';
     } else {
         echo 'Benutzer anlegen fehlgeschlagen';

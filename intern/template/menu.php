@@ -12,7 +12,7 @@
   * @link    http:/salem.dlrg.de
   **/
 ?>
-<div id="menu">
+<div class="menu">
     <ul>
         <li><a href="index.php#own_data">Eigene Daten </a></li>
         <li><a href="index.php#plan">Wachplan </a></li>
@@ -21,6 +21,7 @@
 if ($_SESSION['rights'] >= 2) {
     ?>
     <li><a href="feedback_show.php">Feedback anschauen</a></li>
+    <li><a  href="system_settings2.php">Test</a></li>
     <li><a class="menupoint" href="system_settings.php"> Systemeinstellungen</a></li>
     <?php
 }

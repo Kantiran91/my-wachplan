@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
+
+    <testsuites>
+        <testsuite name="Mail Test Suite">
+            <directory>./tests/MailTest.inc</directory>
+        </testsuite>
+    </testsuites>
+    
+   <logging>
+  <log type="coverage-clover" target="/tmp/coverage.xml"/>
+  <log type="testdox-text" target="/tmp/testdox.txt"/>
+</logging>
+</phpunit>

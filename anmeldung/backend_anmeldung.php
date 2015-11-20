@@ -20,7 +20,7 @@ $handle = fopen('teilnehmer.csv', 'a+');
 
 $line = '';
 foreach ($_POST as $attr) {
-    $line .= $attr;
+    $line .= htmlentities($attr, ENT_QUOTES, 'utf-8');
     $line .= ';';
 }
 
@@ -30,6 +30,6 @@ fwrite($handle, $line);
 // Sende eine Mail an Admins!
 $nachricht = new mail('friedl.sebastian@web.de', 'Neuer Benutzer');
 
-$text = "Ein neuer \nBenutzer " . $_POST['email'] . "muss\n  freigeschaltet werden";
+$text = "Ein neuer \nBenutzer " .post('email') . "muss\n  freigeschaltet werden";
 $nachricht->setText($text);
 $nachricht->sendMail();

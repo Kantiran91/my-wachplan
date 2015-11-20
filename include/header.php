@@ -26,7 +26,7 @@
  */
 function createHeader($title)
 {
-    // TODO Stylesheet für den Kalender anpassen
+    // @TODO Stylesheet für den Kalender anpassen
     ?>
     <!DOCTYPE html>
     <html>

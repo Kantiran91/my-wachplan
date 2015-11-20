@@ -56,10 +56,28 @@ class Mail
      */
     public function __construct($empfaenger, $betreff = 'Wachplan')
     {
-        $this->empfaenger = $empfaenger;
-        $this->betreff = $betreff;
+        if (static::validAddresse($empfaenger) === FALSE) {
+            errorMessage(__FILE__, __LINE__, __METHOD__);
 
+        } else {
+            $this->empfaenger = $empfaenger;
+            $this->_betreff = $betreff;
+
+        }
     }//end __construct()
+
+    /**
+     * check the adresse ist valid.
+     *
+     * @param empfaenger eMail addresse.
+     *
+     * @return boolean True if the addresse is valid.
+     */
+     static function validAddresse($addresse)
+    {
+        $exprection = "/^(([a-zA-z0-9])+(?:\\.[\\w-]+)*)@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-z]{2,6}(?:\\.[a-z]{2})?)$/";
+        return preg_match($exprection, $addresse);
+    }
 
     /**
      * Setzt die private Variable $text.
@@ -70,9 +88,55 @@ class Mail
      */
     public function setText($text)
     {
-        $this->text = $text;
+        $this->_text = $text;
 
     }//end setText()
+
+    /**
+     * Läde einen Mailvorlagetext und ersetzt Schlüsselwörter.
+     *
+     * Mailvorlagen werden mit dem Dateinamen *.mail im Ornder mail_template
+     * im Root-Verzeichnis abgelegt.
+     * Der Aufbau des Textdokument ist wie folgt:
+     * Die erste Zeile enthält den Betreff der Mail. Alle folgenden Zeilen werden
+     * als Text der Mail aufgefasst. Um die Mail anpassen zu können, können
+     * Schlüsselwörter definiert werden. Dazu wird in der Vorlage an entsprechender
+     * Stelle ein Schlüsselwort hinterlegt. Diese wird mit $ vorne und
+     * hinten markiert. Das Schlüsselwort und das entsprechende Array sehen
+     * dann wie folgt aus:
+     * -Schlüsselwort: $tele$
+     * -Array = array(tele => "1234/21234" ... )
+     *
+     * @param string $file  Name des Template das geladen werden soll.
+     * @param array  $param Array mit den Attributen die bei der Mail erstetzt
+     * werden.
+     *
+     * @return bool TRUE wenn alles okay ist.
+     */
+    public function loadTemplate($file, array $param)
+    {
+        $filename = dirname(__FILE__) . '/../mail_template/'. $file . '.mail';
+        $filehandle = fopen($filename, 'r');
+        $this->_betreff = fgets($filehandle);
+        while ($line = fgets($filehandle)) {
+            $this->_text .= $line;
+        }//end while
+
+        foreach ($param as $key => $value) {
+            $this->_betreff = str_replace(
+                '$' . $key . '$',
+                $value,
+                $this->_betreff);
+            $this->_text = str_replace(
+                '$' . $key . '$',
+                $value,
+                $this->_text,
+                $count);
+        }//end foreach
+
+        return TRUE;
+
+    }//end loadTemplate()
 
     /**
      * Setzt die private Variable $Betreff.
@@ -83,9 +147,31 @@ class Mail
      */
     public function setBetreff($betreff)
     {
-        $this->betreff = $betreff;
+        $this->_betreff = $betreff;
 
     }//end setBetreff()
+
+    /**
+     * Return the text which is save in the object
+     *
+     * @return void
+     */
+    public function getText()
+    {
+       return $this->_text;
+
+    }//end setText()
+
+    /**
+     * Return the text of the betreff which is save in the object
+     *
+     * @return void
+     */
+    public function getBetreff()
+    {
+        return $this->_betreff;
+
+    }//end setText()
 
     /**
      * Schickt schließlich die Mail ab.
@@ -98,7 +184,7 @@ class Mail
     public function sendMail($text = NULL)
     {
         if (isset($text) === TRUE) {
-            $this->text = $text;
+            $this->_text = $text;
         }
 
         return mail($this->_empfaenger, $this->_betreff, $this->_text, $this->_absender);

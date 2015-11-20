@@ -23,7 +23,7 @@ $query = 'SELECT  `id` ,  `user_id` ,  `day_id` ,  `position` ,  `user_name`
 		JOIN  `wp_days`
 		JOIN  `wp_user` ON  `user_id` =  `id_user`
 		AND  `day_id` =  `id_day` WHERE `day_id` =' .
- $_POST['day'] . ' ORDER by `position` ASC';
+ post('day') . ' ORDER by `position` ASC';
 $reslut = $database->query($query);
 $leute[] = array();
 while ($user = mysqli_fetch_row($reslut)) {
@@ -41,7 +41,7 @@ for ($i = 1; $i <= 5; $i ++) {
 ?>
 <div id=meldung>
     <form id=eintrag action="include/back_save_row.php" method="POST">
-        <input type="hidden" value="<?php echo $_POST['day']; ?>" name="day">
+        <input type="hidden" value="<?php echo post('day'); ?>" name="day">
         Wachleiter: <input type="text" name="wl"
             value="<?php echo $leute[1]; ?>"
         > stllv.Wachleiter: <input type="text" name="swl"

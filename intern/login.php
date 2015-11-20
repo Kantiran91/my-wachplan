@@ -75,7 +75,7 @@ if (empty($_POST['username']) === TRUE || empty($_POST['pass']) === TRUE) {
  */
 function addLogLine($pwKorrekt)
 {
-    global $database;
+   $database = $GOBALS['database'];
     $mail = $database->real_escape_string($_POST['username']);
     $anfrage = 'INSERT
     INTO `wp_log_login` (`id`, `username`, `datum`, `ip`, `pw_korrekt`)

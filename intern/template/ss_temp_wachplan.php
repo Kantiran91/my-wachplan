@@ -20,13 +20,13 @@
  * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
  * @version GIT:  $Date: Thu May 7 14:43:07 2015 +0200$
  * @link    http:/salem.dlrg.de
- * @todo    Die Auswahl erfolgt dynmaisch die Positionierung an dem Tag, sollte
+ * @TODO    Die Auswahl erfolgt dynmaisch die Positionierung an dem Tag, sollte
  * dann aber statisch erfolgen.
- * @todo    Der Wachleiter sollte immer 18 Jahre alt sein.
+ * @TODO    Der Wachleiter sollte immer 18 Jahre alt sein.
  * Die Prüfung noch ein binden.
- * @todo    Die Anzahl der über diese Verfahren eingeteilten Wachtage
+ * @TODO    Die Anzahl der über diese Verfahren eingeteilten Wachtage
  * soll über eine Variable eingeteilt werden.
- * @todo    Trenne von Frontend und Backend
+ * @TODO    Trenne von Frontend und Backend
  **/
 require_once '../init.php';
 

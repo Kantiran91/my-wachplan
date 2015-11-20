@@ -27,10 +27,13 @@
 define('DEBUG', TRUE);
 if (DEBUG === TRUE) {
     ini_set('display_errors', 'ON');
+    session_set_cookie_params(10);
     error_reporting(E_ALL);
 } else {
     ini_set('display_errors', 'OFF');
+    session_set_cookie_params(36000);
 }
+
 /*
  *  Die Funktion errorHandler leitet alle Fehlermeldungen in eine eigene Datei um.
  */
@@ -45,7 +48,6 @@ header('Content-Type: text/html; charset=utf-8');
 
 // ---------- SESSION ----------//
 // Startet eine Session für 3600sec = 60 minuten
-session_set_cookie_params(3600);
 session_start();
 // ---------- END SESSION ----------//
 
@@ -54,7 +56,7 @@ session_start();
 // name des root verzeichnis
 define('ROOT', realpath(dirname(__FILE__)));
 // Versionsnummer des RELEASE
-define('VERSION', 'Version 0.4.2');
+define('VERSION', 'Version 0.5');
 
 // ---------- END CONSTANTEN ----------//
 
@@ -72,6 +74,7 @@ require_once ROOT . '/include/header.php';
 // SQL-Datenbank
 $database = new mysqli($db['host'], $db['user'], $db['pass'], $db['name']);
 $database->set_charset('utf8');
+$GLOBALS['database'] = $database;
 // ---------- END SQL ----------//
 
 // ---------- GOLOBAL FUNCTIONS ----------//
@@ -84,12 +87,11 @@ $database->set_charset('utf8');
  * umgelenkt.
  *
  * @return boolean TRUE wenn die Session gültig ist
- * @todo Ausgabe einer Fehlermeldung das die Session gültig ist
  */
 function checkSession()
 {
     if (isset($_SESSION['logged']) === FALSE || $_SESSION['logged'] === FALSE) {
-        header('location: ../index.php');
+        header('location: ../index.php?error=Sessionistabgelaufen');
         $_SESSION['local'] = $_SERVER['REQUEST_URI'];
         exit();
     } else {
@@ -199,7 +201,7 @@ function encryptHash($password, $salt = 'c1ab2c7a')
 function getDays()
 {
     $tage = array();
-    global $database;
+    $database = $GOBALS['database'];
     $prepare = $database->prepare('SELECT * FROM `wp_days` ORDER BY `date`');
     $prepare->execute();
     $prepare->bind_result($dayId, $date);
@@ -221,6 +223,10 @@ function getDays()
  * @param string $fehlertext  Beschriebung des Fehlers.
  * @param string $fehlerdatei Datei in der der Fehler aufgetreten ist.
  * @param string $fehlerzeile Zeile in der der Fehler aufgetreten ist.
+ *
+ * @TODO  implement a class for error handling in php, frontend and javascript
+ * @TODO  Bei RELEASE sollen ERROR noch angezeigt werden!
+ * @TODO  Bei RLEASE sollen nur Error und warning gemappt werden.
  *
  * @return void|boolean Kommentar.
  */
@@ -249,7 +255,7 @@ function errorHandler($fehlercode, $fehlertext, $fehlerdatei, $fehlerzeile)
     $zeile .= $fehlerart . ' : ' . $fehlertext . ' in ' . $fehlerdatei .
                  ' Zeile:' . $fehlerzeile . "\n";
 
-    $datei = fopen('./error.log', 'a');
+    $datei = fopen(ROOT . '/phperror.log', 'a');
     fwrite($datei, $zeile);
 
     /*
@@ -261,6 +267,51 @@ function errorHandler($fehlercode, $fehlertext, $fehlerdatei, $fehlerzeile)
 
 }//end errorHandler()
 
+/**
+ * Generiert eine Standardfehlermeldung für Benutzerfehler.
+ *
+ * @param string  $file    Name des Files in dem der Fehler aufgetreten ist.
+ * @param integer $line    Zeile in der der Fehler aufgetreten ist.
+ * @param string  $methode Methode in der der Fehler aufgetreten ist.
+ *
+ * @return void
+ */
+function errorMessage($file, $line, $methode = '')
+{
+    if ($methode === '') {
+        trigger_error('Error in ' . $file . 'on Line' . $line);
+    } else {
+        trigger_error(
+            'Error in ' . $methode . 'in File ' . $file . 'on Line ' . $line
+        );
+    }
 
+}//end errorMessage()
+
+/**
+ * Sichere Zugriff auf die $_GET Parameter.
+ *
+ * @param string $param Name des Parameter der ausgegeben wird.
+ *
+ * @return string
+ */
+function get($param)
+{
+    return htmlentities($_GET[$param], ENT_QUOTES, 'utf-8');
+
+}//end get()
+
+/**
+ * Sichere Zugriff auf die $_POST Parameter.
+ *
+ * @param string $param Name des Parameter der ausgegeben wird.
+ *
+ * @return string
+ */
+function post($param)
+{
+    return htmlentities($_POST[$param], ENT_QUOTES, 'utf-8');
+
+}//end post()
 
 // ---------- END GOLOBAL FUNCTIONS ----------//

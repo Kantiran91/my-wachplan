@@ -78,7 +78,7 @@ createHeader('Startseite');
             <tbody>
 	<?php
 foreach ($ergebnisOwn as $zeile) {
-    //@todo schaueb ob Frontend und Backend besser getrennt werden können.
+    //@TODO schaueb ob Frontend und Backend besser getrennt werden können.
     echo '<tr>';
     echo '<td>';
     echo date('d.m.Y', strtotime($zeile['date']));
@@ -100,7 +100,8 @@ foreach ($ergebnisOwn as $zeile) {
                      '" onclick="cancel_date(' . $zeile['id'] . ')">absagen</a>';
         echo '</td>';
     }
-    if ((int) $zeile['position'] === 1 ||(int) $zeile['position'] === 2) {
+
+    if ((int) $zeile['position'] === 1 || (int) $zeile['position'] === 2) {
         setButtonFeedback($zeile['id_day']);
     }
 
@@ -118,7 +119,8 @@ require 'template/formular_year.php';
 	</div>
     <div class="modul" id="plan">
         <h1>Wachplan</h1>
-	<?php //@todo Verschlanken da nur noch eine externe Datei notwendig ist.
+	<?php
+//@TODO Verschlanken da nur noch eine externe Datei notwendig ist.
 if ($_SESSION['rights'] >= 2) {
     include 'template/table_admin.php';
 } else {

@@ -12,31 +12,7 @@
  * @link    http:/salem.dlrg.de
  **/
 require_once '../init.php';
-
-
-/**
- * Gibt eine zufälligen String zurück.
- *
- * @param integer $length Länge des Strings.
- *
- * @return stirng Ein String mit zufälligen Inhalts.
- */
-function randomString($length = 8)
-{
-    // $chars - String aller erlaubten Zahlen
-    $chars = '!#_-()%abcdefghijklmnopqrstuvwxyz
-    ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-    srand(((double) microtime() * 1000000));
-    $pass = '';
-    for ($i = 1; $i <= $length; $i ++) {
-        // Holen eines zufälligen Zeichens
-        $num = (rand() % strlen($chars));
-        $pass = $pass . substr($chars, $num, 1);
-    }
-
-    return $pass;
-
-}//end randomString()
+require_once '../intern/aservice/UserSettings.inc';
 
 if (count($_GET) !== 2) {
     header('Location: ../index.php?fehler=3');
@@ -64,7 +40,7 @@ if ($stmtGet->num_rows !== 1) {
     // wenn übereinstimmt
     $stmtGet->close();
     // Passwort generieren
-    $newpasswort = randomstring(9);
+    $newpasswort = UserSettings::randomstring(9);
     $hashPass = encrypt_hash($newpasswort);
 
     // Passwort speichern
