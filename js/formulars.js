@@ -45,7 +45,9 @@ $(document).ready(function(){
 	});
 
 	// formular get user data ../intern/system_settings.php
-	//This function get the user_data an put it on the change formular
+	/**This function get the user_data an put it on the change formular
+	 * @deprecated
+	 */
 	$('#user_id').change(function(){
 		$.post("include/back_get_user_data.php",$("#user_id").serialize(),function(msg){
 			$('#c_eh').prop('checked', false);
@@ -62,6 +64,9 @@ $(document).ready(function(){
 			 $('#c_rights').val(data["rights"]);
 			 $('#c_abzeichen').val(data["abzeichen"]);
 			 if(data["med"] ==="EH"){
+				 $('#c_eh').prop('checked', true);
+			 }
+			 if(data["med"] ==="eh"){
 				 $('#c_eh').prop('checked', true);
 			 }
 			 if(data["med"] ==="san"){

@@ -14,9 +14,10 @@
  * @version GIT:  $Date$
  * @link    http:/salem.dlrg.de
  **/
-
-require_once '../intern/include/AbstractSettings.inc';
 require_once '../init.php';
+require_once '../intern/include/AbstractSettings.inc';
+require_once '../intern/include/Utils.inc';
+require_once '../intern/include/View.inc';
 
 /**
  * Benutzereinstellungen.
@@ -40,6 +41,16 @@ class UserSettings extends AbstractSettings
      */
     public $title = self::DISPLAYNAME;
 
+
+    /**
+     *  Constructor.
+     */
+    public function __construct()
+    {
+        View::getInstance()->addScript('usersettings.js', '/wachplan/js/usersettings.js');
+        parent::__construct();
+
+    }//end __construct()
 
     /**
      * Erzeugt das Frontend der Benutzereinstellungen.
@@ -93,13 +104,19 @@ class UserSettings extends AbstractSettings
             }//end foreach
 
             $inputs[] = array(
+                         'name'  => 'id',
+                         'type'  => 'hidden',
+                         'value' => '',
+                        );
+
+            $inputs[] = array(
                          'display' => 'Benutzer',
                          'name'    => 'user_id',
                          'type'    => 'select',
-                         'valNam'  => $userNames,
+                         'valName' => $userNames,
                          'value'   => $userids,
                         );
-        }
+        }//end if
 
         $attributes = '[
           {
@@ -143,7 +160,7 @@ class UserSettings extends AbstractSettings
             "name": "med",
             "type": "select",
             "valName": ["","EH Kurs","San A","San B","Schulsani","Rettungsdienst"],
-            "value": ["eh","eh","san","san","san","san" ]
+            "value": ["","eh","san","san","san","san" ]
           },{
             "display": "Rechte",
             "type": "header"
@@ -170,25 +187,10 @@ class UserSettings extends AbstractSettings
     {
         $database = $GLOBALS['database'];
 
-        //@TODO Prüfung auf  Benutzername in Funktion auslagern
-        // Prüfen ob der Benutzername schon vergeben ist!
-        $query = 'SELECT `id_user`FROM `wp_user` WHERE `user_name`=?';
-        $checkQuery = $database->prepare($query);
-        $checkQuery->bind_param('s', $_POST['username']);
-        $checkQuery->execute();
-        $checkQuery->store_result();
-        if ($checkQuery->num_rows !== 0) {
-            return array('Fehler', 'Benutzername schon vorhanden.');
+        $freeUsername = static::checkUsernameFree();
+        if ($freeUsername !== TRUE) {
+            return $freeUsername;
         }
-
-        foreach ($data as $value) {
-            $value = (string) $value;
-            if ($value === '') {
-                return array('Fehler', 'Nicht alle Felder ausgefüllt');
-            }
-
-            $database->real_escape_string($value);
-        }//end foreach
 
         $newpasswort = static::randomString(10);
         $pwHash = encryptHash($newpasswort);
@@ -244,6 +246,27 @@ class UserSettings extends AbstractSettings
         return $result;
 
     }//end addUser()
+
+    /**
+     * Check if the username is not used yet.
+     *
+     * @return multi True if username is not used else Array of ('Fehler','Message')
+     */
+    static function checkUsernameFree()
+    {
+        $database = $GLOBALS['database'];
+        $query = 'SELECT `id_user`FROM `wp_user` WHERE `user_name`=?';
+        $checkQuery = $database->prepare($query);
+        $checkQuery->bind_param('s', $_POST['username']);
+        $checkQuery->execute();
+        $checkQuery->store_result();
+        if ($checkQuery->num_rows !== 0) {
+            return array('Fehler', 'Benutzername schon vorhanden.');
+        } else {
+            return TRUE;
+        }
+
+    }//end checkUsernameFree()
 
     /**
      * Gibt eine zufälligen String zurück.

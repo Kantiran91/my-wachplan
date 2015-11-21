@@ -26,6 +26,7 @@
 class Form
 {
 
+    private $_name ="";
 
     /**
      * Konstuktor.
@@ -36,10 +37,11 @@ class Form
      */
     public function __construct($content)
     {
+        $this->_name = $content->name;
         $url = $_SERVER['REQUEST_URI'];
-        echo "\n<!-- Formular " . $content->name . " --> \n";
+        echo "\n<!-- Formular " . $this->_name . " --> \n";
         echo '<form class="formular" ';
-        echo 'id= "' . $content->name . '" ';
+        echo 'id= "' . $this->_name . '" ';
         echo 'action= "' . $url . '&method=' . $content->target . '" ';
         echo 'method="POST" ';
         echo ">\n";
@@ -102,6 +104,7 @@ class Form
         echo '<input class="datepicker" ';
         echo 'type="text" ';
         echo 'name="' . $input->name . '" ';
+        echo 'id="' . $this->_name .'_'.$input->name . '" ';
         echo 'value=""';
         echo '>';
         echo "</td>\n";
@@ -123,8 +126,9 @@ class Form
         echo $input->display;
         echo '</td>' . "\n";
         echo '<td>';
-        echo '<input type="text"';
+        echo '<input type="text" ';
         echo 'name="' . $input->name . '" ';
+        echo 'id="' . $this->_name .'_'.$input->name . '" ';
         echo 'value=""';
         echo '>';
         echo "</td>\n";
@@ -148,6 +152,7 @@ class Form
         echo '<td>';
         echo '<input type="password"';
         echo 'name="' . $input->name . '" ';
+        echo 'id="' . $this->_name .'_'.$input->name . '" ';
         echo 'value=""';
         echo '>';
         echo "</td>\n";
@@ -171,6 +176,7 @@ class Form
         echo '<td>';
         echo '<input type="email"';
         echo 'name="' . $input->name . '" ';
+        echo 'id="' . $this->_name .'_'.$input->name . '" ';
         echo 'value=""';
         echo '>';
         echo "</td>\n";
@@ -202,6 +208,7 @@ class Form
             echo '<input type="checkbox"';
             echo 'name="' . $input->name[$i] . '" ';
             echo 'value="' . $input->value[$i] . '" ';
+            echo 'id="' . $this->_name .'_'.$input->name . '" ';
             echo '>' . $input->valName[$i];
             echo '</input>' . "\n";
             if ($numRow === 1) {
@@ -238,7 +245,7 @@ class Form
         echo '<td width=200>';
         $count = count($input->value);
         echo '<select ';
-        echo 'id="' . $input->name  . '"';
+        echo 'id="' . $this->_name .'_'.$input->name . '" ';
         echo 'name="' . $input->name . '" >';
         for ($i = 0; $i < $count; $i ++) {
             echo '<option value="' . $input->value[$i] . '" >';
@@ -276,6 +283,22 @@ class Form
         echo "</td>\n";
         echo "</tr>\n";
 
+    }//end _header()
+
+    /**
+     * Erzeugt aus den Input ein hidden Type
+     *
+     * @param object $input Array mit den Informationen über die Spalte.
+     *
+     * @return void
+     */
+    function _hidden($input)
+    {
+        echo '<input type="hidden" ';
+        echo 'name="' . $input->name . '" ';
+        echo 'id="' . $input->name . '" ';
+        echo 'value="' . $input->value . '" ';
+        echo '>';
     }//end _header()
 
 }//end class

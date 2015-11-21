@@ -135,6 +135,20 @@ class View
     }//end setTitle()
 
     /**
+     * Add a Javascript file to the view. Can be used from the Services itselfs.
+     *
+     * @param string $filename Filenname of the Javascript File
+     * @param string $path     Path of the Javascript File
+     *
+     * @return void
+     */
+    public function addScript($filename, $path)
+    {
+        $this->_scripts[$filename] = $path;
+
+    }//end addScript()
+
+    /**
      * Fügt dem View eine Meldung hinzu.
      *
      * @param string $meldung Meldung die Ausgegeben werden soll.
@@ -154,8 +168,10 @@ class View
      */
     public function printPage()
     {
+
         $contentDecoded = json_decode($this->_content);
         //Binde Modulspezifsche HTML-Attribute in Header ein.
+        //@FIXME Je jeden aufruf wird ein File eingebunden, auch wenn es schon eingebunden ist!
         foreach ($contentDecoded->moduls as $modul){
             include_once 'interpreter/' . $modul->type . '.inc';
             $className = $modul->type;
@@ -167,7 +183,6 @@ class View
             }
 
         }
-
         $this->_printHeader();
         $this->_printMenu();
 
@@ -249,7 +264,6 @@ class View
         <link rel="stylesheet"
             href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"
         >
-        <script src="/wachplan/js/jquery.min.js"></script>
         <?php
         foreach ($this->_scripts as $scripts){
             echo '<script src="' . $scripts . '" /></script>'. "\n";

@@ -69,12 +69,26 @@ class Table
 
     }//end __construct()
 
-    public static function getStyles(){
+    /**
+     * Get the Styles that are used for the tables.
+     *
+     * @return array List of styles that are used for tabels
+     */
+    public static function getStyles()
+    {
         return array();
+
     }//end getStyles()
 
-    public static function getScripts(){
+    /**
+     * Get the Scripts that are used for the tables.
+     *
+     * @return array List of scripts that are used for tabels
+     */
+    public static function getScripts()
+    {
         return array();
+
     }//end getScripts()
 
 }//end class
