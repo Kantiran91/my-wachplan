@@ -249,9 +249,10 @@ class View
         <link rel="stylesheet"
             href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"
         >
+        <script src="/wachplan/js/jquery.min.js"></script>
         <?php
-        foreach ($this->_styles as $style){
-            echo '<link href="' . $style . '" type="text/css" rel="stylesheet" />'. "\n";
+        foreach ($this->_scripts as $scripts){
+            echo '<script src="' . $scripts . '" /></script>'. "\n";
         }?>
 
         </head>
