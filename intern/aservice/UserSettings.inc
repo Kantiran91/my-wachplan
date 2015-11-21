@@ -213,7 +213,7 @@ class UserSettings extends AbstractSettings
      */
     public function addUser(array $data)
     {
-       $database = $GOBALS['database'];
+       $database = $GLOBALS['database'];
 
         //@TODO Prüfung auf  Benutzername in Funktion auslagern
         // Prüfen ob der Benutzername schon vergeben ist!
@@ -321,7 +321,7 @@ class UserSettings extends AbstractSettings
      */
     static function getAllUser()
     {
-       $database = $GOBALS['database'];
+       $database = $GLOBALS['database'];
         $stmtUserdata = $database->prepare(
             'SELECT `id_user`, `user_name` FROM `wp_user` ORDER BY `user_name`');
         $stmtUserdata->bind_result($idUser, $userName);

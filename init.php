@@ -201,7 +201,7 @@ function encryptHash($password, $salt = 'c1ab2c7a')
 function getDays()
 {
     $tage = array();
-    $database = $GOBALS['database'];
+    $database = $GLOBALS['database'];
     $prepare = $database->prepare('SELECT * FROM `wp_days` ORDER BY `date`');
     $prepare->execute();
     $prepare->bind_result($dayId, $date);
