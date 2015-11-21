@@ -25,12 +25,10 @@ require_once '../init.php';
  * -neuen Benutzer anlegen
  * -Benutzer Bearbeiten
  * -Benutzer löschen
-* mögliche Lösung für das Problem das Daten zuerst geholt werden soll, könnten Tabellenüberschriften über alle col darstellen
  */
 class UserSettings extends AbstractSettings
 {
     const DISPLAYNAME = 'Benutzereinstellungen';
-    const DISPLAY = 'display';
 
     /**
      * @var String Displayname
@@ -69,7 +67,6 @@ class UserSettings extends AbstractSettings
                                       );
         $modulChangeUser['content']['inputs'] = $this->_getAttributeInputs(TRUE);
         $this->frontend['moduls'][] = $modulChangeUser;
-
         return json_encode($this->frontend);
 
     }//end getFrontend()
@@ -96,111 +93,69 @@ class UserSettings extends AbstractSettings
             }//end foreach
 
             $inputs[] = array(
-                         DISPLAY   => 'Benutzer',
+                         'display' => 'Benutzer',
                          'name'    => 'user_id',
                          'type'    => 'select',
-                         'valName' => $userNames,
+                         'valNam'  => $userNames,
                          'value'   => $userids,
                         );
         }
 
-        $inputs[] = array(
-                     DISPLAY => 'Benutzerdaten',
-                     'type'  =>  'header',
-                    );
+        $attributes = '[
+          {
+            "display": "Benutzerdaten",
+            "type": "header"
+          }, {
+            "display": "Benutzername",
+            "name": "username",
+            "type": "text"
+          },{
+            "display": "Vorname",
+            "name": "first_name",
+            "type": "text"
+          },{
+            "display": "Nachname",
+            "name": "last_name",
+            "type": "text"
+          },{
+            "display": "eMail",
+            "name": "email",
+            "type": "email"
+          },{
+            "display": "Telefonnummer",
+            "name": "tele",
+            "type": "text"
+          },{
+            "display": "Geburtsdatum",
+            "name": "gb",
+            "type": "date"
+          },{
+            "display": "Qualifkationen",
+            "type": "header"
+          },{
+            "display": "Abzeichen",
+            "name": "abzeichen",
+            "type": "select",
+            "value": ["DRSA Bronze","DRSA Silber","DRSA Gold"],
+            "valName": ["DRSA Bronze","DRSA Silber","DRSA Gold"]
+          }, {
+            "display": "Ausbildung EH / SAN",
+            "name": "med",
+            "type": "select",
+            "valName": ["","EH Kurs","San A","San B","Schulsani","Rettungsdienst"],
+            "value": ["eh","eh","san","san","san","san" ]
+          },{
+            "display": "Rechte",
+            "type": "header"
+          },{
+            "display": "Benutzerrechte",
+            "name": "rights",
+            "type": "select",
+            "valName": ["Wachgänger", "Wachleiter / stellv. Wachleiter","Admin"],
+            "value": ["0","1","2"]
+          }]';
 
-        $inputs[] = array(
-                     DISPLAY => 'Benutzername',
-                     'name'  => 'username',
-                     'type'  => 'text',
-                    );
-
-        $inputs[] = array(
-                     DISPLAY => 'Vorname',
-                     'name'  => 'first_name',
-                     'type'  => 'text',
-                    );
-        $inputs[] = array(
-                     DISPLAY => 'Nachname',
-                     'name'  => 'last_name',
-                     'type'  => 'text',
-                    );
-        $inputs[] = array(
-                     DISPLAY => 'eMail',
-                     'name'  => 'email',
-                     'type'  => 'email',
-                    );
-        $inputs[] = array(
-                     DISPLAY => 'Telefonnummer',
-                     'name'  => 'tele',
-                     'type'  => 'text',
-                    );
-        $inputs[] = array(
-                     DISPLAY => 'Geburtsdatum',
-                     'name'  => 'gb',
-                     'type'  => 'date',
-                    );
-        $inputs[] = array(
-                     DISPLAY => 'Qualifkationen',
-                     'type'  => 'header',
-                    );
-        $inputs[] = array(
-                     DISPLAY   => 'Abzeichen',
-                     'name'    => 'abzeichen',
-                     'type'    => 'select',
-                     'value'   => array(
-                                   'DRSA Bronze',
-                                   'DRSA Silber',
-                                   'DRSA Gold',
-                                  ),
-                     'valName' => array(
-                                   'DRSA Bronze',
-                                   'DRSA Silber',
-                                   'DRSA Gold',
-                                  ),
-                    );
-        $inputs[] = array(
-                     DISPLAY   => 'Ausbildung EH / SAN',
-                     'name'    => 'med',
-                     'type'    => 'select',
-                     'valName' => array(
-                                   '',
-                                   'EH Kurs',
-                                   'San A',
-                                   'San B',
-                                   'Schulsani',
-                                   'Rettungsdienst',
-                                  ),
-                     'value'   => array(
-                                   'eh',
-                                   'eh',
-                                   'san',
-                                   'san',
-                                   'san',
-                                   'san',
-                                  ),
-                    );
-        $inputs[] = array(
-                     DISPLAY   => 'Rechte',
-                     'type'    => 'header',
-                    );
-        $inputs[] = array(
-                     DISPLAY   => 'Benutzerrechte',
-                     'name'    => 'rights',
-                     'type'    => 'select',
-                     'valName' => array(
-                                   'Wachgänger',
-                                   'Wachleiter / stellv. Wachleiter',
-                                   'Admin',
-                                  ),
-                     'value'   => array(
-                                   '0',
-                                   '1',
-                                   '2',
-                                  ),
-                    );
-
-        return $inputs;
+        return array_merge($inputs, json_decode($attributes, TRUE));
 
     }//end _getAttributeInputs()
 
@@ -213,7 +168,7 @@ class UserSettings extends AbstractSettings
      */
     public function addUser(array $data)
     {
-       $database = $GLOBALS['database'];
+        $database = $GLOBALS['database'];
 
         //@TODO Prüfung auf  Benutzername in Funktion auslagern
         // Prüfen ob der Benutzername schon vergeben ist!
@@ -253,7 +208,8 @@ class UserSettings extends AbstractSettings
     		`first_name`,
     		`last_name`
     		)
-    		VALUES (?,?,?,?,?,?,?,?,?,?)');
+    		VALUES (?,?,?,?,?,?,?,?,?,?)'
+        );
         $query->bind_param(
             'sssissssss',
             $data['email'],
@@ -265,7 +221,8 @@ class UserSettings extends AbstractSettings
             $data['abzeichen'],
             $data['med'],
             $data['first_name'],
-            $data['last_name']);
+            $data['last_name']
+        );
 
             // send as mail with Password
         $mail = new mail(post('email'));
@@ -321,9 +278,10 @@ class UserSettings extends AbstractSettings
      */
     static function getAllUser()
     {
-       $database = $GLOBALS['database'];
+        $database = $GLOBALS['database'];
         $stmtUserdata = $database->prepare(
-            'SELECT `id_user`, `user_name` FROM `wp_user` ORDER BY `user_name`');
+            'SELECT `id_user`, `user_name` FROM `wp_user` ORDER BY `user_name`'
+        );
         $stmtUserdata->bind_result($idUser, $userName);
         $stmtUserdata->execute();
         $users = array();
