@@ -36,9 +36,7 @@ function dateDe($date)
 
 if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
     // Mail für Admin vorbereiten.
-    $mailAdmin = new mail('sebastian.friedl@salem.dlrg.de', 'Cronjob');
-    $mailAdminText = "Hallo Sebastian, die Daten von heute:\n";
-    $mailAdminText .= "-------------------------------------\n";
+    $mailAdmin = new mail('sebastian.friedl@salem.dlrg.de');
 
     // Akutelle Zeit auslesen.
     $timestampAkutell = time();
@@ -68,7 +66,7 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
         $resultDays = $database->query($queryDays);
         while ($row = $resultDays->fetch_row()) {
             $days[] = $row;
-        }
+        }//end while
 
         foreach ($days as $day) {
             $resultAcc = $database->query(
@@ -91,57 +89,30 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
             }
 
             array_pop($users);
-            $betreffUser = 'Wachdienst am ' . dateDe($day[1]);
             foreach ($users as $user) {
-                $mail = new mail($user[1], $betreffUser);
-                $mailUserText = 'Hallo ' . $user[2] . ",\n";
+                $mailKeywords = array(
+                                 'tag'     => dateDe($day[1]),
+                                 'vorname' => $user[2],
+                                );
+                $mail = new mail($user[1]);
                 if ($user[3] === 1 || $user[3] === 2) {
-                    //// $leader[] = $user[3];
-                    $mailUserText .= 'du bist am ' .
-                     date('d.m.Y', strtotime($day[1]));
-                    $mailUserText .= "für den Wachdienst als Wachleiter bzw.
-                     stellv. Wachleiter eingeleit.\n";
-                    $mailUserText .= "Deine Wachgänger sind:\n";
+                    $tnListe = '';
                     foreach ($users as $teilnehmer) {
-                        $mailUserText .= $teilnehmer[2] . "\t";
-                        $mailUserText .= $teilnehmer[1] . "\t";
-                        $mailUserText .= $teilnehmer[4] . "\n";
-                    }
+                        $tnListe .= $teilnehmer[2] . "\t";
+                        $tnListe .= $teilnehmer[1] . "\t";
+                        $tnListe .= $teilnehmer[4] . "\n";
+                    }//end foreach
 
-                    $mailUserText .= "Bitte überprüfe ob Sie alle kommen können.
-                     Sollte es ein Probleme geben,
-                     melde dich bitte bei einem von uns. \n";
+                    $mailKeywords['teilnehmer']  = $tnListe;
+                    $mail->loadTemplate('wlCron', $mailKeywords);
                 } else {
-                    $mailUserText .= 'du bist am ' . dateDe($day[1]) .
-                     "für den Wachdienst eingeleit.\n";
-                    $mailUserText .= "Ihr trefft euch um 11:45 am San-Raum \n";
-                    $mailUserText .= "Solltet du kurzfristig nicht können oder
-                     krank werden, bitten wir dich deinem Wachleiter, oder
-                     falls dieser nicht erreichbar ist uns technischen Leitern
-                     so schnell wie möglich Bescheid zugeben\n und / oder zu
-                    Versuchen jemand andern zu finden.Eine mögliche Liste von
-                     Wachgängern findest du im internen Bereich.\n\n
-                    Für den Wachdienst benötigst du noch folgende Sachen:\n";
-                    $mailUserText .= "Schwimmbekleidung\n";
-                    $mailUserText .= "dein DLRG T-Shirt (rot/gelb)\n";
-                    $mailUserText .= "ggf. Taucherbrille, Schnorchel,
-                     Flossen(rot/gelb)\n";
-                    $mailUserText .= "ggf. Sonnenschutz wie Hut oder
-                     Sonnencreme\n (Falls du kein T-Shirt haben, liegen
-                     am Schlosssee welche zum Ausleihen bereit.)\n\n";
+                    $mail->loadTemplate('wgCron', $mailKeywords);
                 }//end if
 
-                $mailUserText .= "------------------------------------------\n";
-                $mailUserText .= "Viel Glück und Spaß beim Wachdienst \n
-                Deine Technische Leitung\n Daniel Schmid \t 0176/82148811\n
-                Sebastian Friedl \t 0151/25255314";
-                $mail->setText($mailUserText);
                 $mail->sendMail();
-                echo '<br>\n\n';
             }//end foreach
 
             $users = NULL;
-            echo "-------------------------------------\n";
         }//end foreach
 
         /*
@@ -161,19 +132,15 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
          $datumOld->format('Y-m-d') . " ' AND ' " . $datum . "'";
         $resultOldWl = $database->query($queryOldWl);
         while ($row = $resultOldWl->fetch_row()) {
-            $mailWl = new mail($row[4], 'Feedback für den :' . dateDe($row[1]));
-            $wlText = 'Hallo' . $row[5] .
-             ",\n danke für den Wachdienst am
-            vergangenen Wochenende!\n Um den Wachdienst für euch noch besser
-             und einfacher zu gestalten, ist uns deine Meinung wichtig.\n
-             Bitte nimm füll doch kurz den Feedbackbogen auf folgender Seite aus:\n
-             seepelikan.bplaced.net/wachplan/intern/feedback_wl.php?day=" .
-             $row[0];
-            $wlText .= "\n\n Danke für deine Hilfe \n Deine Technische Leitung";
-            $mailWl->sendMail($wlText);
-        }
-
-        echo "-------------------------------------\n";
+            $feedbackMail = new mail($row[4]);
+            $feedKeywords = array(
+                             'tag'     => dateDe($row[1]),
+                             'vorname' => $row[5],
+                             'dayId'   => $row[0],
+                            );
+            $feedbackMail->loadTemplate('feedbackCron', $feedKeywords);
+            $feedbackMail->sendMail();
+        }//end while
     }//end if
 
     /*
@@ -195,15 +162,15 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
         $login[] = $row;
     }
 
-    $mailAdminText .= "Login Versuche:\n";
+    $loginTrysString = '';
     foreach ($login as $loginVersuch) {
-        $mailAdminText .= $loginVersuch[0] . "\t";
-        $mailAdminText .= $loginVersuch[1] . "\t";
-        $mailAdminText .= $loginVersuch[2] . "\t";
-        $mailAdminText .= $loginVersuch[3] . "\n";
-    }
+        $loginTrysString .= $loginVersuch[0] . "\t";
+        $loginTrysString .= $loginVersuch[1] . "\t";
+        $loginTrysString .= $loginVersuch[2] . "\t";
+        $loginTrysString .= $loginVersuch[3] . "\n";
+    }//end foreach
 
-    $mailAdminText .= "-------------------------------------\n";
-    $mailAdmin->setText($mailAdminText);
+    $keywords = array('loginversuche' => $loginTrysString);
+    $mail->loadTemplate('adminCron', $keywords);
     $mailAdmin->sendMail();
 }//end if
