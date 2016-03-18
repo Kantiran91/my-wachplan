@@ -1,58 +1,53 @@
 <?php
 /**
- * Frontend zur Neuanforderung des Passwortes
- *
- * PHP versions 5
- *
- * LICENSE: This source file is subject CC BY 4.0 license
- *
  * @author  Sebastian Friedl <friedl.sebastian@web.de>
- * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
- * @version GIT: $Date: Thu May 7 14:43:07 2015 +0200$
- * @link    http:/salem.dlrg.de
- **/
-require_once '../init.php';
-require_once '../intern/aservice/UserSettings.inc';
+ * @copyright Copyright (c) 2016, Sebastian Friedl
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
 
-if (count($_GET) !== 2) {
-    header('Location: ../index.php?fehler=3');
+/**
+ * Frontend zur Neuanforderung des Passwortes
+ **/
+require_once $_SERVER['DOCUMENT_ROOT'] .'/wachplan/init.php';
+require_once ASERVICE.'UserSettings.inc';
+require_once INCLUDEPATH .'LdapUser.inc';
+require_once INCLUDEPATH .'DefaultUser.inc';
+
+
+$user = generateUserObject();
+
+$username = getGetParamOrNull('username');
+if (!$user->checkUserExists($username)){
+    header('Location: ../index.php?error=Username existiert nicht!');
     exit();
 }
 
-$stmtGet = $database->prepare(
-    'SELECT `id_user`,`email`
-    FROM `wp_user`
-    WHERE `first_name`= ? AND `last_name`=? ');
-$stmtGet->bind_param('ss', $_GET['first_name'], $_GET['last_name']);
-$stmtGet->bind_result($id, $email);
-$stmtGet->execute();
-$stmtGet->store_result();
-$stmtGet->fetch();
+$newPasswort = UserSettings::randomstring(9);
+$result = $user->setNewPassword($username,$newPasswort);
 
-// Wenn nur eine Person mit dem Namen übereinstimmt, ist dies die Korrekte
-// Person
-if ($stmtGet->num_rows !== 1) {
-    $stmtGet->close();
-    // wenn nicht übereinstimmt
-    header('Location: ../index.php?fehler=3');
-    exit();
-} else {
-    // wenn übereinstimmt
-    $stmtGet->close();
-    // Passwort generieren
-    $newpasswort = UserSettings::randomstring(9);
-    $hashPass = encrypt_hash($newpasswort);
+if ($result === TRUE) {
+    var_dump($newPasswort);
+    $attibute  = $user->getUserBaseAttributes($username);
+    var_dump($attibute);
+    $email = $attibute['email'];
+    $mail = new mail($email, 'neue Passwort');
+    $mail->setText("Dein neues Passwort lautet :\n" . $newPasswort . "\n");
+    //$mail->sendMail();
+}
 
-    // Passwort speichern
-    $query = 'UPDATE `wp_user` SET `hash`= ? WHERE `id_user`= ?';
-    $stmtSet = $database->prepare($query);
-    $stmtSet->bind_param('si', $hashPass, $id);
-    if ($stmtSet->execute() === TRUE) {
-        $mail = new mail($email, 'neue Passwort');
-        $mail->set_text("Dein neues Passwort lautet :\n" . $newpasswort . "\n");
-        $mail->sendMail();
-    }
-}//end if
 ?>
 <div class="meldung">
     <p>Benutzer gefunden</p>

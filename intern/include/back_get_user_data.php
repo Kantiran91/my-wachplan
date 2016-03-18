@@ -1,4 +1,23 @@
 <?php
+/**
+ * @author  Sebastian Friedl <friedl.sebastian@web.de>
+ * @copyright Copyright (c) 2016, Sebastian Friedl
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
+
  /**
   * Holt aus der Datenbank alle Daten eines Benutzers
   * und gibt dies im JSON-Format aus
@@ -14,15 +33,6 @@
   * - Abzeichen
   * - Medizinsche Qualifikation
   * - Vor und Nachname
-  *
-  * PHP versions 5
-  *
-  * LICENSE: This source file is subject CC BY 4.0 license
-  *
-  * @author  Sebastian Friedl <friedl.sebastian@web.de>
-  * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
-  * @version GIT:  $Date: Sun May 10 09:51:12 2015 +0200$
-  * @link    http:/salem.dlrg.de
   **/
 require_once '../../init.php';
 checkSession();
@@ -46,29 +56,7 @@ $stmt = $database->prepare($query);
 $stmt->bind_param('i', $_POST['user_id']);
 $stmt->execute();
 
-// TODO Als Funktion auslagern
-$meta = $stmt->result_metadata();
-while ($field = $meta->fetch_field()) {
-    $params[] = &$row[$field->name];
-}
-
-call_user_func_array(
-    array(
-     $stmt,
-     'bind_result',
-    ),
-    $params);
-
-$result = array();
-while ($stmt->fetch()) {
-    foreach ($row as $key => $val) {
-        $tmp[$key] = $val;
-    }
-
-    $result[] = $tmp;
-}
-
-echo json_encode($result);
+echo json_encode(getResultAsArray($stmt));
 $stmt->close();
 
 ?>

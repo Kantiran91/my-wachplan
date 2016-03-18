@@ -13,15 +13,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Affero General Public License, version 3,
+ * You should have received a copy of the GNU Affero General Public
+ * License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-?>
-<div class=meldung>
-    <h4>Fehler!</h4>
-	<?php
-    echo get('error');
-?>
-	<br> <br> <a class="button" onclick="hide_massage()">schließen</a> <br>
-</div>
+
+$I = new AcceptanceTester($scenario);
+$I->wantTo('ensure that frontpage works');
+$I->amOnPage('/');
+$I->see('Wachplan Login');

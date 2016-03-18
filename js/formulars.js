@@ -1,5 +1,18 @@
-$(document).ready(function(){
+/**
+ * wachplan - javaScript
+ *
+ * This file is licensed under the Affero General Public License version 3 or
+ * later. See the COPYING file.
+ *
+ * @author  Sebastian Friedl <friedl.sebastian@web.de>
+ * @copyright Copyright (c) 2016, Sebastian Friedl
+ * @license AGPL-3.0
+ */
 
+
+//@todo Abfangen der Post und Get befehle und absenden über AJAXS, dazu muss ggf. ein neuer Parameter eingefügt werden.
+$(document).ready(function(){
+	
 	//formular anmeldung ../anmeldung/anmeldung.php
 	$('#anmeldung').submit(function(e){
 		e.preventDefault();
@@ -37,6 +50,9 @@ $(document).ready(function(){
        return false;
 	});
 
+	/**This function get the user_data an put it on the change formular
+	 * @deprecated
+	 */
 	// formular change user data ../intern/system_settings.php
 	$('#change_user_data').submit(function(e){
 		e.preventDefault();

@@ -17,15 +17,12 @@ createHeader('Passwort vergessen');?>
 	<div class="modul" id="Formular">
 		<h1>Passwort vergessen</h1>
 		<form id="pw_forgot" action="include/new_passwort.php" method="GET">
-			<br> Bitte hier die Vor und Nachname eingeben eingeben. <br>
+			<br> Bitte hier dein Benutzernamen eingeben.
+               Ist dir der Benutzername nicht bekannt wende dich bitte an den Administrator! <br>
 			<table>
 				<tr>
-					<td>Vorname</td>
-					<td><input type="text" id="first_name" name="first_name"></td>
-				</tr>
-				<tr>
-					<td>Nachname</td>
-					<td><input type="text" id="last_name" name="last_name"></td>
+					<td>Benutzername</td>
+					<td><input type="text" id="username" name="username"></td>
 				</tr>
 				<tr>
 					<td colspan="2"><input class="button" type="submit"></td>

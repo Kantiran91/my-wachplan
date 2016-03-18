@@ -1,25 +1,35 @@
 <?php
 /**
+ * @author  Sebastian Friedl <friedl.sebastian@web.de>
+ * @copyright Copyright (c) 2016, Sebastian Friedl
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
+
+/**
  * Die Datei inisalisiert alle wichtigen Werte vorab
  * und bindet wichtige Dateien vorab ein.
  *
  * Die folgenden Dinge werden hier erledigt:
  * - Die DEBUG Funktionen werden ein und ausgestellt
- * - Die Umlaute werden in UFT-8 dargesteööt
+ * - Die Umlaute werden in UFT-8 dargestellt
  * - Die Sessionparamter werden eingestellt
  * - Die Konstanten werden festgelegt
  * - Es wird ein DB Verbindung mit sqli aufgebaut ($database)
  * - Die Wichtigesten Include-Files werden eingelesen
  * - Globae Funktionen werden definiert
- *
- * PHP versions 5
- *
- * LICENSE: This source file is subject CC BY 4.0 license
- *
- * @author  Sebastian Friedl <friedl.sebastian@web.de>
- * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
- * @version GIT: $Id$ $Date: Sun May 10 09:51:12 2015 +0200$
- * @link    http:/salem.dlrg.de
  **/
 
 // ---------- DEBUG --------------------//
@@ -27,7 +37,6 @@
 define('DEBUG', TRUE);
 if (DEBUG === TRUE) {
     ini_set('display_errors', 'ON');
-    session_set_cookie_params(10);
     error_reporting(E_ALL);
 } else {
     ini_set('display_errors', 'OFF');
@@ -52,33 +61,81 @@ session_start();
 // ---------- END SESSION ----------//
 
 // ---------- CONSTANTEN ----------//
-// Alle Konstanten werden hier festgelegt
-// name des root verzeichnis
+// Constance in the file system
 define('ROOT', realpath(dirname(__FILE__)));
+define('INCLUDEPATH', ROOT . '/include/');
+define('CORE', ROOT.'/include/core/');
+define('ASERVICE', ROOT.'/intern/aservice/');
+
 // Versionsnummer des RELEASE
-define('VERSION', 'Version 0.5');
+define('VERSION', 'Version 16-1');
+
+
 
 // ---------- END CONSTANTEN ----------//
 
 // ---------- INCLUDES ----------//
+require_once ROOT . '/include/mail.inc';
+require_once ROOT . '/include/IUser.inc';
+require_once ROOT . '/include/header.php';
+
+// ---------- END INCLUDES ----------//
+
+// ---------- INCLUDE CONFIG FILE ----------//
 if ((include_once ROOT . '/config/config.php') === FALSE) {
     echo 'config Datei nicht vorhanden.';
 }
-
-require_once ROOT . '/include/mail.inc';
-require_once ROOT . '/include/header.php';
-
-// ---------- END INCLUDES ----------/
+$GLOBALS['config'] = $config;
+// ---------- END INCLUDE CONFIG FILE ----------//
 
 // ---------- SQL --------------------//
 // SQL-Datenbank
-$database = new mysqli($db['host'], $db['user'], $db['pass'], $db['name']);
+$database = new mysqli($config['dbhost'], $config['dbuser'], $config['dbpassword'], $config['dbname']);
 $database->set_charset('utf8');
 $GLOBALS['database'] = $database;
 // ---------- END SQL ----------//
 
 // ---------- GOLOBAL FUNCTIONS ----------//
 
+function getResultAsArray($stmt)
+{
+    $meta = $stmt->result_metadata();
+    while ($field = $meta->fetch_field()) {
+        $params[] = &$row[$field->name];
+    }
+
+    call_user_func_array(
+        array(
+            $stmt,
+            'bind_result',
+        ),
+        $params);
+
+    $result = array();
+    while ($stmt->fetch()) {
+        foreach ($row as $key => $val) {
+            $tmp[$key] = $val;
+        }
+
+        $result[] = $tmp;
+    }
+    return $result;
+}
+
+/**
+ * this Function generate a Object that act like a IUser
+ * @see IUser
+ * @return IUser User Object
+ */
+function generateUserObject()
+{
+    if ($GLOBALS['config']['loginMode'] == 'ldap'){
+        $user = new LdapUser(new DefaultUser());
+    } else {
+        $user = new DefaultUser();
+    }
+    return $user;
+}
 
 /**
  * Prüft ob die Session noch gültig ist.
@@ -160,12 +217,7 @@ function checkID($userID, $error = TRUE)
  */
 function checkPast($date)
 {
-    if (strtotime($date) >= time()) {
-        return FALSE;
-    } else {
-        return TRUE;
-    }
-
+    return !(strtotime($date) >= time());
 }//end checkPast()
 
 /**
@@ -276,17 +328,31 @@ function errorHandler($fehlercode, $fehlertext, $fehlerdatei, $fehlerzeile)
  *
  * @return void
  */
-function errorMessage($file, $line, $methode = '')
+function errorMessage($file, $line, $methode = '', $node= '')
 {
     if ($methode === '') {
-        trigger_error('Error in ' . $file . 'on Line' . $line);
+        trigger_error('Error in ' . $file . 'on Line' . $line .'!\n message:'. $node );
     } else {
         trigger_error(
-            'Error in ' . $methode . 'in File ' . $file . 'on Line ' . $line
+            'Error in ' . $methode . 'in File ' . $file . 'on Line ' . $line .'!\n message:'. $node
         );
     }
 
 }//end errorMessage()
+/**
+ * save access of the $_GET Parameter. Check also if the Parameter is set.
+ *
+ * @param string $param Name des Parameter der ausgegeben wird.
+ *
+ * @return string
+ */
+function getGetParamOrNull($param){
+    if (isset($_GET[$param])){
+        return get($param);
+    }else {
+        return null;
+    }
+}
 
 /**
  * Sichere Zugriff auf die $_GET Parameter.
