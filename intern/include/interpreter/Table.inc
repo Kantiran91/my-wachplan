@@ -1,17 +1,27 @@
 <?php
+/**
+ * @author  Sebastian Friedl <friedl.sebastian@web.de>
+ * @copyright Copyright (c) 2016, Sebastian Friedl
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
+
  /**
   * Enthält die Klasse Table.
   *
   *  Diese stellt ein Interpreter für den View des MVP System dar.
-  *
-  * PHP versions 5
-  *
-  * LICENSE: This source file is subject CC BY 4.0 license
-  *
-  * @author  Sebastian Friedl <friedl.sebastian@web.de>
-  * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
-  * @version GIT:  $Date$
-  * @link    http:/salem.dlrg.de
   * @TODO    Möglichkeit zwei Spalten und Zeilen zusammen zu fassen.
   **/
 

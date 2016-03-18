@@ -67,7 +67,7 @@ class Mail
     }//end __construct()
 
     /**
-     * check the adresse ist valid.
+     * check the adresse is valid.
      *
      * @param empfaenger eMail addresse.
      *

@@ -1,24 +1,34 @@
 <?php
- /**
-  * Daten für den Datenbankzugriff
-  *
-  * PHP versions 5
-  *
-  * LICENSE: This source file is subject CC BY 4.0 license
-  *
-  * @author  Sebastian Friedl <friedl.sebastian@web.de>
-  * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
-  * @version GIT: $Date: Thu May 7 14:43:07 2015 +0200$
-  * @link    http:/salem.dlrg.de
-  **/
-$db = array();
+/**
+ * @author  Sebastian Friedl <friedl.sebastian@web.de>
+ * @copyright Copyright (c) 2016, Sebastian Friedl
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
 
-// Kann abweichen, ist aber meistens "localhost"!
-$db['host'] = 'localhost';
-// Benutzername.
-$db['user'] = 'root';
-// Passwort.
-$db['pass'] = 'root';
-// Name der Datenbank.
-$db['name'] = 'wachplan';
+$config = array(
+    'loginMode'     => 'ldap', // possible values are 'ldap','default'
+    //LDAP
+    'ldapUser'      => 'cn=admin,dc=salem-dlrg,dc=de',
+    'ldapPassword'  => 'password',
+    'ldapBaseDn'    => 'dc=salem-dlrg,dc=de',
+    'ldapHost'      => 'swim-und-run-salem.de',
+    // mySQL Database
+    'dbhost'        => 'localhost',
+    'dbuser'        => 'root',
+    'dbpassword'    => 'root',
+    'dbname'        => 'wachplan',
+);
 ?>

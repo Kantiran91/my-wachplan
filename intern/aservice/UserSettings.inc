@@ -1,19 +1,23 @@
 <?php
 
 /**
- * Kurze Beschreibung des Datei-Inhalts
- *
- * Lange Beschreibung des Datei-Inhaltes, wenn erforderlich.
- *
- * PHP versions 5
- *
- * LICENSE: This source file is subject CC BY 4.0 license
- *
  * @author  Sebastian Friedl <friedl.sebastian@web.de>
- * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
- * @version GIT:  $Date$
- * @link    http:/salem.dlrg.de
- **/
+ * @copyright Copyright (c) 2016, Sebastian Friedl
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
 require_once '../init.php';
 require_once '../intern/include/AbstractSettings.inc';
 require_once '../intern/include/Utils.inc';
@@ -71,6 +75,7 @@ class UserSettings extends AbstractSettings
         $modulAddUser['content']['inputs'] = $this->_getAttributeInputs();
         $this->frontend['moduls'][] = $modulAddUser;
 
+        //change user
         $modulChangeUser = static::generateModule('Benutzer bearbeiten', 'Form');
         $modulChangeUser['content'] = array(
                                        'name'   => 'changeUser',
@@ -78,6 +83,32 @@ class UserSettings extends AbstractSettings
                                       );
         $modulChangeUser['content']['inputs'] = $this->_getAttributeInputs(TRUE);
         $this->frontend['moduls'][] = $modulChangeUser;
+
+        //delete user
+        $modulDeleteUser = static::generateModule('Benutzer löschen', 'Form');
+        $modulDeleteUser['content'] = array(
+            'name'   => 'deleteUser',
+            'target' => 'deleteUser',
+        );
+
+            $users = static::getAllUser();
+            $userNames = array('');
+            $userids   = array('');
+
+            foreach ($users as $user) {
+                $userids[] = $user['0'];
+                $userNames[] = $user['1'];
+            }//end foreach
+
+        $modulDeleteUser['content']['inputs'][] =  array(
+                'display' => 'Benutzer',
+                'name'    => 'user_id',
+                'type'    => 'select',
+                'valName' => $userNames,
+                'value'   => $userids,
+            );
+        $this->frontend['moduls'][] = $modulDeleteUser;
+
         return json_encode($this->frontend);
 
     }//end getFrontend()
@@ -102,12 +133,6 @@ class UserSettings extends AbstractSettings
                 $userids[] = $user['0'];
                 $userNames[] = $user['1'];
             }//end foreach
-
-            $inputs[] = array(
-                         'name'  => 'id',
-                         'type'  => 'hidden',
-                         'value' => '',
-                        );
 
             $inputs[] = array(
                          'display' => 'Benutzer',
@@ -179,14 +204,12 @@ class UserSettings extends AbstractSettings
     /**
      * Methode um einen Benutzer dem Wachplan hinzuzufügen.
      *
-     * @param array $data Der $_POST-Array das durchgereicht wird.
+     * @param array $_POST Der $_POST-Array das durchgereicht wird.
      *
      * @return array  Besteht aus einem Titel und einem Text, der ausgegeben wird.
      */
-    public function addUser(array $data)
+    public function addUser()
     {
-        $database = $GLOBALS['database'];
-
         $freeUsername = static::checkUsernameFree();
         if ($freeUsername !== TRUE) {
             return $freeUsername;
@@ -195,8 +218,7 @@ class UserSettings extends AbstractSettings
         $newpasswort = static::randomString(10);
         $pwHash = encryptHash($newpasswort);
 
-        // create the db query
-        $query = $database->prepare(
+        $query = $GLOBALS['database']->prepare(
             'INSERT INTO
     		`wp_user`(
     		`email`,
@@ -214,16 +236,16 @@ class UserSettings extends AbstractSettings
         );
         $query->bind_param(
             'sssissssss',
-            $data['email'],
-            $data['username'],
+            $_POST['email'],
+            $_POST['username'],
             $pwHash,
-            $data['rights'],
-            $data['tele'],
-            $data['gb'],
-            $data['abzeichen'],
-            $data['med'],
-            $data['first_name'],
-            $data['last_name']
+            $_POST['rights'],
+            $_POST['tele'],
+            $_POST['gb'],
+            $_POST['abzeichen'],
+            $_POST['med'],
+            $_POST['first_name'],
+            $_POST['last_name']
         );
 
             // send as mail with Password
@@ -248,15 +270,74 @@ class UserSettings extends AbstractSettings
     }//end addUser()
 
     /**
+     * Methode um die Daten eines Bneutzers im Wachplan!
+     *
+     * @param array $_POST Der $_POST-Array das durchgereicht wird.
+     *
+     * @return array  Besteht aus einem Titel und einem Text, der ausgegeben wird.
+     */
+    public function changeUser(){
+        $stmtChange = $GLOBALS['database']->prepare(
+                        'UPDATE `wp_user` SET
+         `friend`=?,
+         `email`=?,
+         `user_name`=?,
+         `telephone`=?,
+         `geburtsdatum`=?,
+         `abzeichen`=?,
+         `med`=?,
+         `first_name`=?,
+         `last_name`=?,
+         `rights`=?
+         WHERE `id_user`=?');
+        $stmtChange->bind_param(
+                        'issssssssii',
+                        $_POST['friend'],
+                        $_POST['email'],
+                        $_POST['username'],
+                        $_POST['tele'],
+                        $_POST['gb'],
+                        $_POST['abzeichen'],
+                        $_POST['med'],
+                        $_POST['first_name'],
+                        $_POST['last_name'],
+                        $_POST['rights'],
+                        $_POST['user_id']);
+        $result = array();
+        if ($stmtChange->execute() === TRUE) {
+            $result = array('Meldung', 'Daten bearbeitet!');
+        } else {
+            $result = array('Fehler', 'Fehler in der Datenbank!');
+        }
+        return $result;
+    }//end changeUser()
+
+    /**
+     * Methode um die Daten eines Bneutzers im Wachplan!
+     *
+     * @param array $_POST Der $_POST-Array das durchgereicht wird.
+     *
+     * @return array  Besteht aus einem Titel und einem Text, der ausgegeben wird.
+     */
+    public function deleteUser(){
+        $stmt = $GLOBALS['database']->prepare('DELETE FROM `wp_user` WHERE `id_user`=?');
+        $stmt->bind_param('i', $_POST['user_id']);
+        if ($stmt->execute() === TRUE) {
+            return array('Meldung', 'Benutzer wurde gelöscht!');
+        } else {
+            return array('Fehler', 'Fehler beim Löschen des Benutzers!');
+        }
+    }//end deleteUser()
+
+    /**
      * Check if the username is not used yet.
      *
      * @return multi True if username is not used else Array of ('Fehler','Message')
      */
     static function checkUsernameFree()
     {
-        $database = $GLOBALS['database'];
         $query = 'SELECT `id_user`FROM `wp_user` WHERE `user_name`=?';
-        $checkQuery = $database->prepare($query);
+        $checkQuery = $GLOBALS['database']->prepare($query);
         $checkQuery->bind_param('s', $_POST['username']);
         $checkQuery->execute();
         $checkQuery->store_result();
@@ -301,8 +382,7 @@ class UserSettings extends AbstractSettings
      */
     static function getAllUser()
     {
-        $database = $GLOBALS['database'];
-        $stmtUserdata = $database->prepare(
+        $stmtUserdata = $GLOBALS['database']->prepare(
             'SELECT `id_user`, `user_name` FROM `wp_user` ORDER BY `user_name`'
         );
         $stmtUserdata->bind_result($idUser, $userName);

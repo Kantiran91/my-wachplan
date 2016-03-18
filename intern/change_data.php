@@ -1,19 +1,31 @@
 <?php
+/**
+ * @author  Sebastian Friedl <friedl.sebastian@web.de>
+ * @copyright Copyright (c) 2016, Sebastian Friedl
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
+
  /**
-  * In diesem File kann der Benutzer seine Daten ändern.
-  *
-  * PHP versions 5
-  *
-  * LICENSE: This source file is subject CC BY 4.0 license
-  *
-  * @author  Sebastian Friedl <friedl.sebastian@web.de>
-  * @license http://creativecommons.org/licenses/by/4.0/deed.en CC BY 4.0
-  * @version GIT:  $Date: Sun May 10 09:51:12 2015 +0200$
-  * @link    http:/salem.dlrg.de
+  * This script is used to change the data and the password of the user
   * @TODO    Frontend und Backend Trennen
   **/
 require_once '../init.php';
 require_once 'aservice/UserSettings.inc';
+require_once INCLUDEPATH .'LdapUser.inc';
+require_once INCLUDEPATH .'DefaultUser.inc';
 checkSession();
 
 /*
@@ -50,6 +62,7 @@ if (isset($_GET['user_name']) === TRUE) {
         echo '<div class=meldung>Fehler beim Eintragen.<br>
         <a class="button" onclick="hide_massage()" >schließen</a></div>';
     }
+    $stmtChange->close();
 }//end if
 
 /*
@@ -58,45 +71,30 @@ if (isset($_GET['user_name']) === TRUE) {
 
 $users = UserSettings::getAllUser();
 
+$user = unserialize($_SESSION['userInterface']);
 
 /*
  * Passwort ändern
  */
-
-$pwSame = TRUE; // @var bool is true if both pw fields are equal
-$pwSave = FALSE; // @var bool is true if the pw is save in the Database
-if (isset($_POST['pass1']) === TRUE && isset($_POST['pass2']) === TRUE) {
-    if ($_POST['pass1'] === $_POST['pass2']) {
-        $pwSame = TRUE;
-        // TODO Query durch prepare ersetzten
-        $queryPw = 'UPDATE `wp_user` SET `hash`="' .
-                     encryptHash($_POST['pass1']) . '" WHERE `user_name`=';
-        $queryPw .= '"' . $_SESSION['user_name'] . '"';
-        $result = $database->query($queryPw);
-        $pwSave = $result;
-    } else {
-        $pwSame = FALSE;
-    }//end if
+if (passwordFieldsAreSet() && passwordFieldsAreEqual()) {
+        $newPassword = post('pass1');
+        $oldPassword = post('oldPassword');
+        $pwSave = $user->changePassword($oldPassword,$newPassword);
 }//end if
 
 // Holt alle Daten des Benutzers
+$userData = $user->getUserContactData();
 //TODO Schauen ob diese Querey ausgelagert werden kann.
 $queryOwn = '
 SELECT
-    `user_name`,
-    `email` ,
-    `telephone`,
     `geburtsdatum`,
     `abzeichen`,
     `med`,
-    `first_name`,
-    `last_name`,
     `friend`
 FROM  `wp_user`
-WHERE `user_name` ="' . $_SESSION['user_name'] . '"';
+WHERE `id_user` ="' . $_SESSION['id'] . '"';
 $resultOwn = $database->query($queryOwn);
 $row = $resultOwn->fetch_row();
-
 // FRONTEND
 createHeader('Eigene Daten');
 //@TODO die auswahl des Sanitätsausbildung überarbeiten
@@ -109,43 +107,43 @@ createHeader('Eigene Daten');
             <table>
                 <tr>
                     <td><label for="username">Benutzername</label></td>
-                    <td><input type=text name=user_name
-                        value="<?php echo $row[0]; ?>"
+                    <td><input type=text name=user_name readonly
+                        value="<?php echo $userData->username; ?>"
                     ></td>
                 </tr>
                 <tr>
                     <td><label for="first_name">Vorname</label></td>
                     <td><input type=text name=first_name
-                        value="<?php echo $row[6]; ?>"
+                        value="<?php echo $userData->firstName; ?>"
                     ></td>
                 </tr>
                 <tr>
                     <td><label for="last_name">Nachname</label></td>
                     <td><input type=text name=last_name
-                        value="<?php echo $row[7]; ?>"
+                        value="<?php echo $userData->lastName; ?>"
                     ></td>
                 </tr>
                 <tr>
                     <td>E-Mail:</td>
                     <td><input type=text name=email
-                        value="<?php echo $row[1]; ?>"
+                        value="<?php echo $userData->eMail; ?>"
                     ></td>
                 </tr>
                 <tr>
                     <td>Telefonnummer:</td>
                     <td><input type=text name=tele
-                        value="<?php echo $row[2]; ?>"
+                        value="<?php echo $userData->phoneNumber; ?>"
                     ></td>
                 </tr>
                 <tr>
                     <td>Geburtsdatum:</td>
-                    <td><input type=text name=gb value="<?php echo $row[3]; ?>"></td>
+                    <td><input type=text name=gb value="<?php echo $row[0]; ?>"></td>
                 </tr>
                 <tr>
                     <td>Abzeichen:</td>
                     <td><select id="abzeichen" name="abzeichen" >
-                    <option value="<?php echo $row[4]; ?>" selected>
-                    <?php echo $row[4]; ?></option>
+                    <option value="<?php echo $row[1]; ?>" selected>
+                    <?php echo $row[1]; ?></option>
                     <option value="DRSA Bronze" >DRSA Bronze</option>
                     <option value="DRSA Silber" >DRSA Silber</option>
                     <option value="DRSA Gold" >DRSA Gold</option>
@@ -154,8 +152,8 @@ createHeader('Eigene Daten');
                 <tr>
                     <td>Erste-Hilfe-Ausbildung:</td>
                     <td><select id="med"name="med" >
-                    <option value="<?php echo $row[5]; ?>" selected>
-                    <?php echo $row[5]; ?></option>
+                    <option value="<?php echo $row[2]; ?>" selected>
+                    <?php echo $row[2]; ?></option>
                     <option value="" ></option>
                     <option value="eh" >EH Kurs</option>
                     <br><option value="san" >San A</option>
@@ -169,20 +167,7 @@ createHeader('Eigene Daten');
                     <td>Wunschpartner</td>
                     <td><select name="friend">
                             <option value="NULL"></option>
-		<?php
-foreach ($users as $user) {
-    if ($user[0] === $row[8]) {
-        echo '<option value="';
-        echo $user[0] . '"selected >';
-    } else {
-        echo '<option value="';
-        echo $user[0] . '">';
-    }
-
-    echo $user[1];
-    echo '</option><br/>';
-}
-?>
+		<?php generateUserList($users, (int)$row[3])?>
 		</select></td>
                 </tr>
                 <tfoot>
@@ -199,6 +184,11 @@ foreach ($users as $user) {
         <h1>Passwort neu setzen</h1>
         <form class="formular" action="change_data.php" method="post">
             <table>
+               <tr>
+                    <td>altes Passwort:</td>
+                    <td><input type="password" name=oldPassword></td>
+
+                <tr>
                 <tr>
                     <td>Neues Passwort:</td>
                     <td><input type="password" name=pass1></td>
@@ -209,22 +199,55 @@ foreach ($users as $user) {
                     <td><input type="password" name=pass2></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input class="button" type="submit"></td>
+                    <td colspan="2"><input id="submitPassword" class="button" type="submit"></td>
                 </tr>
             </table>
         </form>
     </div>
 
 	<?php
-if ($pwSame === FALSE) {
+if (passwordFieldsAreSet() && !passwordFieldsAreEqual()) {
     echo '<div class=meldung> Die Passworte stimmen nicht überein!<br>
           <a class="button" onclick="hide_massage()" >schließen</a></div>';
 }
-if ($pwSave === FALSE) {
+if (isset($pwSave) && $pwSave === FALSE) {
     echo '<div class=meldung> Password konnte nicht gespeichtert werden,
                melden sie sich beim Admin<br>
           <a class="button" onclick="hide_massage()" >schließen</a></div>';
 }
-?><div id="foot"><?php echo VERSION; ?></div>
-    </body>
+?><div id="foot"><?php echo VERSION;?>
+</div>
+</body>
 </html>
+<?php
+/**
+ * check if the Passwordfields are set.
+ * @return bool
+ */
+function passwordFieldsAreSet()
+{
+    return isset($_POST['pass1']) === TRUE && isset($_POST['pass2']) === TRUE;
+}
+
+function passwordFieldsAreEqual()
+{
+    return $_POST['pass1'] === $_POST['pass2'];
+}
+
+function generateUserList($users, $friend)
+{
+    foreach ($users as $user) {
+        if ($user[0] === $friend) {
+            echo '<option value="';
+            echo $user[0] . '"selected >';
+        } else {
+            echo '<option value="';
+            echo $user[0] . '">';
+        }
+
+        echo $user[1];
+        echo '</option><br/>';
+    }
+}
+
+?>
