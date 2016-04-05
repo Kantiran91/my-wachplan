@@ -215,7 +215,7 @@ if (isset($pwSave) && $pwSave === FALSE) {
                melden sie sich beim Admin<br>
           <a class="button" onclick="hide_massage()" >schließen</a></div>';
 }
-?><div id="foot"><?php echo VERSION;?>
+?><div id="foot"><?php echo VERSION?>;
 </div>
 </body>
 </html>

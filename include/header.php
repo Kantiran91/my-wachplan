@@ -40,20 +40,25 @@ function createHeader($title)
     <head>
     <title> <?php echo $title .'@' . $GLOBALS['config']['title']; ?></title>
     <meta charset="UTF-8" />
-    <link href="/wachplan/style/style.css" type="text/css" rel="stylesheet" />
+    <link href="/<?php echo baseURL();?>/style/style.css" type="text/css" rel="stylesheet" />
     <link rel="stylesheet"
         href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"
     >
-    <script src="/wachplan/js/jquery.min.js"></script>
+    <script src="/<?php echo baseURL();?>/js/jquery.min.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <script src="/wachplan/js/intern_function.js"></script>
-    <script src="/wachplan/js/buttons.js"></script>
-    <script src="/wachplan/js/formulars.js"></script>
+    <script src="/<?php echo baseURL();?>/js/intern_function.js"></script>
+    <script src="/<?php echo baseURL();?>/js/buttons.js"></script>
+    <script src="/<?php echo baseURL();?>/js/formulars.js"></script>
     </head>
 
     <?php
     return TRUE;
 
 }//end createHeader()
+
+function baseURL(){
+     $values = explode('/', $_SERVER['REQUEST_URI']);
+    return $values[1];
+}
 
 ?>

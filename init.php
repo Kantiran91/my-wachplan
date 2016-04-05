@@ -75,7 +75,7 @@ define('VERSION', 'Version 16-1');
 // ---------- END CONSTANTEN ----------//
 
 // ---------- INCLUDES ----------//
-require_once ROOT . '/include/mail.inc';
+require_once ROOT . '/include/Mail.inc';
 require_once ROOT . '/include/IUser.inc';
 require_once ROOT . '/include/header.php';
 

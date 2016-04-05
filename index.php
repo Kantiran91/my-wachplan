@@ -28,6 +28,7 @@
  **/
 
 require_once __DIR__ . '/init.php';
+
 createHeader('Login');
 ?>
 <body>

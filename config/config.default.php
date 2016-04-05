@@ -19,7 +19,7 @@
  */
 
 $config = array(
-    'loginMode'     => 'ldap', // possible values are 'ldap','default'
+    'loginMode'     => 'default', // possible values are 'ldap','default'
     //LDAP
     'ldapUser'      => 'cn=admin,dc=salem-dlrg,dc=de',
     'ldapPassword'  => 'wR{c|(LliFBK&Y0v',

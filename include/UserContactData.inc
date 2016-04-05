@@ -17,20 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+class UserContactData {
 
-$config = array(
-    'loginMode'     => 'ldap', // possible values are 'ldap','default'
-    //LDAP
-    'ldapUser'      => 'cn=admin,dc=salem-dlrg,dc=de',
-    'ldapPassword'  => 'wR{c|(LliFBK&Y0v',
-    'ldapBaseDn'    => 'dc=salem-dlrg,dc=de',
-    'ldapHost'      => 'swim-und-run-salem.de',
-    // mySQL Database
-    'dbhost'        => 'localhost',
-    'dbuser'        => 'root',
-    'dbpassword'    => 'root',
-    'dbname'        => 'wachplan',
-    //app infos
-    'title'         => 'Wachplan 2016'
-);
-?>
+    public $username;
+    public $firstName;
+    public $lastName;
+    public $eMail;
+    public $phoneNumber;
+}
