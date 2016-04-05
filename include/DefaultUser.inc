@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-require_once $_SERVER['DOCUMENT_ROOT'] . '/wachplan/init.php';
+require_once  '../init.php';
 
 class DefaultUser implements IUser
 {

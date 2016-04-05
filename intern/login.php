@@ -26,7 +26,7 @@
  * übereinstimmt.
  *
  **/
-require_once $_SERVER['DOCUMENT_ROOT'] .'/wachplan/init.php';
+require_once  '../init.php';
 require_once INCLUDEPATH .'LdapUser.inc';
 require_once INCLUDEPATH .'DefaultUser.inc';
 

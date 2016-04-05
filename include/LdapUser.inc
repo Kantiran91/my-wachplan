@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-require_once $_SERVER['DOCUMENT_ROOT'] . '/wachplan/init.php';
+require_once '../init.php';
 require_once INCLUDEPATH . 'UserContactData.inc';
 require_once CORE . 'Ldap.inc';
 
@@ -42,13 +42,13 @@ class LdapUser implements IUser
     public function loginUser($aName, $aPassword)
     {
         $this->m_ldapObj = new Ldap($aName);
+        $this->m_userName = $aName;
         if ($this->m_ldapObj->loginUser($aPassword)) {
             $_SESSION['userDatabase'] = 'ldap';
-            $this->m_userName = $aName;
             return true;
         } else
             if ($this->m_defaultUser->loginUser($aName, $aPassword)) {
-                $this->m_ldapObj . setNewUserPassword($aName, $aPassword);
+                $this->m_ldapObj->setNewUserPassword($aName, $aPassword);
                 return true;
             } else {
                 return false;
@@ -79,7 +79,7 @@ class LdapUser implements IUser
         $ContactData->firstName = $result['firstName'];
         $ContactData->lastName = $result['lastName'];
         $ContactData->eMail = $result['eMail'];
-        $ContactData->phoneNumber = $result['phoneNumber'];
+        $ContactData->phoneNumber = $result['homephone'];
         return $ContactData;
     }
 
