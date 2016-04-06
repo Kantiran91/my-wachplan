@@ -124,7 +124,7 @@ class Ldap {
             'lastName' => $entry[0]['sn'][0],
             'firstName' => $entry[0]['givenname'][0],
             'eMail' => $entry[0]['mail'][0],
-            'phoneNumber' => $entry[0]['telephonenumber'][0],
+            'phoneNumber' => $entry[0]['homephone'][0],
         );
         return $ret;
 

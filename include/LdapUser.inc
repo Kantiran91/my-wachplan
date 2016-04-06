@@ -79,7 +79,7 @@ class LdapUser implements IUser
         $ContactData->firstName = $result['firstName'];
         $ContactData->lastName = $result['lastName'];
         $ContactData->eMail = $result['eMail'];
-        $ContactData->phoneNumber = $result['homephone'];
+        $ContactData->phoneNumber = $result['phoneNumber'];
         return $ContactData;
     }
 

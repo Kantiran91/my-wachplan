@@ -41,11 +41,10 @@ $result = $user->setNewPassword($username,$newPasswort);
 if ($result === TRUE) {
     var_dump($newPasswort);
     $attibute  = $user->getUserBaseAttributes($username);
-    var_dump($attibute);
     $email = $attibute['email'];
     $mail = new mail($email, 'neue Passwort');
     $mail->setText("Dein neues Passwort lautet :\n" . $newPasswort . "\n");
-    //$mail->sendMail();
+    $mail->sendMail();
 }
 
 ?>
