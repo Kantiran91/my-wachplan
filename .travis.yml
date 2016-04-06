@@ -10,6 +10,7 @@ before_script:
   - wget http://selenium-release.storage.googleapis.com/2.41/selenium-server-standalone-2.41.0.jar
   - echo "extension = imagick.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - java -jar selenium-server-standalone-2.41.0.jar -port 4444 >/dev/null 2>&1 &
+  - mkdir tests/_log
   - php codecept.phar build
 
 script: php codecept.phar run -d
