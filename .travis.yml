@@ -1,10 +1,19 @@
 language: php
 
 php:
-  - 5.4
-  - 5.5
+  - 5.6
 
+sudo: true
+
+install: travis_retry composer install --no-interaction --prefer-source
 
 before_script:
+  # Start WebServer on localhost:8000
+  - php artisan serve --quiet 2>&1 >/dev/null & 
+  # Start PhantomJS
+  - phantomjs --webdriver=4444 2>&1 >/dev/null &
+  # Give it some time to start
+  - sleep 5
 
-script: php codecept run
+script:
+  - vendor/bin/codecept run
