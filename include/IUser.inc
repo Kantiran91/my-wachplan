@@ -76,4 +76,6 @@ interface IUser
      * @return  bool
      */
     public function setNewPassword($aName,$aNewPassword);
+
+
 }

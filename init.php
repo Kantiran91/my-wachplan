@@ -82,7 +82,7 @@ require_once ROOT . '/include/header.php';
 // ---------- END INCLUDES ----------//
 
 // ---------- INCLUDE CONFIG FILE ----------//
-if ((include_once ROOT . '/config/config.php') === FALSE) {
+if ((bool)(include_once ROOT . '/config/config.php') === FALSE) {
     echo 'config Datei nicht vorhanden.';
 }
 $GLOBALS['config'] = $config;
