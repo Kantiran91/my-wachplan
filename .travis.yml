@@ -16,4 +16,4 @@ before_script:
   - sleep 5
 
 script:
-  - vendor/bin/codecept run --coverage --coverage-xml --config=/home/travis/build/Kantiran91/my-wachplan/codeception.yml
+  - vendor/bin/codecept run --coverage --coverage-xml

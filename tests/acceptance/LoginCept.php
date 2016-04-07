@@ -22,7 +22,7 @@
 $I = new AcceptanceTester($scenario);
 $I->wantTo('login as a normal Member');
 $I->amOnPage('/');
-$I->fillField('username', 'test');
-$I->fillField('pass', 'jr4pU7');
+$I->fillField('username', 'admin');
+$I->fillField('pass', 'admin');
 $I->click('submitButton');
 $I->see('Meine persönlichen Daten');
