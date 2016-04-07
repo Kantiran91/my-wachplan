@@ -9,7 +9,7 @@ install: travis_retry composer install --no-interaction --prefer-source
 
 before_script:
   # Start WebServer on localhost:8000
-  - php -S localhost:8000
+  - php -S localhost:8000 --quiet 2>&1 >/dev/null & 
   # Start PhantomJS
   - phantomjs --webdriver=4444 2>&1 >/dev/null &
   # Give it some time to start
