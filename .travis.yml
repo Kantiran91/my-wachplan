@@ -1,24 +1,19 @@
 language: php
 
 php:
-  - 5.4
-  - 5.5
+  - 5.6
 
-env:
- - CODECEPT_VERSION="1"
- - CODECEPT_VERSION="2"
+sudo: true
 
-matrix:
-  exclude:
-    - php: 5.3
-      env: CODECEPT_VERSION="2"
+install: travis_retry composer install --no-interaction --prefer-source
 
 before_script:
-  - printf "\n" | pecl install imagick
-  - wget http://selenium-release.storage.googleapis.com/2.41/selenium-server-standalone-2.41.0.jar
-  - echo "extension = imagick.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - java -jar selenium-server-standalone-2.41.0.jar -port 4444 >/dev/null 2>&1 &
-  - mkdir tests/_log
-  - php codecept${CODECEPT_VERSION}.phar build
+  # Start WebServer on localhost:8000
+  - php -S localhost:8000
+  # Start PhantomJS
+  - phantomjs --webdriver=4444 2>&1 >/dev/null &
+  # Give it some time to start
+  - sleep 5
 
-script: php codecept${CODECEPT_VERSION}.phar run -d
+script:
+  - vendor/bin/codecept run
