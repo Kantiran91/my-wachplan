@@ -17,4 +17,4 @@ before_script:
   - cp config/config.default.php config/config.php
 
 script:
-  - vendor/bin/codecept run
+  - vendor/bin/codecept run unit

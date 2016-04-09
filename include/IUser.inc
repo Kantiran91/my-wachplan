@@ -77,5 +77,6 @@ interface IUser
      */
     public function setNewPassword($aName,$aNewPassword);
 
+    public function checkRights($app);
 
 }

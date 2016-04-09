@@ -102,4 +102,8 @@ class DefaultUser implements IUser
         $stmt->bind_param('ss',$hashValue , $aName);
         return $stmt->execute();
     }
+
+    public function checkRights($app){
+
+    }
 }

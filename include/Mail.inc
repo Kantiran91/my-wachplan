@@ -27,25 +27,25 @@ class Mail
      *
      * @var string Email-Adresse des Empfängers.
      */
-    private $_empfaenger = '';
+    private $empfaenger = '';
 
     /**
      *
      * @var string Email-Adresse des Senders.
      */
-    private $_absender = 'From: DLRG Salem <tl@salem.dlrg.de>';
+    private $absender = 'From: DLRG Salem <tl@salem.dlrg.de>';
 
     /**
      *
      * @var string Betreff der Email
      */
-    private $_betreff = '';
+    private $betreff = '';
 
     /**
      *
      * @var string Inhalt der Email
      */
-    private $_text = '';
+    private $text = '';
 
 
     /**
@@ -61,7 +61,7 @@ class Mail
 
         } else {
             $this->empfaenger = $empfaenger;
-            $this->_betreff = $betreff;
+            $this->betreff = $betreff;
 
         }
     }//end __construct()
@@ -88,7 +88,7 @@ class Mail
      */
     public function setText($text)
     {
-        $this->_text = $text;
+        $this->text = $text;
 
     }//end setText()
 
@@ -117,20 +117,20 @@ class Mail
     {
         $filename = dirname(__FILE__) . '/../mail_template/'. $file . '.mail';
         $filehandle = fopen($filename, 'r');
-        $this->_betreff = fgets($filehandle);
+        $this->betreff = fgets($filehandle);
         while ($line = fgets($filehandle)) {
-            $this->_text .= $line;
+            $this->text .= $line;
         }//end while
 
         foreach ($param as $key => $value) {
-            $this->_betreff = str_replace(
+            $this->betreff = str_replace(
                 '$' . $key . '$',
                 $value,
-                $this->_betreff);
-            $this->_text = str_replace(
+                $this->betreff);
+            $this->text = str_replace(
                 '$' . $key . '$',
                 $value,
-                $this->_text,
+                $this->text,
                 $count);
         }//end foreach
 
@@ -147,7 +147,7 @@ class Mail
      */
     public function setBetreff($betreff)
     {
-        $this->_betreff = $betreff;
+        $this->betreff = $betreff;
 
     }//end setBetreff()
 
@@ -158,7 +158,7 @@ class Mail
      */
     public function getText()
     {
-       return $this->_text;
+       return $this->text;
 
     }//end setText()
 
@@ -169,7 +169,7 @@ class Mail
      */
     public function getBetreff()
     {
-        return $this->_betreff;
+        return $this->betreff;
 
     }//end setText()
 
@@ -184,10 +184,10 @@ class Mail
     public function sendMail($text = NULL)
     {
         if (isset($text) === TRUE) {
-            $this->_text = $text;
+            $this->text = $text;
         }
 
-        return mail($this->_empfaenger, $this->_betreff, $this->_text, $this->_absender);
+        return mail($this->empfaenger, $this->betreff, $this->text, $this->absender);
 
     }//end sendMail()
 

@@ -83,7 +83,7 @@ mit dem Wachdienst gibt kannst du dich gerne an einen von uns wenden.\n
 Viele Grüße und viel Spaß beim Wachdienst
 Deine Wachdienstleitung";
     $mail = new Mail($user['email'], 'Einteilung Wachdienst');
-    $mail->set_text($text);
-    $mail->send_mail();
+    $mail->setText($text);
+    $mail->sendMail();
     echo $user['first_name'];
 }//end foreach
