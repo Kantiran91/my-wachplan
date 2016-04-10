@@ -48,7 +48,7 @@ if (empty($_POST['username']) === TRUE || empty($_POST['pass']) === TRUE) {
     if (!$user->loginUser($pUserName,$pLoginPassword)){
         addLogLine('0');
         header('Location: ../index.php?error=Passwort oder Benutzername sind falsch');
-        exit;
+        throw  new Exception('Login Daten falsch');
     }//end if
 
     addLogLine('1');

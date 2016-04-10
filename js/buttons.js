@@ -18,7 +18,8 @@ function add_self(position, day) {
 		position : position,
 		day : day
 	}, function(html) {
-		window.location = "index.php";
+		$('#plan').append(html);
+		//window.location = "index.php";
 	});
 }
 

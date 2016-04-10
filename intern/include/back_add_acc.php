@@ -28,8 +28,9 @@
   **/
 require_once '../../init.php';
 checkSession();
+//var_dump($_GET);
 // Prüfen ob eine Eingabe vorhanden ist
-if (isset($_GET['eingabe']) === TRUE && $_GET['eingabe'] === 'TRUE') {
+if (isset($_GET['eingabe']) === TRUE && $_GET['eingabe'] === 'true') {
     // Prüfen die Person andere eintragen will und darf!
     if ((isset($_GET['name']) === TRUE) && ($_GET['name'] === $_SESSION['id']) === FALSE) {
         checkRightsAndRedirect('wachplanAdmin');
@@ -38,29 +39,16 @@ if (isset($_GET['eingabe']) === TRUE && $_GET['eingabe'] === 'TRUE') {
         $userID = $_SESSION['id'];
     }
 
-    // Prüfen das keine Wachgänger als Wachleiter eingeteilt wird!
-    if ($_GET['position'] <= 2) {
-        $queryCheck = 'SELECT `user_name` FROM `wp_user` WHERE `rights` >= 1 and `id_user`=' .
-         $userID;
-        $result = $database->query($queryCheck);
-        if ($result->num_rows !== 1) {
-            header(
-                'Location: ../index.php?error=Die Person ist für den Posten nicht qualifiziert!');
-            exit();
-        }
+    if (checkPosition($userID) === false)  {
+        header(
+            'Location: ../index.php?error=Die Person ist für den Posten nicht qualifiziert!');
+        exit();
     }
 
-    // Prüfen ob der Tag in der Vergangenheit liegt.
-    $stmtDay = $database->prepare(
-        'SELECT `date` FROM `wp_days` WHERE `id_day` =?');
-    $stmtDay->bind_param('s', $_GET['day']);
-    $stmtDay->execute();
-    $stmtDay->bind_result($date);
-    $stmtDay->fetch();
-    $stmtDay->close();
-    if (strtotime($date) < time()) {
+    $day = get('day');
+    if (checkIfDayIsNotInPast($day) === false)  {
         header(
-            'Location: ../index.php?error=Das Datum liegt in der Vergangenheit!');
+            'Location: ../index.php?error=Der Tag liegt in der Vergangenheit!');
         exit();
     }
 
@@ -75,11 +63,46 @@ if (isset($_GET['eingabe']) === TRUE && $_GET['eingabe'] === 'TRUE') {
         header('Location: ../index.php');
         exit();
     } else {
-        $stmtDay->close();
         header('Location: ../index.php?error=Fehlercode back_add_acc1');
         exit();
     }
 } else {
-    header('Location: ../index.php?error=Fehlercode back_add_acc2');
+    errorMessage(__FILE__,__LINE__,""," Input was not correct: " .$_GET['eingabe']);
     exit();
-}//end if
+}
+
+/**
+ * @param userID
+ * @param result Kommentar.
+ * @todo LDAP anpassen
+ */
+function checkPosition($userID)
+{
+    if ($_GET['position'] <= 2) {
+        $queryCheck = 'SELECT `user_name` FROM `wp_user` WHERE `rights` >= 1 and `id_user`=' . $userID;
+        $result = $GLOBALS['database']->query($queryCheck);
+        return $result->num_rows !== 1;
+    }
+}
+
+/**
+ * Kurze Beschreibung
+ *
+ * Lange Beschreibung
+ * Kommentar.
+ */
+
+function checkIfDayIsNotInPast($day)
+{
+    // Prüfen ob der Tag in der Vergangenheit liegt.
+    $stmtDay = $GLOBALS['database']->prepare(
+        'SELECT `date` FROM `wp_days` WHERE `id_day` =?');
+    $stmtDay->bind_param('s',$day);
+    $stmtDay->execute();
+    $stmtDay->bind_result($date);
+    $stmtDay->fetch();
+    $stmtDay->close();
+    return !checkPast($date);
+}
+
+//end if

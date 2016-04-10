@@ -39,6 +39,7 @@ if (DEBUG === TRUE) {
     ini_set('display_errors', 'ON');
     error_reporting(E_ALL);
 } else {
+    error_reporting(E_USER_ERROR);
     ini_set('display_errors', 'OFF');
     session_set_cookie_params(36000);
 }
@@ -304,6 +305,12 @@ function errorHandler($fehlercode, $fehlertext, $fehlerdatei, $fehlerzeile)
     switch ($fehlercode) {
         case E_USER_ERROR:
             $fehlerart = 'ERROR';
+            echo "<div class=meldung>";
+            echo "<h4>Fehler!</h4>";
+            echo $fehlertext;
+            echo '<br><br>';
+            echo '<a class="button" onclick="hide_massage()">schließen</a> ';
+            echo '<br><br></div>';
         break;
 
         case E_USER_WARNING:
@@ -347,10 +354,10 @@ function errorHandler($fehlercode, $fehlertext, $fehlerdatei, $fehlerzeile)
 function errorMessage($file, $line, $methode = '', $node= '')
 {
     if ($methode === '') {
-        trigger_error('Error in ' . $file . 'on Line' . $line .'!\n message:'. $node );
+        trigger_error('Error in ' . $file . ' on Line' . $line ."! message:". $node, E_USER_ERROR );
     } else {
         trigger_error(
-            'Error in ' . $methode . 'in File ' . $file . 'on Line ' . $line .'!\n message:'. $node
+            'Error in ' . $methode . ' in File ' . $file . ' on Line ' . $line .' !<br> message:'. $node, E_USER_ERROR
         );
     }
 

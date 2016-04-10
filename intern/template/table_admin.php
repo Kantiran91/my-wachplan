@@ -42,16 +42,16 @@ checkSession();
  */
 function genHTMLAddButton($day, $pos)
 {
-    if ((int) $_SESSION['rights'] === 2) {
+    if (checkRights('wachplanAdmin')) {
         echo "<a class=\"button_pic\" onclick=\"add_ac('" . $pos . "','" . $day .
                      "')\">";
         echo '<img src="../img/Edit_add.png" alt="" width="25"></a>' . "\n";
-    } else if ($pos <= 2 && $_SESSION['rights'] >= 1) {
-        echo "<a class=\"button_pic\" onclick=\"add_self('" . $pos . ',' . $day .
+    } else if ($pos <= 2 && checkRights('wachplanAdmin')) {
+        echo "<a class=\"button_pic\" onclick=\"add_self('" . $pos . "','" . $day .
                      "')\">";
         echo '<img src="../img/Edit_add.png" alt="" width="25"></a>' . "\n";
     } else if ($pos > 2) {
-        echo "<a class=\"button_pic\" onclick=\"add_self('" . $pos . ',' . $day .
+        echo "<a class=\"button_pic\" onclick=\"add_self('" . $pos . "','" . $day .
                      "')\">";
         echo '<img src="../img/Edit_add.png" alt="" width="25"></a>' . "\n";
     }
