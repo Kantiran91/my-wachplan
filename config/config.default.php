@@ -33,6 +33,6 @@ $config = array(
     //app infos
     'title'         => 'Wachplan 2016',
 
-    'base'          => '/wachplan',
+    'base'          => '/wachplan', //path to include the css and js files
 );
 ?>

@@ -64,7 +64,7 @@ $day = $startDay;
 $dayArray = array();
 while ($day <= $stopDay) {
     foreach ($weekdays as $weekday) {
-        if ($weekday === date('N', $day)) {
+        if ($weekday === (int)date('N', $day)) {
             $dayArray[] = date('Y-m-d', $day);
         }
     }
@@ -82,8 +82,13 @@ foreach ($dayArray as $newDay) {
 ?>
 <!-- Anzeige das alles funktuniert -->
 <div class="meldung">
-	Die neuen Wachtage wurde hinzugefügt. <br> <a class="button"
-		onclick="hide_massage()">schließen</a>
+	Die folgenden Wachtage wurden hinzugefügt: <br>
+    <?php
+    foreach ($dayArray as $newDay) {
+        echo $newDay . "<br>";
+    }
+    ?>
+     <a class="button" onclick="hide_massage()">schließen</a>
 </div>
 
 

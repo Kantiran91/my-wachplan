@@ -28,7 +28,7 @@ $sql = 'SELECT
              `last_name`
        FROM `wp_user`
        LEFT Join `wp_poss_acc`ON `wp_user`.`id_user` = `wp_poss_acc`.`user_id`
-       WHERE `wp_poss_acc`.`id` IS NULL GROUP BY `user_name`';
+       WHERE `wp_poss_acc`.`user_id` IS NULL GROUP BY `user_name`';
 
 unset($meta);
 unset($params);

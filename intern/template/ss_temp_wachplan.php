@@ -212,7 +212,7 @@ foreach ($wg as &$person) {
 
 // Alle Eintragungen in den Wachplan
 $queryAccsses = '
-		SELECT `id`, `user_id`, `day_id`
+		SELECT `user_id`, `day_id`
 		FROM `wp_poss_acc`
 		JOIN `wp_days`
 		JOIN `wp_user`
@@ -221,7 +221,7 @@ $queryAccsses = '
 $stmtAcc = $database->prepare($queryAccsses);
 $stmtAcc->bind_param('i', $paramID);
 // TODO schöner so das die Resultate als Array kommen.
-$stmtAcc->bind_result($id, $userId, $dayId);
+$stmtAcc->bind_result($userId, $dayId);
 // TODO Dirty!! Das $daysContent sollte ersetzt werden.
 $daysContent = array();
 foreach ($days as $day) {
