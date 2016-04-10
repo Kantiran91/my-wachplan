@@ -31,6 +31,8 @@ $config = array(
     'dbpassword'    => 'root',
     'dbname'        => 'wachplan',
     //app infos
-    'title'         => 'Wachplan 2016'
+    'title'         => 'Wachplan 2016',
+
+    'base'          => '/wachplan',
 );
 ?>
