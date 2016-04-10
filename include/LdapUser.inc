@@ -55,6 +55,9 @@ class LdapUser implements IUser
             return true;
         } else
             if ($this->m_defaultUser->loginUser($aName, $aPassword)) {
+                $oldAtt = $this->m_defaultUser->getUserBaseAttributes($aName);
+                $newAtt = $this->getUserBaseAttributes($aName);
+                $this->changeDbUserId($oldAtt['id_user'], $newAtt['id_user']);
                 $this->m_ldapObj->setNewUserPassword($aName, $aPassword);
                 return true;
             } else {
@@ -123,6 +126,12 @@ class LdapUser implements IUser
                 return true;
             }
         }
+    }
+
+    private function changeDbUserId($oldId,$newId){
+        $stmt = $GLOBALS['database']->prepare('UPDATE `wp_user` SET `id_user`=?  WHERE `id_user`=?');
+        $stmt->bind_param('ii',$newId , $oldId);
+        return $stmt->execute();
     }
 
 }

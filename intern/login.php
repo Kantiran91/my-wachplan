@@ -67,6 +67,8 @@ if (empty($_POST['username']) === TRUE || empty($_POST['pass']) === TRUE) {
         $_SESSION['local']  = 'index.php';
     }//end if
 
+
+
     header('Location:' . $_SESSION['local']);
 }//end if
 
