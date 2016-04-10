@@ -93,6 +93,15 @@ class LdapUser implements IUser
         return $ContactData;
     }
 
+    public function saveUserContactData(UserContactData $data){
+        $ldap = new Ldap($this->mUserName);
+        $dataAsArray['givenName'] = $data->firstName;
+        $dataAsArray['sn'] = $data->lastName;
+        $dataAsArray['homePhone'] = $data->phoneNumber;
+        $dataAsArray['mail'] = $data->eMail;
+        return $ldap->setContactData($dataAsArray);
+    }
+
     public function checkUserExists($aName)
     {
         $ldap = new Ldap($aName);

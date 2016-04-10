@@ -61,6 +61,13 @@ interface IUser
     public function getUserContactData();
 
     /**
+     * Get the contact Data from the user
+     *
+     * @param UserContactData The hole ContactData
+     */
+    public function saveUserContactData(UserContactData $data);
+
+    /**
      * This method check if the user is in the persistent storage
      *
      * @param string $aName Identifiere of the User.

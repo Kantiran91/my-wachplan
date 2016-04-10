@@ -24,11 +24,11 @@ class Ldap {
 
     private $shortUid;
 
-    private $_longUid;
+    private $longUid;
 
     public function __construct($name) {
         $username = 'uid=' . $name . ',ou=Users,dc=salem-dlrg,dc=de';
-        $this->_longUid = $username;
+        $this->longUid = $username;
         $this->shortUid = 'uid=' .$name;
 
         if ($this->connectToLdap() == false) {
@@ -55,7 +55,7 @@ class Ldap {
     public function  loginUser($password){
         if ($this->checkUserExist() === true){
             try {
-                $res =  @ldap_bind($this->connection, $this->_longUid, $password);
+                $res =  @ldap_bind($this->connection, $this->longUid, $password);
             } catch (Exception $e) {
                 header('Location: ../index.php?error=Unable to bind to LDAP server2');
             }
@@ -95,9 +95,12 @@ class Ldap {
 
     }
 
-    public function changeEmail($email){
-
-
+    public function setContactData($data){
+        $con = $this->connection;
+        $adminDn =  $GLOBALS['config']['ldapUser'];
+        $adminPassword = $GLOBALS['config']['ldapPassword'];
+        $res =  @ldap_bind($con, $adminDn, $adminPassword);
+        return ldap_modify($con, $this->longUid, $data);
     }
 
     public function getContactData(){
@@ -133,7 +136,7 @@ class Ldap {
 
     public function changePassword($password){
         $entry['userPassword'] = $password;
-        return ldap_mod_replace($this->connection, $this->_longUid, $entry);
+        return ldap_mod_replace($this->connection, $this->longUid, $entry);
     }
 
     public function setNewUserPassword($user,$password){
@@ -141,7 +144,8 @@ class Ldap {
         $adminPassword = $GLOBALS['config']['ldapPassword'];
         $res =  @ldap_bind($this->connection, $adminDn, $adminPassword);
         $entry['userPassword'] = $password;
-        return $result = ldap_mod_add($this->connection, $this->_longUid, $entry);
+        $result = ldap_mod_add($this->connection, $this->longUid, $entry);
+        return $result;
     }
 
     public function getGroupMember($group){

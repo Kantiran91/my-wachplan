@@ -89,6 +89,26 @@ class DefaultUser implements IUser
         return $ContactData;
     }
 
+    public function saveUserContactData(UserContactData $data)
+    {
+        $stmtChange = $GLOBALS['database']->prepare('UPDATE `wp_user`
+         SET `email`=?,
+             `user_name`=?,
+             `telephone`=?,
+             `first_name`=?,
+             `last_name`=?
+        WHERE `id_user`=' . $this->m_userId);
+        $stmtChange->bind_param('sssss',
+            $data->eMail,
+            $data->username,
+            $data->phoneNumber,
+            $data->firstName,
+            $data->lastName);
+        $status = $stmtChange->execute();
+        $stmtChange->close();
+        return $status;
+    }
+
     public function checkUserExists($aName)
     {
         $stmt = $GLOBALS['database']->prepare('SELECT `id_user`,`email`

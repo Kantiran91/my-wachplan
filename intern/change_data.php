@@ -24,45 +24,43 @@
   **/
 require_once '../init.php';
 require_once 'aservice/UserSettings.inc';
+require_once INCLUDEPATH .'UserContactData.inc';
+require_once INCLUDEPATH .'WpUserData.inc';
 require_once INCLUDEPATH .'LdapUser.inc';
 require_once INCLUDEPATH .'DefaultUser.inc';
 checkSession();
+$user = unserialize($_SESSION['userInterface']);
 
 /*
  * Benutzerdaten ändern
  */
 
 if (isset($_GET['user_name']) === TRUE) {
-    $_SESSION['user_name'] = $_GET['user_name'];
-    $_SESSION['email'] = $_GET['email'];
-    $stmtChange = $database->prepare(
-        'UPDATE `wp_user`
-         SET `friend`=?,
-             `email`=?,
-             `user_name`=?,
-             `telephone`=?,
-             `geburtsdatum`=?,
-             `abzeichen`=?,
-             `med`=?,
-             `first_name`=?,
-             `last_name`=?
-        WHERE `id_user`=' . $_SESSION['id']);
-    $stmtChange->bind_param(
-        'issssssss',
-        $_GET['friend'],
-        $_GET['email'],
-        $_GET['user_name'],
-        $_GET['tele'],
-        $_GET['gb'],
-        $_GET['abzeichen'],
-        $_GET['med'],
-        $_GET['first_name'],
-        $_GET['last_name']);
-    if ($stmtChange->execute() === FALSE) {
-        echo '<div class=meldung>Fehler beim Eintragen.<br>
+    $_SESSION['user_name'] = get('user_name');
+    $_SESSION['email'] = get('email');
+    $ContactData = new UserContactData();
+    $ContactData->username = get('user_name');
+    $ContactData->firstName = get('first_name');
+    $ContactData->lastName = get('last_name');
+    $ContactData->eMail = get('email');
+    $ContactData->phoneNumber = get('tele');
+    $status = $user->saveUserContactData($ContactData);
+    if ($status === false){
+        echo '<div class=meldung>Fehler beim Eintragen der Kontakt-Daten.<br>
         <a class="button" onclick="hide_massage()" >schließen</a></div>';
     }
-    $stmtChange->close();
+
+    $userData = new WpUserData();
+    $userData->friend = get('friend');
+    $userData->gb = get('gb');
+    $userData->abzeichen = get('abzeichen');
+    $userData->med = get('med');
+    $status = saveWpUserData($userData);
+    if ($status === false){
+        echo '<div class=meldung>Fehler beim Eintragen der Wachplan-Daten.<br>
+        <a class="button" onclick="hide_massage()" >schließen</a></div>';
+    };
+
 }//end if
 
 /*
@@ -71,15 +69,15 @@ if (isset($_GET['user_name']) === TRUE) {
 
 $users = UserSettings::getAllUser();
 
-$user = unserialize($_SESSION['userInterface']);
+
 
 /*
  * Passwort ändern
  */
 if (passwordFieldsAreSet() && passwordFieldsAreEqual()) {
-        $newPassword = post('pass1');
-        $oldPassword = post('oldPassword');
-        $pwSave = $user->changePassword($oldPassword,$newPassword);
+    $newPassword = post('pass1');
+    $oldPassword = post('oldPassword');
+    $pwSave = $user->changePassword($oldPassword,$newPassword);
 }//end if
 
 //@todo check if data change in ldap!
@@ -249,6 +247,26 @@ function generateUserList($users, $friend)
         echo $user[1];
         echo '</option><br/>';
     }
+}
+
+function saveWpUserData(WpUserData $data)
+{
+    $stmtChange = $GLOBALS['database']->prepare(
+        'UPDATE `wp_user`
+         SET `friend`=?,
+             `geburtsdatum`=?,
+             `abzeichen`=?,
+             `med`=?
+        WHERE `id_user`=' . $_SESSION['id']);
+    $stmtChange->bind_param(
+        'isss',
+        $data->friend,
+        $data->gb,
+        $data->abzeichen,
+        $data->med);
+    $status = $stmtChange->execute();
+    $stmtChange->close();
+    return $status;
 }
 
 ?>
