@@ -23,7 +23,7 @@
  **/
 require_once '../init.php';
 createHeader('Anmeldung');
-$tage = get_days();
+$tage = getDays();
 ?>
 <body>
     <div class="modul" id="Formular">
@@ -74,7 +74,7 @@ foreach ($tage as $tag) {
     echo '"value="ja';
     echo '" ></td>';
     if ($i >= 5) {
-        echo '</tr>\n';
+        echo "</tr>\n";
         $i = 0;
     }
 
