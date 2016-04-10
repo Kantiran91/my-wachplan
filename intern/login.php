@@ -59,7 +59,7 @@ if (empty($_POST['username']) === TRUE || empty($_POST['pass']) === TRUE) {
     $_SESSION['email']          = $attributes['email'];
     $_SESSION['user_name']      = $attributes['user_name'];
     $_SESSION['rights']         = $attributes['rights'];
-    $_SESSION['userInterface']  = serialize ($user);
+    $_SESSION['userInterface']  = serialize($user);
 
     if (isset($_SESSION['local']) === TRUE) {
         $_SESSION['local']  = $_SESSION['local'];

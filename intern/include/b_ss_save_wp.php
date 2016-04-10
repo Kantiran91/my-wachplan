@@ -29,7 +29,7 @@
   **/
 require_once '../../init.php';
 checkSession();
-checkRights(2);
+checkRightsAndRedirect('WachplanSettings');
 
 $query = 'INSERT
 INTO `wp_access_user_days`(`user_id`, `day_id`, `position`)

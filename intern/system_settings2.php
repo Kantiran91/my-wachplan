@@ -20,7 +20,7 @@
 require_once '../init.php';
 require_once 'include/View.inc';
 checkSession();
-checkRights(2);
+checkRightsAndRedirect('settings');
 
 $view = View::getInstance();
 

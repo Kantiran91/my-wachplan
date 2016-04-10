@@ -304,7 +304,7 @@ class View
                    'index.php#tele_plan',
                   );
 
-        if (checkRights(2, FALSE) === TRUE) {
+        if (checkRights('feedback') === TRUE) {
             $menu[] = array(
                        'Feedback anschauen',
                        'feedback_show.php',

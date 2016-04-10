@@ -144,6 +144,32 @@ class Ldap {
         return $result = ldap_mod_add($this->connection, $this->_longUid, $entry);
     }
 
+    public function getGroupMember($group){
+        $con = $this->connection;
+        $adminDn =  $GLOBALS['config']['ldapUser'];
+        $adminPassword = $GLOBALS['config']['ldapPassword'];
+        $res =  @ldap_bind($con, $adminDn, $adminPassword);
+        $baseDn = 'ou=Group,dc=salem-dlrg,dc=de';
+        $attributes = array('gidNumber','memberUid');
+        $filter = 'gidNumber='. $group ;
+        $res = ldap_search($con, $baseDn, $filter, $attributes);
+        $entry = ldap_get_entries($con, $res);
+        if ($res === false) {
+            return false;
+        }
+
+        if (ldap_count_entries($con, $res) === 0) {
+            return false;
+        }
+
+        $entry = ldap_get_entries($con, $res);
+        if ($entry === false) {
+            return false;
+        }
+
+        return $entry;
+    }
+
     public function checkUserExist(){
         $ldap = $this->connection;
         $baseDn = 'dc=salem-dlrg,dc=de';

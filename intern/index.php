@@ -64,6 +64,8 @@ function setButtonFeedback($day)
 
 createHeader('Startseite');
 
+
+
 /*
  * FRONTEND
  */
@@ -123,9 +125,7 @@ foreach ($ergebnisOwn as $zeile) {
     </div>
     <div class="modul" id="formular">
         <h1>Mögliche Wachtage 2015</h1>
-	<?php
-require 'template/formular_year.php';
-?>
+	<?php require 'template/formular_year.php'; ?>
 	</div>
     <div class="modul" id="plan">
         <h1>Wachplan</h1>

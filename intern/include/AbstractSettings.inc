@@ -54,7 +54,7 @@ abstract class AbstractSettings
     public function __construct()
     {
         checkSession();
-        checkRights(2);
+        checkRightsAndRedirect('settings');
         $this->frontend['header'] = $this->displayname;
         $this->frontend['moduls'] = array();
 

@@ -32,10 +32,7 @@ checkSession();
 if (isset($_GET['eingabe']) === TRUE && $_GET['eingabe'] === 'TRUE') {
     // Prüfen die Person andere eintragen will und darf!
     if ((isset($_GET['name']) === TRUE) && ($_GET['name'] === $_SESSION['id']) === FALSE) {
-        if (checkRights(2) === FALSE) {
-            exit();
-        }
-
+        checkRightsAndRedirect('wachplanAdmin');
         $userID = $_GET['name'];
     } else {
         $userID = $_SESSION['id'];

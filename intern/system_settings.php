@@ -30,7 +30,7 @@
   **/
 require_once '../init.php';
 checkSession();
-checkRights(2);
+checkRightsAndRedirect('settings');
 // for the userdata change
 // get all userdata
 $stmtUserdata = $database->prepare(

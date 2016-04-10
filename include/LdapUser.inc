@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-require_once '../init.php';
 require_once INCLUDEPATH . 'UserContactData.inc';
 require_once CORE . 'Ldap.inc';
 
@@ -28,7 +27,15 @@ class LdapUser implements IUser
 
     private $m_ldapObj;
 
-    private $m_userName;
+    private $mUserName;
+
+    private $m_AppRights = array (
+        'settings' => array(10004,10007),
+        'usersSettings' => array(10004,10007),
+        'wachplanSettings' => array(10004,10007),
+        'wachplanAdmin' => array(10004,10007,10002),
+        'feedback' => array(10004,10007,10002),
+    );
 
     public function __construct(IUser $defaultUser)
     {
@@ -42,7 +49,7 @@ class LdapUser implements IUser
     public function loginUser($aName, $aPassword)
     {
         $this->m_ldapObj = new Ldap($aName);
-        $this->m_userName = $aName;
+        $this->mUserName = $aName;
         if ($this->m_ldapObj->loginUser($aPassword)) {
             $_SESSION['userDatabase'] = 'ldap';
             return true;
@@ -65,14 +72,17 @@ class LdapUser implements IUser
 
     public function changePassword($aOldPassword, $aNewPassword)
     {
-        $this->m_ldapObj = new Ldap($this->m_userName);
-        $this->m_ldapObj->loginUser($aOldPassword);
-        return $this->m_ldapObj->changePassword($aNewPassword);
+        $this->m_ldapObj = new Ldap($this->mUserName);
+        if ($this->m_ldapObj->loginUser($aOldPassword)){
+            return $this->m_ldapObj->changePassword($aNewPassword);
+        } else {
+            return false;
+        }
     }
 
     public function getUserContactData()
     {
-        $this->m_ldapObj = new Ldap($this->m_userName);
+        $this->m_ldapObj = new Ldap($this->mUserName);
         $result = $this->m_ldapObj->getContactData();
         $ContactData = new userContactData();
         $ContactData->username = $result['username'];
@@ -94,4 +104,16 @@ class LdapUser implements IUser
         $ldap = new Ldap($aName);
         return $ldap->setNewUserPassword($aName, $aNewPassword);
     }
+
+    public function checkUserHasAccess($app){
+        $ldap = new Ldap($this->mUserName);
+        foreach ($this->m_AppRights[$app] as $groupId) {
+            $members = $ldap->getGroupMember($groupId);
+            $key = array_search($this->mUserName,$members[0]['memberuid']);
+            if (!is_bool($key)){
+                return true;
+            }
+        }
+    }
+
 }

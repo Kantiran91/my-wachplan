@@ -40,13 +40,10 @@ if (is_bool($result) === FALSE) {
 
     // Prüfen ob der Benutzer einen andern Benutzer löschen will und darf!
     if (($user[0] === $_SESSION['id']) === FALSE) {
-        if (checkRights(2) === FALSE) {
-            exit();
-        }
+        checkRightsAndRedirect('wachplanAdmin');
     }
 
     // Prüfen ob das zu löschen Datum in der Vergangenheit liegt.
-    var_dump($user[3]);
     if (checkPast($user[3]) === TRUE) {
         exit();
     }

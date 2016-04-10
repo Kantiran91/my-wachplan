@@ -79,6 +79,9 @@ require_once ROOT . '/include/Mail.inc';
 require_once ROOT . '/include/IUser.inc';
 require_once ROOT . '/include/header.php';
 
+require_once INCLUDEPATH .'LdapUser.inc';
+require_once INCLUDEPATH .'DefaultUser.inc';
+
 // ---------- END INCLUDES ----------//
 
 // ---------- INCLUDE CONFIG FILE ----------//
@@ -160,30 +163,43 @@ function checkSession()
 /**
  * Prüft ob der Benutzer die Berechtigung für die Seite hat.
  *
- * Es gibt 4 Rechte
+ * Es gibt 3 Rechte
  * -0 User
  * -1 Wachleiter    können als Wachleiter eingetragen werden und Feedback geben
  * -2 Admins        haben alle Rechte
  *
  * @param integer $inputRights Rechte die für die Seite notwendig sind.
- * @param boolean $error       Wenn TRUE wird auf die Hauptseite verwiesen.
- * Wenn FALSE erfolgt keine Reaktion. Es wird nur TRUE bzw. FALSE zurückgegeben.
  *
  * @return boolean TRUE wenn die Person berechtigt ist.
  */
-function checkRights($inputRights, $error = TRUE)
+function checkRights($app)
 {
-    if ($_SESSION['rights'] < $inputRights) {
-        if ($error === TRUE) {
-            header('location: index.php');
-        }
-
-        return FALSE;
-    } else {
-        return TRUE;
-    }
+	$user = unserialize($_SESSION['userInterface']);
+	return $user->checkUserHasAccess('settings');
 
 }//end checkRights()
+
+/**
+ * Prüft ob der Benutzer die Berechtigung für die Seite hat.Wenn keine Berechtigung
+ * vorhanden, wird die Person auf den Index zurückgeleitet!
+ *
+ * Es gibt 3 Rechte
+ * -0 User
+ * -1 Wachleiter    können als Wachleiter eingetragen werden und Feedback geben
+ * -2 Admins        haben alle Rechte
+ *
+ * @param integer $inputRights Rechte die für die Seite notwendig sind.
+ *
+ * @return void
+ */
+function checkRightsAndRedirect($app)
+{
+    $user = unserialize($_SESSION['userInterface']);
+    if ($user->checkUserHasAccess('settings') === false){
+        header('location: index.php?error=accessdenied');
+    }
+
+}
 
 /**
  * Prüft ob die Benutzer ID mit der User ID in der Session übereinstimmt.

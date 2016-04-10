@@ -144,7 +144,7 @@ foreach ($table as $day) {
         if (isset($users[$i]) === TRUE) {
             echo $users[$i]['first_name'];
             echo ' ' . substr($users[$i]['last_name'], 0, 1) . '.<br>';
-            if ((checkRights(2, FALSE)) === TRUE
+            if ((checkRights('wachplanAdmin')) === TRUE
                 && checkPast($day['date']) === FALSE
             ) {
                 genHTMLDeleteButton($users[$i]['accessID']);

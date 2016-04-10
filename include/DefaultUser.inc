@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-require_once  '../init.php';
+
 
 class DefaultUser implements IUser
 {
@@ -25,6 +25,14 @@ class DefaultUser implements IUser
     private $m_userAtribute = '';
 
     private $m_userId;
+
+    private $m_AppRights = array (
+        'settings' => 2,
+        'usersSettings' => 2,
+        'wachplanSettings' => 2,
+        'wachplanAdmin' => 2,
+        'feedback' => 1,
+    );
 
     public function loginUser($aName, $aPassword)
     {
@@ -103,7 +111,7 @@ class DefaultUser implements IUser
         return $stmt->execute();
     }
 
-    public function checkRights($app){
-
+    public function checkUserHasAccess($app){
+            return  $this->m_AppRights[$app] <= $_SESSION['rights'];
     }
 }

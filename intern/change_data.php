@@ -82,6 +82,7 @@ if (passwordFieldsAreSet() && passwordFieldsAreEqual()) {
         $pwSave = $user->changePassword($oldPassword,$newPassword);
 }//end if
 
+//@todo check if data change in ldap!
 // Holt alle Daten des Benutzers
 $userData = $user->getUserContactData();
 //TODO Schauen ob diese Querey ausgelagert werden kann.

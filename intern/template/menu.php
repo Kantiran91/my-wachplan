@@ -27,8 +27,8 @@
         <li><a href="index.php#own_data">Eigene Daten </a></li>
         <li><a href="index.php#plan">Wachplan </a></li>
         <li><a href="index.php#tele_plan">Telefonliste </a></li>
-<?php
-if ($_SESSION['rights'] >= 2) {
+        <?php
+if (checkRights('settings')) {
     ?>
     <li><a href="feedback_show.php">Feedback anschauen</a></li>
     <li><a  href="system_settings2.php">Test</a></li>
