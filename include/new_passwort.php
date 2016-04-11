@@ -39,7 +39,6 @@ $newPasswort = UserSettings::randomstring(9);
 $result = $user->setNewPassword($username,$newPasswort);
 
 if ($result === TRUE) {
-    var_dump($newPasswort);
     $attibute  = $user->getUserBaseAttributes($username);
     $email = $attibute['email'];
     $mail = new mail($email, 'neue Passwort');

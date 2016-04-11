@@ -176,7 +176,7 @@ function checkSession()
 function checkRights($app)
 {
 	$user = unserialize($_SESSION['userInterface']);
-	return $user->checkUserHasAccess('settings');
+	return $user->checkUserHasAccess($app);
 
 }//end checkRights()
 
@@ -196,7 +196,7 @@ function checkRights($app)
 function checkRightsAndRedirect($app)
 {
     $user = unserialize($_SESSION['userInterface']);
-    if ($user->checkUserHasAccess('settings') === false){
+    if ($user->checkUserHasAccess($app) === false){
         header('location: index.php?error=accessdenied');
     }
 
