@@ -62,8 +62,8 @@ class Form
         }
 
         // Send Button
-        echo '<td colspan="4">';
-        echo '<input class=button type="submit" value="senden">';
+        echo '<td class="tableheader" colspan="4">';
+        echo '<input class="button submit" type="submit" value="senden">';
         echo '</td>';
         echo "</table>\n";
         echo "</form>\n";

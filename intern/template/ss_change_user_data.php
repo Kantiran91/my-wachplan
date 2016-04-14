@@ -83,7 +83,7 @@ foreach ($users as $user) {
 			<td><input type="checkbox" name='san' value="TRUE" id="c_san"></td>
 		</tr>
 		<tr>
-			<td colspan="2"><input class=button type="submit" value="senden"></td>
+			<td colspan="2"><input class="button submit" type="submit" value="senden"></td>
 		</tr>
 		<tr>
 			<td colspan="2"><a id=button_delete class=button onclick="delete_user()">Benutzer

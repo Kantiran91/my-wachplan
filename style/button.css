@@ -9,39 +9,28 @@
  * @copyright Copyright (c) 2016, Sebastian Friedl
  * @license AGPL-3.0
  */
-
-
-
 .button {
 	text-decoration: none;
-	background: #fefcea; /* Old browsers */
-	background: -moz-linear-gradient(top, #fefcea 0%, #f1da36 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fefcea),
-		color-stop(100%, #f1da36)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #fefcea 0%, #f1da36 100%);
-	/* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #fefcea 0%, #f1da36 100%);
-	/* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #fefcea 0%, #f1da36 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #fefcea 0%, #f1da36 100%); /* W3C */
-	border: 1px solid #eaca2c;
+	letter-spacing: 0.5px;
+	background: #cc3900;
+	border: 1px solid #cc3900;
+	border-radius: 5px;
 	display: inline-block;
-	color: #5c5c5c;
+	color: #ffffff;
 	font-size: 15px;
 	font-weight: normal;
 	height: 20px;
 	line-height: 17px;
 	text-align: center;
-	padding-left: 5px;
-	padding-right: 5px;
+	padding: 4px;
 	margin: 2px;
 	cursor: pointer;
 	text-indent: 0;
 }
 
 .button:hover {
-	color: #cc3900;
-	background: #fcf3c8
+	border: 1px solid #cc3900;
+	background: #b73400;
 }
 
 .button:active {
@@ -62,5 +51,10 @@
 .big {
 	height: 30px;
 	font-size: 16px;
-	line-height: 30px;
+	padding-bottom: 7px;
+}
+
+.submit {
+	height: 28px;
+	padding: 4px;
 }

@@ -55,7 +55,7 @@ foreach ($days as $day) {
 }
 ?>
 	</table>
-    <br> <input class="button big" type="submit" value="senden"> <br> Unter
+    <br> <input class="button submit" type="submit" value="senden"> <br> Unter
     Meine Daten bearbeiten, kann ein Wunschpartner eingetragen werden, dieser
     Wunsch wir von uns nach Möglichkeiten berücksichtigt.<br>
 </form>

@@ -55,16 +55,7 @@ createHeader('Login');
             href="pw_vergessen.php"
         >Passwort vergessen?</a>
     </div>
-    <div class="modul" id="News">
-        <h1>Aktuelles</h1>
-	<?php require 'changelog.html'; ?>
-	</div>
     <div id="foot"><?php echo VERSION; ?>
-	<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"> <img
-            alt="Creative Commons Lizenzvertrag" style="border-width: 0"
-            src="http://i.creativecommons.org/l/by/4.0/88x31.png"
-        />
-        </a>
     </div>
 		<?php
 if (isset($_GET['error']) === TRUE) {

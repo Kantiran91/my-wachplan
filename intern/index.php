@@ -78,7 +78,7 @@ createHeader('Startseite');
         <h2>Meine Daten</h2>
         <p>Name: <?php echo $_SESSION['user_name']; ?></p>
         <p>E-Mail: <?php echo $_SESSION['email']; ?> </p>
-        <a class="button big" id="buttonUserSettings" href="change_data.php"> Meine Daten bearbeiten </a>
+        <a class="button" id="buttonUserSettings" href="change_data.php"> Meine Daten bearbeiten </a>
         <h2>Meine Termine</h2>
         <table id="own_table">
             <thead>
@@ -124,17 +124,12 @@ foreach ($ergebnisOwn as $zeile) {
         </table>
     </div>
     <div class="modul" id="formular">
-        <h1>Mögliche Wachtage 2015</h1>
+        <h1>Mögliche Wachtage 2016</h1>
 	<?php require 'template/formular_year.php'; ?>
 	</div>
     <div class="modul" id="plan">
         <h1>Wachplan</h1>
 	<?php
-//@TODO Verschlanken da nur noch eine externe Datei notwendig ist.
-if ($_SESSION['rights'] >= 2) {
-    include 'template/table_admin.php';
-} else {
-    //TODO $wpEnable als Globale Constante definieren und nutzen!
     $wpEnable = TRUE;
     if ($wpEnable === TRUE) {
         include 'template/table_admin.php';
@@ -143,7 +138,6 @@ if ($_SESSION['rights'] >= 2) {
         Bitte fülle das Formular oben aus.<br> Sobald der Wachplan fertig ist,
         bekommst du eine Email mit deinen Terminen!<br>';
     }
-}
 ?>
 	</div>
     <div class="modul" id="tele_plan">
@@ -152,11 +146,11 @@ if ($_SESSION['rights'] >= 2) {
 require 'template/table_tele.php';
 ?>
 	</div>
-    <div class="modul" id="logout">
+    <!-- <div class="modul" id="logout">
         <h1>
             <a href=logout.php>Logout</a>
         </h1>
-    </div>
+    </div> -->
     <div id="foot"><?php echo VERSION; ?></div>
 	<?php
 if (isset($_GET['error']) === TRUE) {

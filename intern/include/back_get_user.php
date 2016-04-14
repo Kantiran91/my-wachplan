@@ -58,7 +58,7 @@ foreach ($users as $user) {
     echo '</option>' . "\n";
 }
 ?>
-		</select> <input class="button" type="submit" id="submit" value="senden"><br>
+		</select> <input class="button submit" type="submit" id="submit" value="senden"><br>
 		<br> <a class="button" onclick="hide_massage()">schließen</a>
 	</form>
 

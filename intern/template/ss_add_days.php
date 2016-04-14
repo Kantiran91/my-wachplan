@@ -47,7 +47,7 @@
 			<td><input type="checkbox" name="so" value="7">Sonntag</td>
 		</tr>
 		<tr>
-			<td colspan="4"><input class=button type="submit" value="senden"></td>
+			<td colspan="4"><input class="button submit" type="submit" value="senden"></td>
 		</tr>
 
 	</table>
@@ -68,7 +68,7 @@
 			<td><input class="datepicker" type="text" name="day" value=""></td>
 		</tr>
 		<tr>
-			<td colspan="2"><input class=button type="submit" value="senden"></td>
+			<td colspan="2"><input class="button submit" type="submit" value="senden"></td>
 		</tr>
 
 	</table>

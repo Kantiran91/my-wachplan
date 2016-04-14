@@ -171,8 +171,8 @@ createHeader('Eigene Daten');
                 </tr>
                 <tfoot>
                     <tr>
-                        <td colspan="2"><input class="button" type="submit"
-                            value="senden"
+                        <td colspan="2"><input class="button submit" type="submit"
+                            value="Senden"
                         ></td>
                     </tr>
                 </tfoot>
@@ -198,7 +198,7 @@ createHeader('Eigene Daten');
                     <td><input type="password" name=pass2></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input id="submitPassword" class="button" type="submit"></td>
+                    <td colspan="2"><input id="submitPassword" class="button submit" type="submit"></td>
                 </tr>
             </table>
         </form>
