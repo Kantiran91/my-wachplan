@@ -174,7 +174,6 @@ class View
      */
     public function printPage()
     {
-        var_dump($this->_content);
         $contentDecoded = json_decode($this->_content);
         //Binde Modulspezifsche HTML-Attribute in Header ein.
         foreach ($contentDecoded->moduls as $modul){
@@ -191,7 +190,7 @@ class View
 
         }
         $this->_printHeader();
-        $this->_printMenu();
+        $this->printMenu();
 
         // Hauptfenster und beschreibung
         echo '<div class="modul">' . "\n";
@@ -288,7 +287,7 @@ class View
      * @return void
      * @TODO Einstellungseite erzeugen
      */
-    private function _printMenu()
+    public function printMenu()
     {
         $menu = array();
         $menu[] = array(
@@ -365,7 +364,7 @@ class View
         echo '</select>';
         echo '</div>' . "\n\n";
 
-    }//end _printMenu()
+    }//end printMenu()
 
     /**
      * Erzeugen eines Menuepunkts.

@@ -3,6 +3,7 @@
  * @author  Sebastian Friedl <friedl.sebastian@web.de>
  * @copyright Copyright (c) 2016, Sebastian Friedl
  * @license AGPL-3.0
+ * @deprecated
  *
  * This code is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -18,24 +19,6 @@
  *
  */
 
- /**
-  * Stellt das Menu des internen Bereichs dar.
-  **/
+require_once 'include/View.inc';
+View::getInstance()->printMenu();
 ?>
-<div class="menu">
-    <ul>
-        <li><a href="index.php#own_data">Eigene Daten </a></li>
-        <li><a href="index.php#plan">Wachplan </a></li>
-        <li><a href="index.php#tele_plan">Telefonliste </a></li>
-        <?php
-if (checkRights('settings')) {
-    ?>
-    <li><a href="feedback_show.php">Feedback anschauen</a></li>
-    <li><a  href="system_settings2.php">Test</a></li>
-    <li><a class="menupoint" href="system_settings.php"> Systemeinstellungen</a></li>
-    <?php
-}
-?>
-<li><a href="logout.php" class="menupoint">Logout </a></li>
-    </ul>
-</div>
