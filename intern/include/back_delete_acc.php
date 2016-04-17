@@ -44,12 +44,11 @@ if (is_bool($result) === FALSE) {
     }
 
     // Prüfen ob das zu löschen Datum in der Vergangenheit liegt.
-    if (checkPast($user[3]) === TRUE) {
-        exit();
+    if (checkDateIsInPast($user[3]) === TRUE) {
+        throw new Exception('Das Datum liegt in der Vergangenheit!');
     }
 } else {
-    //@TODO Fehlermeldung vom Wachplan übernehmen.
-    echo 'Fehler: Datenbank abfreage ist gescheitert.';
+    throw new Exception('Fehler in der Datenbank! Bitte melde dich beim Administrator!');
 }
 
 // Informiere den Wachleiter bzw. Technischen Leiter
@@ -76,17 +75,12 @@ $meldung->sendMail();
 
 $queryDel = 'DELETE FROM `wp_access_user_days` WHERE `id`=';
 $queryDel .= '"' . $id . '"';
-//@TODO Fehlermeldung erfolgt nicht richtig. Da die Seite gleich neu geladen wird.
 if ($database->query($queryDel) === TRUE) {
     echo '<div class=meldung>';
     echo '<h4>Person gelöscht.</h4>';
     echo "Die Person wurde ausgetragen.\n";
-    echo '<a class="button" onclick="hide_massage()">schließen</a>';
+    echo '<a class="button" onclick="change_window()">schließen</a>';
     echo '</div>';
 } else {
-    echo '<div class=meldung>';
-    echo '<h4>Fehler!</h4>';
-    echo "Austragen der Person fehlgeschlagen.\n";
-    echo '<a class="button" onclick="hide_massage()">schließen</a>';
-    echo '</div>';
+    throw new Exception('Austragen des Wachgängers ist fehlgeschlagen!');
 }

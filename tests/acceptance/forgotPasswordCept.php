@@ -20,8 +20,14 @@
  */
 
 $I = new AcceptanceTester($scenario);
-$I->wantTo('Regist me as a new User');
+$I->resetEmails();
+$I->wantTo('to get a new password!');
 $I->amOnPage('/');
 $I->seeLink('Passwort vergessen?','pw_vergessen.php');
 $I->click('Passwort vergessen?');
 $I->see('Passwort vergessen','h1');
+$I->fillField('username', 'dumm.kopf');
+$I->click('submitButton');
+
+$I->seeInLastEmail("Dein neues Passwort lautet :");
+

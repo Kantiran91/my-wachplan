@@ -19,7 +19,4 @@ modules:
             user: 'root'
             password: 'root'
             dump: 'db/install.sql'
-
-coverage:
-    enabled: true
     

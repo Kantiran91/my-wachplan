@@ -25,7 +25,7 @@ createHeader('Passwort vergessen');?>
 					<td><input type="text" id="username" name="username"></td>
 				</tr>
 				<tr>
-					<td colspan="2"><input class="button" type="submit"></td>
+					<td colspan="2"><input id="submitButton" class="button" type="submit"></td>
 				</tr>
 			</table>
 

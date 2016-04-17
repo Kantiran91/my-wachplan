@@ -21,7 +21,7 @@
 
 $I = new AcceptanceTester($scenario);
 $I->wantTo('login as a  User and see the wachplan');
-$I->login('admin', 'admin');
+$I->login('max.mustermann', 'test');
 $I->seeTheMenu();
 $I->see('Telefonliste','h1');
 $I->see('Wachplan', 'h1');
