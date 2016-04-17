@@ -19,7 +19,12 @@
  *
  */
 
-$I = new AcceptanceTester($scenario);
-$I->wantTo('see the Welcome Page');
-$I->amOnPage('/');
-$I->see('Wachplan Login');
+$I = new AdminTester($scenario);
+$I->wantTo('login as Admin and see the wachplan');
+$I->login('admin', 'admin');
+$I->seeTheMenu();
+$I->see('Telefonliste','h1');
+$I->see('Wachplan', 'h1');
+$I->see('Meine persönlichen Daten','h1');
+$I->canSeeLink('Meine Daten bearbeiten','change_data.php');
+$I->canSeeElement('.button_pic');

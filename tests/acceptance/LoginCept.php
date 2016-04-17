@@ -20,9 +20,10 @@
  */
 
 $I = new AcceptanceTester($scenario);
-$I->wantTo('login as a normal Member');
-$I->amOnPage('/');
-$I->fillField('username', 'admin');
-$I->fillField('pass', 'admin');
-$I->click('submitButton');
-$I->see('Meine persönlichen Daten');
+$I->wantTo('login as a  User and see the wachplan');
+$I->login('admin', 'admin');
+$I->seeTheMenu();
+$I->see('Telefonliste','h1');
+$I->see('Wachplan', 'h1');
+$I->see('Meine persönlichen Daten','h1');
+$I->canSeeLink('Meine Daten bearbeiten','change_data.php');

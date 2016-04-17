@@ -16,7 +16,7 @@
  *
  * @SuppressWarnings(PHPMD)
 */
-class AcceptanceTester extends \Codeception\Actor
+class AdminTester extends \Codeception\Actor
 {
     use _generated\AcceptanceTesterActions;
 
@@ -38,6 +38,8 @@ class AcceptanceTester extends \Codeception\Actor
         $I->see('Wachplan','.menu');
         $I->see('Telefonliste','.menu');
         $I->see('Eigene Daten','.menu');
+        $I->see('Feedback anschauen','.menu');
+        $I->see('Einstellungen','.menu');
         $I->see('Logout','.menu');
     }
 }

@@ -20,6 +20,8 @@
  */
 
 $I = new AcceptanceTester($scenario);
-$I->wantTo('see the Welcome Page');
+$I->wantTo('Regist me as a new User');
 $I->amOnPage('/');
-$I->see('Wachplan Login');
+$I->seeLink('Passwort vergessen?','pw_vergessen.php');
+$I->click('Passwort vergessen?');
+$I->see('Passwort vergessen','h1');

@@ -20,6 +20,8 @@
  */
 
 $I = new AcceptanceTester($scenario);
-$I->wantTo('see the Welcome Page');
+$I->wantTo('Regist me as a new User');
 $I->amOnPage('/');
-$I->see('Wachplan Login');
+$I->seeLink('Noch nicht angemeldet?','anmeldung/index.php');
+$I->click('Noch nicht angemeldet?');
+$I->see('Wachplan Registrierung');
