@@ -46,6 +46,7 @@ array_pop($users);
 
 <div class=meldung>
 	<form id=eintrag action="include/back_add_acc.php" method="get">
+        <input type="hidden" value="true" name="form">
 		<input type="hidden" value="true" name="eingabe"> <input type="hidden"
 			value="<?php echo $day; ?>" name="day" readonly size="10"> <input type="hidden"
 			value="<?php echo $position; ?>" name="position" readonly size="10"> <select

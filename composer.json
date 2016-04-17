@@ -1,7 +1,15 @@
 {
-    "require": {
-        "phpunit/phpunit": ">4.8.20 <6.0",
-        "phpunit/php-code-coverage": ">=2.1.3",
-        "codeception/codeception" : ">=2.1.7"
+    "name": "myWachplan",
+    "description": "",
+    "authors": [
+        {
+            "name": "Sebastian Friedl",
+            "email": "friedl.sebastian@web.de"
+        }
+    ],
+    
+    "require-dev": {
+        "codeception/codeception": "*",
+        "captbaritone/mailcatcher-codeception-module": "1.*"
     }
 }

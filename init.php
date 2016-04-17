@@ -43,7 +43,7 @@ if (DEBUG === TRUE) {
     ini_set('display_errors', 'OFF');
     session_set_cookie_params(36000);
 }
-
+set_exception_handler('wpExceptionHandler');
 
 /*
  *  Die Funktion errorHandler leitet alle Fehlermeldungen in eine eigene Datei um.
@@ -414,5 +414,21 @@ function dateDe($date)
     return date('d.m.Y', strtotime($date));
 
 }//end dateDe()
+
+function wpExceptionHandler(Exception $aException)
+{
+    echo '<div class=meldung>';
+    echo '<h4> Fehler!</h4>';
+    echo $aException->getMessage() . '<br>';
+    echo 'Code: ' . $aException->getCode(). '<br>';
+    if (DEBUG){
+        echo 'Zeile: ' . $aException->getLine() . '<br>';
+        if (isset($aException->xebug_message)){
+            echo $aException->xebug_message;
+        }
+    }
+    echo '<a class="button" onclick="hide_massage()">schließen</a>';
+    echo '</div>';
+}
 
 // ---------- END GOLOBAL FUNCTIONS ----------//

@@ -10,3 +10,9 @@ modules:
         - PhpBrowser:
             url: http://localhost/wachplan
         - \Helper\Acceptance
+        - MailCatcher
+
+    config:
+        MailCatcher:
+            url: 'http://localhost'
+            port: '1080'

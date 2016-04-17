@@ -30,7 +30,7 @@
 require_once '../init.php';
 
 
-if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
+if (isset($_GET['key']) === TRUE && get('key') === 'c8f207d9') {
     // Mail für Admin vorbereiten.
     $mailAdmin = new mail('sebastian.friedl@salem.dlrg.de');
 
@@ -52,7 +52,7 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
      * Feedback senden.
      */
 
-    if ($wochentag === '1') {
+    if ($wochentag === '1' || get('debug') == "true") {
         // Hole die Tage an denen Wachdienst gemacht wird.
         $datumNextFormat = $datumNext->format('Y-m-d');
         $queryDays = "SELECT `id_day`, `date`
@@ -167,6 +167,6 @@ if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
     }//end foreach
 
     $keywords = array('loginversuche' => $loginTrysString);
-    $mail->loadTemplate('adminCron', $keywords);
+    $mailAdmin->loadTemplate('adminCron', $keywords);
     $mailAdmin->sendMail();
 }//end if

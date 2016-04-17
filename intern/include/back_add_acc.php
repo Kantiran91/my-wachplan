@@ -40,16 +40,12 @@ if (isset($_GET['eingabe']) === TRUE && $_GET['eingabe'] === 'true') {
     }
 
     if (checkPosition($userID) === false)  {
-        header(
-            'Location: ../index.php?error=Die Person ist für den Posten nicht qualifiziert!');
-        exit();
+        throw  new Exception('Die Person ist für den Posten nicht qualifiziert!');
     }
 
     $day = get('day');
     if (checkIfDayIsNotInPast($day) === false)  {
-        header(
-            'Location: ../index.php?error=Der Tag liegt in der Vergangenheit!');
-        exit();
+        throw  new Exception('Das Datum liegt in der Vergangenheit!');
     }
 
     // SQL Abfrage zum Einfügen
@@ -59,16 +55,15 @@ if (isset($_GET['eingabe']) === TRUE && $_GET['eingabe'] === 'true') {
     $stmtAdd->bind_param('iii', $userID, $_GET['day'], $_GET['position']);
 
     // Prüfen ob erfolgreich, ansonsten geben eine Fehlermeldung aus.!
-    if ($stmtAdd->execute() === TRUE) {
-        header('Location: ../index.php');
-        exit();
-    } else {
-        header('Location: ../index.php?error=Eintragen in Datenbank fehlgeschlagen.');
-        exit();
+    if ($stmtAdd->execute() === FALSE) {
+        throw  new Exception('Eintragen in Datenbank fehlgeschlagen.');
     }
 } else {
-    errorMessage(__FILE__,__LINE__,""," Input was not correct: " .$_GET['eingabe']);
-    exit();
+    throw new Exception(' Input was not correct: ' .$_GET['eingabe']);
+}
+if (isset($_GET['form'])){
+header('Location: ../index.php');
+
 }
 
 /**

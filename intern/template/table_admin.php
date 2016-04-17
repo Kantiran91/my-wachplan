@@ -43,8 +43,8 @@ checkSession();
 function genHTMLAddButton($day, $pos)
 {
     if (checkRights('wachplanAdmin')) {
-        echo "<a class=\"button_pic\" onclick=\"add_ac('" . $pos . "','" . $day .
-                     "')\">";
+        echo '<a title="Wachgänger eintragen" class="button_pic"
+                onclick="add_ac(' . $pos . ',' . $day .')">';
         echo '<span class="icon-add-user"/></a>' . "\n";
     } else if ($pos <= 2 && checkRights('wachplanAdmin')) {
         echo "<a class=\"button_pic\" onclick=\"add_self('" . $pos . "','" . $day .
@@ -67,7 +67,7 @@ function genHTMLAddButton($day, $pos)
  */
 function genHTMLDeleteButton($id)
 {
-    echo "<a class=\"button_pic\" onclick=\"delete_ac('" .$id ."')\">";
+    echo '<a title="Wachgänger austragen" class="button_pic" onclick="delete_ac(' .$id .')">';
     echo '<span class="icon-delete"/></a>' . "\n";
 }//end genHTMLDeleteButton()
 
@@ -119,7 +119,22 @@ foreach ($days as $day) {
 
 //FRONTEND
 ?>
-<span class="ui-icon ui-icon-circle-triangle-w">Prev</span>
+<div>
+<span class="icon-add"/>
+Hiermit kann ein Benutzer sich selbst in den Wachplan eintragen.
+</div>
+
+<div>
+<span class="icon-add-user"/>
+Hiermit kann ein Wachplan Administrator einen andern Benutzer eintragen.
+</div>
+
+<div>
+<span class="icon-delete"/>
+Hiermit kann ein Benutzer ausgetragen werden.
+</div>
+<br>
+
 <table class="plan">
     <thead>
         <tr>

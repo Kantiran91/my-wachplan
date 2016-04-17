@@ -17,10 +17,7 @@ function add_self(position, day) {
 		eingabe : "true",
 		position : position,
 		day : day
-	}, function(html) {
-		$('#plan').append(html);
-		//window.location = "index.php";
-	});
+	}, change_window);
 }
 
 /** buttons to add somebody */
@@ -36,7 +33,7 @@ function add_ac(position, day) {
 function delete_ac(data) {
 	$.get("include/back_delete_acc.php", {
 		acc : data
-	}, change_window);
+	}, change_site);
 }
 
 /** buttons to delete self */
