@@ -30,11 +30,12 @@
 
 .button:hover {
 	border: 1px solid #cc3900;
-	background: #b73400;
+	background: #A72F00;
 }
 
 .button:active {
-	position: relative;
+	/*position: relative;
+	*/
 	top: 1px;
 }
 
