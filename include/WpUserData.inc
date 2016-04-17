@@ -23,4 +23,47 @@ class WpUserData {
     public $gb;
     public $abzeichen;
     public $med;
+    public $userId;
+
+    public function getFromDatabase($userId)
+    {
+        $this->userId = $userId;
+        $stmt = $GLOBALS['database']->prepare(
+        'SELECT
+            `geburtsdatum`,
+            `abzeichen`,
+            `med`,
+            `friend`
+        FROM  `wp_user`
+        WHERE `id_user` =?');
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        $stmt->bind_result(
+            $this->gb,
+            $this->abzeichen,
+            $this->med,
+            $this->friend);
+        $stmt->fetch();
+        $stmt->close();
+    }
+
+    function saveInDatabase()
+    {
+        $stmtChange = $GLOBALS['database']->prepare(
+            'UPDATE `wp_user`
+         SET `friend`=?,
+             `geburtsdatum`=?,
+             `abzeichen`=?,
+             `med`=?
+        WHERE `id_user`=' . $_SESSION['id']);
+        $stmtChange->bind_param(
+            'isss',
+            $this->friend,
+            $this->gb,
+            $this->abzeichen,
+            $this->med);
+        $status = $stmtChange->execute();
+        $stmtChange->close();
+        return $status;
+    }
 }

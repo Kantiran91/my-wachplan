@@ -32,11 +32,11 @@ checkSession();
 // Prüfen ob eine Eingabe vorhanden ist
 if (isset($_GET['eingabe']) === TRUE && $_GET['eingabe'] === 'true') {
     // Prüfen die Person andere eintragen will und darf!
-    if ((isset($_GET['name']) === TRUE) && ($_GET['name'] === $_SESSION['id']) === FALSE) {
+    if ((isset($_GET['name']) === TRUE) && ((int)get('name') === $_SESSION['id']) === FALSE) {
         checkRightsAndRedirect('wachplanAdmin');
-        $userID = $_GET['name'];
+        $userID = (int)$_GET['name'];
     } else {
-        $userID = $_SESSION['id'];
+        $userID = (int)$_SESSION['id'];
     }
 
     if (checkPosition($userID) === false)  {
@@ -56,14 +56,14 @@ if (isset($_GET['eingabe']) === TRUE && $_GET['eingabe'] === 'true') {
     $queryAdd = 'INSERT INTO `wp_access_user_days`
                  SET `user_id` = ?, `day_id`=?, `position`=?';
     $stmtAdd = $database->prepare($queryAdd);
-    $stmtAdd->bind_param('sss', $userID, $_GET['day'], $_GET['position']);
+    $stmtAdd->bind_param('iii', $userID, $_GET['day'], $_GET['position']);
 
     // Prüfen ob erfolgreich, ansonsten geben eine Fehlermeldung aus.!
     if ($stmtAdd->execute() === TRUE) {
         header('Location: ../index.php');
         exit();
     } else {
-        header('Location: ../index.php?error=Fehlercode back_add_acc1');
+        header('Location: ../index.php?error=Eintragen in Datenbank fehlgeschlagen.');
         exit();
     }
 } else {
@@ -102,7 +102,7 @@ function checkIfDayIsNotInPast($day)
     $stmtDay->bind_result($date);
     $stmtDay->fetch();
     $stmtDay->close();
-    return !checkPast($date);
+    return !checkDateIsInPast($date);
 }
 
 //end if

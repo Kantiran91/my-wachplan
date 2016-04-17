@@ -30,20 +30,6 @@
 require_once '../init.php';
 
 
-/**
- * Gibt das Datum als Formatierten String zurück.
- *
- * @param string $date String mit Datum.
- *
- * @return string Datum in der Darstellung d.m.Y
- * @TODO   Überführen in die Init datei. ggf. auch eine funktion für sql Datum
- */
-function dateDe($date)
-{
-    return date('d.m.Y', strtotime($date));
-
-}//end dateDe()
-
 if (isset($_GET['key']) === TRUE && $_GET['key'] === 'c8f207d9') {
     // Mail für Admin vorbereiten.
     $mailAdmin = new mail('sebastian.friedl@salem.dlrg.de');

@@ -55,9 +55,9 @@ $weather[5] = 'teilweise starker Regen / Gewitter / leichter Sturm';
 $weather[6] = 'Dauerregen / Gewitter / starker Sturm';
 
 // send as mail
-$mail = new mail('tl@salem.dlrg.de', 'Feedback: ' . date('d.m.Y', strtotime($reslutDay[1])));
+$mail = new mail('tl@salem.dlrg.de', 'Feedback: ' . dateDe($reslutDay[1]));
 $mailText = "Es ist ein Feedbackbogen eingegangen:\n";
-$mailText .= 'Tag: ' . date('d.m.Y', strtotime($reslutDay[1]));
+$mailText .= 'Tag: ' . dateDe($reslutDay[1]);
 $mailText .= "\nPosition: " . $position[$feedbackInput['position']];
 $mailText .= "\nWetter: " . $weather[$feedbackInput['weather']];
 $mailText .= "\nWachdienst fand statt: " . $feedbackInput['happend'];

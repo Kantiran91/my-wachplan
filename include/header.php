@@ -40,11 +40,8 @@ function createHeader($title)
     <title> <?php echo $title .'@' . $GLOBALS['config']['title']; ?></title>
     <meta charset="UTF-8" />
     <link href="<?php echo $GLOBALS['config']['base'];?>/style/style.css" type="text/css" rel="stylesheet" />
-    <link rel="stylesheet"
-        href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"
-    >
+    <link href="<?php echo $GLOBALS['config']['base'];?>/style/icons.css" type="text/css" rel="stylesheet" />
     <script src="<?php echo $GLOBALS['config']['base'];?>/js/jquery.min.js"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="<?php echo $GLOBALS['config']['base'];?>/js/intern_function.js"></script>
     <script src="<?php echo $GLOBALS['config']['base'];?>/js/buttons.js"></script>
     <script src="<?php echo $GLOBALS['config']['base'];?>/js/formulars.js"></script>

@@ -41,7 +41,7 @@ foreach ($days as $day) {
     }
 
     echo '<td>';
-    echo date('d.m.Y', strtotime($day[1]));
+    echo dateDe($day[1]);
     echo '<input type="checkbox" name="';
     echo $day[0];
     echo '" value="' . $day[0];

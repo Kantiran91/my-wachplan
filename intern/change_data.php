@@ -55,7 +55,7 @@ if (isset($_GET['user_name']) === TRUE) {
     $userData->gb = get('gb');
     $userData->abzeichen = get('abzeichen');
     $userData->med = get('med');
-    $status = saveWpUserData($userData);
+    $status = $userData->saveInDatabase();
     if ($status === false){
         echo '<div class=meldung>Fehler beim Eintragen der Wachplan-Daten.<br>
         <a class="button" onclick="hide_massage()" >schließen</a></div>';
@@ -69,8 +69,6 @@ if (isset($_GET['user_name']) === TRUE) {
 
 $users = UserSettings::getAllUser();
 
-
-
 /*
  * Passwort ändern
  */
@@ -80,23 +78,13 @@ if (passwordFieldsAreSet() && passwordFieldsAreEqual()) {
     $pwSave = $user->changePassword($oldPassword,$newPassword);
 }//end if
 
-//@todo check if data change in ldap!
-// Holt alle Daten des Benutzers
 $userData = $user->getUserContactData();
-//TODO Schauen ob diese Querey ausgelagert werden kann.
-$queryOwn = '
-SELECT
-    `geburtsdatum`,
-    `abzeichen`,
-    `med`,
-    `friend`
-FROM  `wp_user`
-WHERE `id_user` ="' . $_SESSION['id'] . '"';
-$resultOwn = $database->query($queryOwn);
-$row = $resultOwn->fetch_row();
+
+$userWpData = new WpUserData();
+$userWpData->getFromDatabase($_SESSION['id']);
+
 // FRONTEND
 createHeader('Eigene Daten');
-//@TODO die auswahl des Sanitätsausbildung überarbeiten
 ?>
 <body>
 	<?php require 'template/menu.php'; ?>
@@ -136,13 +124,13 @@ createHeader('Eigene Daten');
                 </tr>
                 <tr>
                     <td>Geburtsdatum:</td>
-                    <td><input type=text name=gb value="<?php echo $row[0]; ?>"></td>
+                    <td><input type=text name=gb value="<?php echo $userWpData->gb; ?>"></td>
                 </tr>
                 <tr>
                     <td>Abzeichen:</td>
                     <td><select id="abzeichen" name="abzeichen" >
-                    <option value="<?php echo $row[1]; ?>" selected>
-                    <?php echo $row[1]; ?></option>
+                    <option value="<?php echo $userWpData->abzeichen; ?>" selected><?php
+                    echo  $userWpData->abzeichen;?></option>
                     <option value="DRSA Bronze" >DRSA Bronze</option>
                     <option value="DRSA Silber" >DRSA Silber</option>
                     <option value="DRSA Gold" >DRSA Gold</option>
@@ -151,8 +139,8 @@ createHeader('Eigene Daten');
                 <tr>
                     <td>Erste-Hilfe-Ausbildung:</td>
                     <td><select id="med"name="med" >
-                    <option value="<?php echo $row[2]; ?>" selected>
-                    <?php echo $row[2]; ?></option>
+                    <option value="<?php echo  $userWpData->med; ?>" selected><?php
+                    echo $userWpData->med;  ?></option>
                     <option value="" ></option>
                     <option value="eh" >EH Kurs</option>
                     <br><option value="san" >San A</option>
@@ -166,7 +154,7 @@ createHeader('Eigene Daten');
                     <td>Wunschpartner</td>
                     <td><select name="friend">
                             <option value="NULL"></option>
-		<?php generateUserList($users, (int)$row[3])?>
+		<?php generateUserList($users, (int)$userWpData->friend); ?>
 		</select></td>
                 </tr>
                 <tfoot>
@@ -247,26 +235,6 @@ function generateUserList($users, $friend)
         echo $user[1];
         echo '</option><br/>';
     }
-}
-
-function saveWpUserData(WpUserData $data)
-{
-    $stmtChange = $GLOBALS['database']->prepare(
-        'UPDATE `wp_user`
-         SET `friend`=?,
-             `geburtsdatum`=?,
-             `abzeichen`=?,
-             `med`=?
-        WHERE `id_user`=' . $_SESSION['id']);
-    $stmtChange->bind_param(
-        'isss',
-        $data->friend,
-        $data->gb,
-        $data->abzeichen,
-        $data->med);
-    $status = $stmtChange->execute();
-    $stmtChange->close();
-    return $status;
 }
 
 ?>

@@ -68,7 +68,7 @@ foreach ($tage as $tag) {
     echo '"value="nein';
     echo $tag[1];
     echo '" >';
-    echo date('d.m.Y', strtotime($tag[1]));
+    echo dateDe($tag[1]);
     echo '<input type="checkbox" name="';
     echo $tag[0];
     echo '"value="ja';

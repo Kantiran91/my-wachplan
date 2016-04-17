@@ -30,10 +30,10 @@
 		<tr>
 			<td>Startdatum</td>
 			<!-- //TODO Umwanden in html5 -->
-			<td><input class="datepicker" type="text" name="start" value=""></td>
+			<td><input class="datepicker" type="date" name="start" value=""></td>
 			<td>Enddatum</td> <!-- //TODO Umwanden in html5 -->
 
-			<td><input class="datepicker" type="text" name="end" value=""></td>
+			<td><input class="datepicker" type="date" name="end" value=""></td>
 		</tr>
 		<tr>
 			<td><input type="checkbox" name="mon" value="1">Montag</td>

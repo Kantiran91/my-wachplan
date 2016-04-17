@@ -44,6 +44,7 @@ if (DEBUG === TRUE) {
     session_set_cookie_params(36000);
 }
 
+
 /*
  *  Die Funktion errorHandler leitet alle Fehlermeldungen in eine eigene Datei um.
  */
@@ -232,10 +233,10 @@ function checkID($userID, $error = TRUE)
  *
  * @return boolean TRUE wenn das Datum in der Vergangenheit liegt.
  */
-function checkPast($date)
+function checkDateIsInPast($date)
 {
     return !(strtotime($date) >= time());
-}//end checkPast()
+}//end checkDateIsInPast()
 
 /**
  * Die Funktion verschlüsstel ein Passowrt über den sha512 Schlüssel.
@@ -294,8 +295,6 @@ function getDays()
  * @param string $fehlerzeile Zeile in der der Fehler aufgetreten ist.
  *
  * @TODO  implement a class for error handling in php, frontend and javascript
- * @TODO  Bei RELEASE sollen ERROR noch angezeigt werden!
- * @TODO  Bei RLEASE sollen nur Error und warning gemappt werden.
  *
  * @return void|boolean Kommentar.
  */
@@ -402,5 +401,18 @@ function post($param)
     return htmlentities($_POST[$param], ENT_QUOTES, 'utf-8');
 
 }//end post()
+
+/**
+ * Gibt das Datum als Formatierten String zurück.
+ *
+ * @param string $date String mit Datum.
+ *
+ * @return string Datum in der Darstellung d.m.Y
+ */
+function dateDe($date)
+{
+    return date('d.m.Y', strtotime($date));
+
+}//end dateDe()
 
 // ---------- END GOLOBAL FUNCTIONS ----------//

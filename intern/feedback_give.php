@@ -43,7 +43,7 @@ createHeader('Feedback');
 <?php require 'template/menu.php'; ?>
 <div class="modul" id="anleitung">
 <h1>
-Feedback für den <?php echo date('d.m.Y', strtotime($reslutDay[1])); ?>
+Feedback für den <?php echo dateDe($reslutDay[1]); ?>
 </h1>
         Danke das du Hilfts den Wachdienst zu verbessern, bitte fülle das
         angebene Formular aus. Dies sollte dich nur max. 5 Minuten kosten.

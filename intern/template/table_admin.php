@@ -45,7 +45,7 @@ function genHTMLAddButton($day, $pos)
     if (checkRights('wachplanAdmin')) {
         echo "<a class=\"button_pic\" onclick=\"add_ac('" . $pos . "','" . $day .
                      "')\">";
-        echo '<img src="../img/Edit_add.png" alt="" width="25"></a>' . "\n";
+        echo '<span class="icon-add-user"/></a>' . "\n";
     } else if ($pos <= 2 && checkRights('wachplanAdmin')) {
         echo "<a class=\"button_pic\" onclick=\"add_self('" . $pos . "','" . $day .
                      "')\">";
@@ -53,7 +53,7 @@ function genHTMLAddButton($day, $pos)
     } else if ($pos > 2) {
         echo "<a class=\"button_pic\" onclick=\"add_self('" . $pos . "','" . $day .
                      "')\">";
-        echo '<img src="../img/Edit_add.png" alt="" width="25"></a>' . "\n";
+        echo '<span class="icon-add"/></a>' . "\n";
     }
 
 }//end genHTMLAddButton()
@@ -68,8 +68,7 @@ function genHTMLAddButton($day, $pos)
 function genHTMLDeleteButton($id)
 {
     echo "<a class=\"button_pic\" onclick=\"delete_ac('" .$id ."')\">";
-    echo '<img src="../img/Edit_remove.png" alt="" width="25"></a>' . "\n";
-
+    echo '<span class="icon-delete"/></a>' . "\n";
 }//end genHTMLDeleteButton()
 
 /*
@@ -114,12 +113,13 @@ foreach ($days as $day) {
     }
 
     $table[$day[0]]['user'] = $user;
-    $table[$day[0]]['date'] = date('d.m.Y', strtotime($day[1]));
+    $table[$day[0]]['date'] = dateDe($day[1]);
     $table[$day[0]]['ID'] = $dayID;
 }//end foreach
 
 //FRONTEND
 ?>
+<span class="ui-icon ui-icon-circle-triangle-w">Prev</span>
 <table class="plan">
     <thead>
         <tr>
@@ -145,11 +145,11 @@ foreach ($table as $day) {
             echo $users[$i]['first_name'];
             echo ' ' . substr($users[$i]['last_name'], 0, 1) . '.<br>';
             if ((checkRights('wachplanAdmin')) === TRUE
-                && checkPast($day['date']) === FALSE
+                && checkDateIsInPast($day['date']) === FALSE
             ) {
                 genHTMLDeleteButton($users[$i]['accessID']);
             }
-        } else if ((strtotime($day['date']) >= time()) === TRUE) {
+        } else if (checkDateIsInPast($day['date']) === FALSE) {
             genHTMLAddButton($day['ID'], $i);
         }
 

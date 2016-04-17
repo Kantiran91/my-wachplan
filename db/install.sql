@@ -139,7 +139,8 @@ CREATE TABLE IF NOT EXISTS `wp_user` (
 --
 
 INSERT INTO `wp_user` (`id_user`, `email`, `user_name`, `hash`, `rights`, `telephone`, `geburtsdatum`, `abzeichen`, `med`, `friend`, `first_name`, `last_name`) VALUES
-(1, 'test@localhost', 'admin', '0b52a1c6f9c755bb0ff0084d58c7ad5f52782cf866a356fa0ff435b6d634841baed50796f03e4755310aacb68cf06b12b2bde5c0d868e47933ed334ad00a109a', 2, '1234', '1901-06-25', 'DRSA Gold', 'san', NULL, 'Max', 'Mustermann');
+(1, 'test@localhost', 'admin', '0b52a1c6f9c755bb0ff0084d58c7ad5f52782cf866a356fa0ff435b6d634841baed50796f03e4755310aacb68cf06b12b2bde5c0d868e47933ed334ad00a109a', 2, '1234', '1901-06-25', 'DRSA Gold', 'san', NULL, 'Maxi', 'Mustermann'),
+(2, 'sebastian.friedl@me.com', 'max.mustermann', 'bb04ca90c63097590188265b02f81dcb4c6e23233496ec5efdb92351ca697a57c5e639d386a39291d9bb88f275847ad81de8fb22fca2622342da79abc1f6d02b', 0, '1234567890', '23.09.1989', 'DRSA Silber', 'san', 'Mustermann', 'Max');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

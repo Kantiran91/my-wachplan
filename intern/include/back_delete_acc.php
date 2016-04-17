@@ -53,18 +53,18 @@ if (is_bool($result) === FALSE) {
 }
 
 // Informiere den Wachleiter bzw. Technischen Leiter
-$betreff = 'Austragung am  ' . date('d.m.Y', strtotime($user[3]));
+$betreff = 'Austragung am  ' . dateDe($user[3]);
 if (($user[0] === $_SESSION['id'])) {
     $mailAdresse = 'tl@salem.dlrg.de';
     $meldung = new mail($mailAdresse, $betreff);
     $text = "Hallo Wachleiter \n Leider kann ich ". $user[1]. ' am ' .
-                 date('d.m.Y', strtotime($user[3])) .
+                dateDe($user[3]) .
                  ' doch nicht am Wachdienst teilnehmen.';
 } else {
         // Informiere den Wachgänger
     $meldung = new mail($user[1], $betreff);
     $text = 'Hallo' . $user[2] . " \n Du wurdest von einem Wachleiter am  " .
-                 date('d.m.Y', strtotime($user[3]));
+                 dateDe($user[3]);
     $text .= " aus dem Wachplan ausgetragen.\n Wir danken dir trotzdem für die
                Bereitschaft beim Wachdienst mit zuarbeiten.\n Wenn das Austragen
                nicht mit dir abgesprochen wurde, melde dich bitte bei un, damit

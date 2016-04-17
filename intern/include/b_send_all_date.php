@@ -73,7 +73,7 @@ foreach ($users as $user) {
 dich im Wachplan eingetragen hast. Wir haben aus allen Wunschterminen einen möglichst
 gerechten Wachplan erstellt. Dabei wurdest du für folgende Termine eingeteilt:\n\n";
     foreach ($user['dates'] as $day) {
-        $text .= '- ' . date('d.m.Y', strtotime($day)) . "\n";
+        $text .= '- ' . dateDe($day) . "\n";
     }
 
     $text .= '-------------------------';

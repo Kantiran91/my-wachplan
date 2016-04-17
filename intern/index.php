@@ -30,20 +30,8 @@
   **/
 require_once '../init.php';
 checkSession();
-// Wenn Person hinzugefügt wird
-// Holt alle Wachtage für den Benutzer
-$queryOwn = '
-SELECT  `id`,
-        `user_name`,
-        `date` ,
-        `position`,
-        `id_day`
-FROM  `wp_access_user_days`
-JOIN  `wp_user`
-JOIN  `wp_days` ON  `wp_user`.`id_user` =  `wp_access_user_days`.`user_id`
-AND  `wp_days`.`id_day` =  `wp_access_user_days`.`day_id`  WHERE `user_name` =';
-$queryOwn .= '"' . $_SESSION['user_name'] . '" ORDER BY `date`';
-$ergebnisOwn = $database->query($queryOwn);
+
+
 
 
 /**
@@ -65,11 +53,36 @@ function setButtonFeedback($day)
 createHeader('Startseite');
 
 
+function selectDaysForUser($aUserId)
+{
+    $stmt = $GLOBALS['database']->prepare('
+        SELECT
+            `id`,
+            `date` ,
+            `position`,
+            `id_day`
+        FROM  `wp_access_user_days`
+        JOIN  `wp_days` ON `wp_days`.`id_day` =  `wp_access_user_days`.`day_id`
+        WHERE `wp_access_user_days`.`user_id` =? ORDER BY `date`');
+    $stmt->bind_param('i', $aUserId);
+    $row = array();
+    $table = array();
+    $stmt->bind_result(
+        $row['id'],
+        $row['date'],
+        $row['position'],
+        $row['id_day']
+        );
+    $stmt->execute();
+    while ($stmt->fetch()) {
+        $table[] = $row;
+    }
+    return $table;
+}
 
 /*
  * FRONTEND
  */
-
 ?>
 <body>
 	<?php require 'template/menu.php'; ?>
@@ -89,11 +102,11 @@ createHeader('Startseite');
             </thead>
             <tbody>
 	<?php
-foreach ($ergebnisOwn as $zeile) {
+foreach (selectDaysForUser($_SESSION['id']) as $zeile) {
     //@TODO schaueb ob Frontend und Backend besser getrennt werden können.
     echo '<tr>';
     echo '<td>';
-    echo date('d.m.Y', strtotime($zeile['date']));
+    echo dateDe($zeile['date']);
     echo '</td>';
     echo '<td>';
     if ((int) $zeile['position'] === 1) {
@@ -105,14 +118,12 @@ foreach ($ergebnisOwn as $zeile) {
     }
 
     echo '</td> ';
-
-    if (checkPast($zeile['date']) === FALSE) {
+    if (checkDateIsInPast($zeile['date']) === FALSE) {
         echo '<td>';
         echo '<a class="button"  id="' . $zeile['date'] .
                      '" onclick="cancel_date(' . $zeile['id'] . ')">absagen</a>';
         echo '</td>';
     }
-
     if ((int) $zeile['position'] === 1 || (int) $zeile['position'] === 2) {
         setButtonFeedback($zeile['id_day']);
     }

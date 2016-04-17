@@ -3,6 +3,7 @@ the text of which can be found in COPYING-AGPL, or any later version of the AGPL
 unless otherwise noted.
 
 Licensing of components:
+    style/fonts Squid.ink LICENSE
 
 All unmodified files from these and other sources retain their original copyright
 and license notices: see the relevant individual files.

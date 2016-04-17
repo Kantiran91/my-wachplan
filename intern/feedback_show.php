@@ -96,7 +96,7 @@ createHeader('Feedback');
 foreach ($row as $cell) {
     echo '<tr>';
     echo '<td>';
-    echo date('d.m.Y', strtotime($cell[1]));
+    echo dateDe($cell[1]);
     echo '</td>';
     echo '<td>';
     echo $position[$cell[2]];
