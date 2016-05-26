@@ -67,23 +67,24 @@ while ($stmt->fetch()) {
     }
 }//end while
 
+echo '<h1>' .count($users) . '</h1>';
 foreach ($users as $user) {
-    $text = 'Hallo ' . $user['first_name'] . ' ' . $user['last_name'] . ",\n";
-    $text .= "Danke das du diese Jahr wieder beim Wachdienst mit machst und du
-dich im Wachplan eingetragen hast. Wir haben aus allen Wunschterminen einen möglichst
-gerechten Wachplan erstellt. Dabei wurdest du für folgende Termine eingeteilt:\n\n";
+
+    $daysAsString = '';
     foreach ($user['dates'] as $day) {
-        $text .= '- ' . dateDe($day) . "\n";
+        $daysAsString .= '- ' . dateDe($day) . "\n";
     }
 
-    $text .= '-------------------------';
-    $text .= "Solltest du an einem dieser Termine nicht können, dann melde dich bitte gleich bei uns.
-damit wir diese Problem lösen können. Auch wenn es Problem während oder
-mit dem Wachdienst gibt kannst du dich gerne an einen von uns wenden.\n
-Viele Grüße und viel Spaß beim Wachdienst
-Deine Wachdienstleitung";
-    $mail = new Mail($user['email'], 'Einteilung Wachdienst');
-    $mail->setText($text);
-    $mail->sendMail();
-    echo $user['first_name'];
+    $keywords = array(
+        'firstName' => $user['first_name'],
+        'lastName' => $user['last_name'],
+        'days'   => $daysAsString,
+     );
+
+     $mail = new Mail($user['email']);
+     $mail->loadTemplate('sendDates', $keywords);
+     $mail->sendMail();
+
+     echo '<h3>' . $user['first_name'] . "</h3>\n";
 }//end foreach
+

@@ -1,0 +1,14 @@
+Einteilung zum Wachdienst
+Hallo $firstName$ $lastName$,
+Danke, dass du diese Jahr wieder beim Wachdienst mit machst und du dich im
+Wachplan eingetragen hast. Wir haben aus allen Wunschterminen einen möglichst
+gerechten Wachplan erstellt. Dabei wurdest du für folgende Termine eingeteilt:
+-------------------------
+$days$
+-------------------------
+Solltest du an einem dieser Termine nicht können, dann melde dich bitte gleich 
+bei uns, damit wir diese Problem lösen können. Auch wenn es Problem während oder
+mit dem Wachdienst gibt kannst du dich gerne an einen von uns wenden.
+
+Viele Grüße und viel Spaß beim Wachdienst
+Deine Wachdienstleitung
