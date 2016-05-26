@@ -55,6 +55,7 @@ set_error_handler('errorHandler');
 // ---------- PHP INI ----------//
 // Damit Umlaute korret dargestellt werden: UTF-8 verwenden.
 header('Content-Type: text/html; charset=utf-8');
+date_default_timezone_set('Europe/Berlin');
 // ---------- END PHP INI ----------//
 
 // ---------- SESSION ----------//

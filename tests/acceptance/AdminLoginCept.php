@@ -27,4 +27,3 @@ $I->see('Telefonliste','h1');
 $I->see('Wachplan', 'h1');
 $I->see('Meine persönlichen Daten','h1');
 $I->canSeeLink('Meine Daten bearbeiten','change_data.php');
-$I->canSeeElement('.button_pic');

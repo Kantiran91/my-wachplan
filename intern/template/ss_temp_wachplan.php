@@ -65,174 +65,24 @@ function getNextPrio($prio, array $array)
 
 }//end getNextPrio()
 
-// TODO In init.php ausgliedern.
-date_default_timezone_set('Europe/Berlin');
-
-/*
- * Tabellen für darstellung holen.
- * TODO Diese Anfrage schöner gestalten. Zum Beispiel durch ein Prepare und dann
- * über verschiedene Rechte holen.
- */
 
 $days = getDays();
 
 // Erstelle eine Liste von Wachleitern und eine Liste von Wahgängern
 // Wachleiter holen
-$queryWl = '
-		SELECT
-            `id_user`,
-            `first_name`,
-            `last_name`,
-              `abzeichen`,
-            `rights`,`med`,
-            `geburtsdatum`
-        FROM  `wp_user`
-        WHERE `rights` >=1';
-$stmtWl = $database->prepare($queryWl);
-$stmtWl->execute();
-// TODO schöner so das die Resultate als Array kommen.
-$meta = $stmtWl->result_metadata();
-while ($field = $meta->fetch_field()) {
-    $params[] = &$row[$field->name];
-}
+$wl = getWgFromDbWhere('`rights` > 0');
 
-call_user_func_array(
-    array(
-     $stmtWl,
-     'bind_result',
-    ),
-    $params);
-$wl = array();
-while ($stmtWl->fetch()) {
-    foreach ($row as $key => $val) {
-        $tmp[$key] = $val;
-    }
-
-    $tmp['countDays'] = 0;
-    $wl[$tmp['id_user']] = $tmp;
-}
-
-$stmtWl->close();
-
-// Wachgänger holen
-$queryWg = '
-		SELECT
-            `id_user`,
-            `first_name`,
-            `last_name` ,
-              `abzeichen`,
-            `rights`,`med`,
-            `geburtsdatum`
-        FROM  `wp_user`
-        WHERE `rights` =0';
-$stmtWg = $database->prepare($queryWg);
-$stmtWg->execute();
-// TODO schöner so das die Resultate als Array kommen.
-$meta = $stmtWg->result_metadata();
-$params = array();
-while ($field = $meta->fetch_field()) {
-    $params[] = &$row[$field->name];
-}
-
-call_user_func_array(
-    array(
-     $stmtWg,
-     'bind_result',
-    ),
-    $params);
-$wg = array();
-while ($stmtWg->fetch()) {
-    foreach ($row as $key => $val) {
-        $tmp[$key] = $val;
-    }
-
-    $tmp['countDays'] = 0;
-    $wg[$tmp['id_user']] = $tmp;
-}
-
-$stmtWg->close();
-
-// Priobrechnen berechnung
-$paramAbzeichen['DRSA Bronze'] = 1;
-$paramAbzeichen['DRSA Silber'] = 3.5;
-$paramAbzeichen['DRSA Gold'] = 3.7;
-$paramMed['EH'] = 2.5;
-$paramMed['san'] = 3.5;
-// Berechnung des Alterswert (a-(b/X))=Y
-$paramAlter['a'] = 80;
-$paramAlter['b'] = 20;
+$wg = getWgFromDbWhere('`rights` = 0');
 
 foreach ($wl as &$person) {
-    // brechnung des Alters einer Person
-    $gb = new DateTime(date('Y-m-d', strtotime(($person['geburtsdatum']))));
-    // Aktuelles Datum
-    $today = new DateTime(date('Y-m-d'));
-    $interval = $today->diff($gb);
-    $monate = $interval->format('%m');
-    $age = ($interval->format('%Y') + ($interval->format('%m') / 12));
-    $age += 13;
-
-    $prio = 0;
-    // Berechnung der Start-Prio
-    if (array_key_exists($person['abzeichen'], $paramAbzeichen) === TRUE) {
-        $prio += $paramAbzeichen[$person['abzeichen']];
-    }
-
-    if (array_key_exists($person['med'], $paramAbzeichen) === TRUE) {
-        $prio += $paramAbzeichen[$person['med']];
-    }
-
-    $prio += ($paramAlter['b'] - ($paramAlter['a'] / $age));
-    $person['prio'] = (($prio * 10) + 60);
+    $person['prio'] = calculatePrioForMember($person);
 }//end foreach
 
 foreach ($wg as &$person) {
-    // brechnung des Alters einer Person
-    $gbString = $person['geburtsdatum'];
-    $gb = new DateTime(date('Y-m-d', strtotime($gbString)));
-    // Aktuelles Datum
-    $today = new DateTime(date('Y-m-d'));
-    $interval = $today->diff($gb);
-    $monate = $interval->format('%m');
-    $age = ($interval->format('%Y') + ($interval->format('%m') / 12));
-    $age += 13;
-    $prio = 0;
-    // Berechnung der Start-Prio
-    if (array_key_exists($person['abzeichen'], $paramAbzeichen) === TRUE) {
-        $prio += $paramAbzeichen[$person['abzeichen']];
-    }
-
-    if (array_key_exists($person['med'], $paramAbzeichen) === TRUE) {
-        $prio += $paramAbzeichen[$person['med']];
-    }
-
-    $prio += ($paramAlter['b'] - ($paramAlter['a'] / $age));
-    $person['prio'] = (($prio * 10) + 60);
+    $person['prio'] = calculatePrioForMember($person);
 }//end foreach
 
-// Alle Eintragungen in den Wachplan
-$queryAccsses = '
-		SELECT `user_id`, `day_id`
-		FROM `wp_poss_acc`
-		JOIN `wp_days`
-		JOIN `wp_user`
-		ON `user_id` =`id_user` AND `day_id` =`id_day`
-		WHERE `day_id` = ?';
-$stmtAcc = $database->prepare($queryAccsses);
-$stmtAcc->bind_param('i', $paramID);
-// TODO schöner so das die Resultate als Array kommen.
-$stmtAcc->bind_result($userId, $dayId);
-// TODO Dirty!! Das $daysContent sollte ersetzt werden.
-$daysContent = array();
-foreach ($days as $day) {
-    $paramID = $day[0];
-    $stmtAcc->execute();
-    while ($stmtAcc->fetch()) {
-        $day[] = $userId;
-    }
-
-    $daysContent[] = $day;
-}
+$daysContent = getPossAccessFromDb($days);
 
 $tableContent = array();
 foreach ($daysContent as $day) {
@@ -513,6 +363,107 @@ foreach ($tableContent as &$row) {
     $tableContent[$dayId]['wg3'] = array();
     $tableContent[$dayId]['wg3'] = $tempArray;
 }//end foreach
+
+
+function getWGFromDbWhere($statment)
+{
+    $stmtWl = $GLOBALS['database']->prepare( '
+		SELECT
+            `id_user`,
+            `first_name`,
+            `last_name`,
+              `abzeichen`,
+            `rights`,`med`,
+            `geburtsdatum`
+        FROM  `wp_user`
+        WHERE'. $statment);
+    $stmtWl->execute();
+    $meta = $stmtWl->result_metadata();
+    while ($field = $meta->fetch_field()) {
+        $params[] = &$row[$field->name];
+    }
+    call_user_func_array(
+        array(
+            $stmtWl,
+            'bind_result',
+        ),
+        $params);
+    $wl = array();
+    while ($stmtWl->fetch()) {
+        foreach ($row as $key => $val) {
+            $tmp[$key] = $val;
+        }
+
+        $tmp['countDays'] = 0;
+        $wl[$tmp['id_user']] = $tmp;
+    }
+
+    $stmtWl->close();
+    return $wl;
+}
+
+function getAge($birthday)
+{
+    $gb = new DateTime(date('Y-m-d', strtotime($birthday)));
+    $today = new DateTime(date('Y-m-d'));
+    return $today->diff($gb);
+}
+
+function getPossAccessFromDb($days){
+    $stmt = $GLOBALS['database']->prepare('
+		SELECT `user_id`
+		FROM `wp_poss_acc`
+		JOIN `wp_days`
+		JOIN `wp_user`
+		ON `user_id` =`id_user` AND `day_id` =`id_day`
+		WHERE `day_id` = ?');
+    $stmt->bind_param('i', $dayId);
+    $stmt->bind_result($userId);
+    $returnArray = array();
+    foreach ($days as $day) {
+        $dayId = $day[0];
+        $stmt->execute();
+        while ($stmt->fetch()) {
+            $day[] = $userId;
+        }
+
+        $returnArray[] = $day;
+    }
+    $stmt->close();
+    return $returnArray;
+}
+
+function calculatePrioForMember($person)
+{
+    // Priobrechnen berechnung
+    $paramAbzeichen['DRSA Bronze'] = 1;
+    $paramAbzeichen['DRSA Silber'] = 3.5;
+    $paramAbzeichen['DRSA Gold'] = 3.7;
+    $paramMed['EH'] = 2.5;
+    $paramMed['san'] = 3.5;
+    // Berechnung des Alterswert (a-(b/X))=Y
+    $paramAlter['a'] = 80;
+    $paramAlter['b'] = 20;
+
+    $interval =  getAge($person['geburtsdatum']);
+
+    $monate = $interval->format('%m');
+    $age = ($interval->format('%Y') + ($interval->format('%m') / 12));
+    $age += 13;
+
+    $prio = 0;
+    if (array_key_exists($person['abzeichen'], $paramAbzeichen) === TRUE) {
+        $prio += $paramAbzeichen[$person['abzeichen']];
+    }
+
+    if (array_key_exists($person['med'], $paramAbzeichen) === TRUE) {
+        $prio += $paramAbzeichen[$person['med']];
+    }
+
+    $prio += ($paramAlter['b'] - ($paramAlter['a'] / $age));
+    return (($prio * 10) + 60);
+}
+
 
 // FRONTEND
 ?>

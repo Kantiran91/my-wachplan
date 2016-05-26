@@ -21,7 +21,7 @@
 /**
  * Frontend zur Neuanforderung des Passwortes
  **/
-require_once $_SERVER['DOCUMENT_ROOT'] .'/wachplan/init.php';
+require_once '../init.php';
 require_once ASERVICE.'UserSettings.inc';
 require_once INCLUDEPATH .'LdapUser.inc';
 require_once INCLUDEPATH .'DefaultUser.inc';

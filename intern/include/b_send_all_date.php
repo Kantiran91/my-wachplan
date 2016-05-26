@@ -21,11 +21,11 @@
  /**
   * Schick an alle Benutzer die Termine wann sie Wachdienst haben.
   **/
-require_once '../init.php';
-check_session();
+require_once '../../init.php';
+checkSession();
 
 // Alle Wachdiensttage
-$days = get_days();
+$days = getDays();
 
 // Alle Eintragungen
 $queryAccsses = '
@@ -62,7 +62,7 @@ while ($stmt->fetch()) {
         $oldID = $result['user_id'];
         $users[$result['user_id']]['dates'][] = $result['date'];
         $users[$result['user_id']]['first_name'] = $result['first_name'];
-        $users[$result['user_id']]['last_name'] = $result['first_name'];
+        $users[$result['user_id']]['last_name'] = $result['last_name'];
         $users[$result['user_id']]['email'] = $result['email'];
     }
 }//end while

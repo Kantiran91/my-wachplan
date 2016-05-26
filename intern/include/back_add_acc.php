@@ -76,7 +76,9 @@ function checkPosition($userID)
     if ($_GET['position'] <= 2) {
         $queryCheck = 'SELECT `user_name` FROM `wp_user` WHERE `rights` >= 1 and `id_user`=' . $userID;
         $result = $GLOBALS['database']->query($queryCheck);
-        return $result->num_rows !== 1;
+        return $result->num_rows == 1;
+    }else {
+        return true;
     }
 }
 

@@ -48,7 +48,7 @@ function cancel_date(data) {
 function delete_user() {
 	tmp = $('#c_id').val();
 	$.post("include/back_delete_user.php", {
-		id_user :tmp,
+		id_user :tmp
 	}, change_site);
 }
 
